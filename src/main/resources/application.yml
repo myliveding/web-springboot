@@ -1,0 +1,23 @@
+spring:
+    application:
+        name: springboot
+    profiles:
+        active: dev
+    #session store type\u4F7F\u7528\u6765\u5B58\u653Esession\u7684\u5B58\u50A8\u65B9\u5F0F\uFF0C\u76EE\u524DSpring boot\u4E2D\u53EA\u652F\u6301redis\u65B9\u5F0F
+    #\u7531\u4E8E\u672C\u5E94\u7528\u6682\u65E0\u9700\u5C06session\u653E\u5165redis\u7684\u9700\u6C42\uFF0C\u6545\u8FD9\u91CC\u5C31\u53EF\u4EE5\u5C06session store type\u8BBE\u7F6E\u4E3Anone
+    session:
+        store-type: none
+
+    # HTTP ENCODING
+    http:
+        encoding.charset: UTF-8
+        encoding.enable: true
+        encoding.force: true
+
+server:
+    port: 8088
+
+logging:
+    level:
+        com.dzr: DEBUG
+    file: /home/wwwlogs/${spring.application.name}.log
