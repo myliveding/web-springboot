@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author dingzr
- * @Description 用于有样式的页面或者模版渲染
+ * @Description 默认进去的后缀名称为templates目录下html的文件
  * @ClassName UserHtmlController
- * @since 2017/6/29 14:31
+ * @since 2017/7/4 15:57
  */
 
 @Controller
@@ -20,6 +20,11 @@ public class UserHtmlController {
     public String hello(@PathVariable("name") String name, Model model) {
         model.addAttribute("name", name);
         return "hello";
+    }
+
+    @RequestMapping("/more")
+    public String more(){
+        return "hello2";
     }
 
 }

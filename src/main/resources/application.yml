@@ -3,8 +3,8 @@ spring:
         name: springboot
     profiles:
         active: dev
-    #session store type\u4F7F\u7528\u6765\u5B58\u653Esession\u7684\u5B58\u50A8\u65B9\u5F0F\uFF0C\u76EE\u524DSpring boot\u4E2D\u53EA\u652F\u6301redis\u65B9\u5F0F
-    #\u7531\u4E8E\u672C\u5E94\u7528\u6682\u65E0\u9700\u5C06session\u653E\u5165redis\u7684\u9700\u6C42\uFF0C\u6545\u8FD9\u91CC\u5C31\u53EF\u4EE5\u5C06session store type\u8BBE\u7F6E\u4E3Anone
+    #session store type使用来存放session的存储方式，目前Spring boot中只支持redis方式
+    #由于本应用暂无需将session放入redis的需求，故这里就可以将session store type设置为none
     session:
         store-type: none
 
@@ -13,6 +13,19 @@ spring:
         encoding.charset: UTF-8
         encoding.enable: true
         encoding.force: true
+
+    #jsp 页面支持配置
+    mvc:
+      view:
+        prefix: /WEB-INF/jsp/
+        suffix: .jsp
+
+    #h5页面 templates
+    thymeleaf:
+      cache: false #用于页面热部署
+      encoding: UTF-8
+      mode: HTML5
+
 
 server:
     port: 8088
