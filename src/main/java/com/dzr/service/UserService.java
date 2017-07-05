@@ -1,5 +1,8 @@
 package com.dzr.service;
 
+import com.dzr.po.City;
+import com.dzr.po.User;
+
 /**
  * @author dingzr
  * @Description
@@ -8,5 +11,7 @@ package com.dzr.service;
  */
 public interface UserService {
 
+    public User getUserInfo(Integer id);
+    public City getCityInfo(Integer id);
 
 }

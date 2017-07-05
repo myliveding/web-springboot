@@ -1,7 +1,11 @@
 package com.dzr.controller;
 
+import com.dzr.po.City;
+import com.dzr.po.User;
+import com.dzr.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +29,9 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @Autowired
+    UserService userService;
+
     @RequestMapping("/{name}")
     public String hello(@PathVariable("name") String name, Model model) {
         model.addAttribute("name", name);
@@ -36,6 +43,11 @@ public class UserController {
         logger.info("测试log日志的位置。。。。");
         model.addAttribute("time", new Date());
         model.addAttribute("message", "第一个jsp页面");
+
+        User user = userService.getUserInfo(1);
+        logger.info("user。。。。" + user.getUserName());
+        City city = userService.getCityInfo(1);
+        logger.info("city。。。。" + city.getName());
         return "index";
     }
 
