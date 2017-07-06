@@ -25,6 +25,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     CityMapper cityMapper;
 
+
+
     public User getUserInfo(Integer id){
         return userMapper.selectByPrimary(id);
     }
