@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix="spring.datasource.primary")
 public class YmlConfig {
-    private String url;
+    private String jdbcurl;
     private String username;
     private String password;
 }

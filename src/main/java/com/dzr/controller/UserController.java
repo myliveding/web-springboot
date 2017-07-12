@@ -46,7 +46,7 @@ public class UserController {
         logger.info("测试log日志的位置。。。。");
         model.addAttribute("time", new Date());
         model.addAttribute("message", "第一个jsp页面");
-        System.err.println(ymlConfig.getUrl());
+        System.err.println(ymlConfig.getJdbcurl());
         User user = userService.getUserInfo(1);
         logger.info("user。。。。" + user.getUserName());
         City city = userService.getCityInfo(1);
