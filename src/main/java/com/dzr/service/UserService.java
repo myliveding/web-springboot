@@ -11,7 +11,7 @@ import com.dzr.po.User;
  */
 public interface UserService {
 
-    public User getUserInfo(Integer id);
-    public City getCityInfo(Integer id);
+    User getUserInfo(Integer id);
+    City getCityInfo(Integer id);
 
 }

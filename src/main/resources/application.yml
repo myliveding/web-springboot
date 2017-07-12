@@ -26,7 +26,6 @@ spring:
       encoding: UTF-8
       mode: HTML5
 
-
 server:
     port: 8088
 

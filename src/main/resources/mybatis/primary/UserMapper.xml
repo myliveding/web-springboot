@@ -15,6 +15,17 @@
     <result column="is_delete" property="isDelete" />
   </resultMap>
 
+    <insert id="insert" parameterType="com.dzr.po.User">
+        insert into user (id, user_name, nick_name, pwd, age,
+        address, birthday, create_time, update_time, is_delete)
+
+        values (#{id,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR},
+        #{nickName,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},
+        #{age,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+        #{birthday,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=VARCHAR}, #{isDelete,jdbcType=BIT})
+  </insert>
+
   <select id="selectByPrimary" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select *
     from user

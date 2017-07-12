@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
  * @since 2017/7/5 13:52
  */
 
+@Mapper
 @Component
 public interface UserMapper {
 
-    public User selectByPrimary(Integer id);
+    int insert(User user);
+
+    User selectByPrimary(Integer id);
 
 }

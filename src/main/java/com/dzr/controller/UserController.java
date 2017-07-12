@@ -3,6 +3,7 @@ package com.dzr.controller;
 import com.dzr.po.City;
 import com.dzr.po.User;
 import com.dzr.service.UserService;
+import com.dzr.util.YmlConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    YmlConfig ymlConfig;
 
     @RequestMapping("/{name}")
     public String hello(@PathVariable("name") String name, Model model) {
@@ -43,7 +46,7 @@ public class UserController {
         logger.info("测试log日志的位置。。。。");
         model.addAttribute("time", new Date());
         model.addAttribute("message", "第一个jsp页面");
-
+        System.err.println(ymlConfig.getUrl());
         User user = userService.getUserInfo(1);
         logger.info("user。。。。" + user.getUserName());
         City city = userService.getCityInfo(1);
