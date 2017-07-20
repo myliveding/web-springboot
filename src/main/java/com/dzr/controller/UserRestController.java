@@ -1,5 +1,9 @@
 package com.dzr.controller;
 
+import com.dzr.po.User;
+import com.dzr.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,13 +22,11 @@ import java.util.Map;
  */
 
 @RestController // == @Controller + @ResponseBody
-@RequestMapping("/userrest")
+@RequestMapping("/userRest")
 public class UserRestController {
 
-    @RequestMapping("/index")
-    public String greeting() {
-        return "Hello World!";
-    }
+    @Autowired
+    UserService userService;
 
     @RequestMapping("/{username}")
     public String userProfile(@PathVariable("username") String username) {
@@ -39,6 +41,11 @@ public class UserRestController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPost() {
         return "Login Post Request";
+    }
+
+    @RequestMapping(value = "json", method = RequestMethod.GET)
+    public User getJson(){
+       return userService.getUserCityInfo(1,1);
     }
 
 }

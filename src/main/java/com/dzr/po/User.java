@@ -21,5 +21,7 @@ public class User {
     private String createTime;
     private String updateTime;
     private String isDelete;
+
+    private City city;
 }
 

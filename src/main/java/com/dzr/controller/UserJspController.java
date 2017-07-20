@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,10 +24,10 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/userJsp")
+public class UserJspController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserJspController.class);
 
     @Autowired
     UserService userService;
@@ -36,27 +35,26 @@ public class UserController {
     YmlConfig ymlConfig;
 
     @RequestMapping("/{name}")
-    public String hello(@PathVariable("name") String name, Model model) {
+    public String welcome(@PathVariable("name") String name, Model model) {
         model.addAttribute("name", name);
         return "welcome";
     }
 
     @RequestMapping("/index")
-    public String welcome(Model model) {
+    public String index(Model model) {
         logger.info("测试log日志的位置。。。。");
         model.addAttribute("time", new Date());
         model.addAttribute("message", "第一个jsp页面");
-        System.err.println(ymlConfig.getJdbcurl());
-        User user = userService.getUserInfo(1);
-        logger.info("user。。。。" + user.getUserName());
-        City city = userService.getCityInfo(1);
-        logger.info("city。。。。" + city.getName());
+        logger.info("从配置文件中获取主数据库信息jdbcUrl：" + ymlConfig.getJdbcurl());
+        User user = userService.getUserCityInfo(1, 1);
+        model.addAttribute("address", user.getAddress());
+        model.addAttribute("cityName", user.getCity().getName());
         return "index";
     }
 
-    @RequestMapping("/body")
-    public @ResponseBody String body(Model model) {
-        return "Controller里面的调用返回值";
+    @RequestMapping("/json")
+    public @ResponseBody User json(Model model) {
+        return userService.getUserCityInfo(1, 1);
     }
 
     @RequestMapping("/foo")

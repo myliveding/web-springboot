@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @Controller
-@RequestMapping("/userhtml")
+@RequestMapping("/userHtml")
 public class UserHtmlController {
 
     @RequestMapping("/{name}")
