@@ -3,6 +3,8 @@ package com.dzr.service.impl;
 import com.dzr.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@ConditionalOnExpression("${scheduling.enabled} == true")
 public class ScheduledExecutorService {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduledExecutorService.class);

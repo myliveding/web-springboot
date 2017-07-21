@@ -1,6 +1,5 @@
 package com.dzr.controller;
 
-import com.dzr.po.City;
 import com.dzr.po.User;
 import com.dzr.service.UserService;
 import com.dzr.util.YmlConfig;
