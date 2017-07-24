@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,8 @@ public class LoginFilter implements Filter{
     public void init(FilterConfig filterConfig) throws ServletException {
         Pattern p = Pattern.compile("userJsp/*");
         patterns.add(p);
+        Pattern p1 = Pattern.compile("userHtml/*");
+        patterns.add(p1);
         logger.info("loginFilter filterConfig...");
     }
 

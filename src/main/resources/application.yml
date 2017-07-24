@@ -15,10 +15,10 @@ spring:
         encoding.force: true
 
     #jsp 页面支持配置
-    mvc:
-      view:
-        prefix: /WEB-INF/jsp/
-        suffix: .jsp
+#    mvc:
+#      view:
+#        prefix: /WEB-INF/jsp/
+#        suffix: .jsp
 
     #h5页面 templates
     thymeleaf:

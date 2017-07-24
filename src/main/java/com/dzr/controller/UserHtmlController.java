@@ -27,4 +27,20 @@ public class UserHtmlController {
         return "hello2";
     }
 
+    @RequestMapping("/map")
+    public String map() {
+        return "map";
+    }
+
+    @RequestMapping("/mapDemo")
+    public String mapDemo() {
+        return "mapDemo";
+    }
+
+    @RequestMapping("/main")
+    public String main() {
+        return "allmap";
+    }
+
+
 }
