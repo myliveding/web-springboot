@@ -1,21 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Thymeleaf: Web Content</title>
+    <title>Thymeleaf: First Page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"  href="../../css/bootstrap.min.css" />
 </head>
 
 <body>
 <div class="container">
-    <h1>my thymeleaf indexpage</h1>
+    <h1>my thymeleaf index page</h1>
     <div class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="http://thymeleaf.org">Thymeleaf</a>
-            <ul class="nav">
-                <p th:text="'Hello, This is Thymeleaf Name: ' + ${name} + '!'" />
-                <li><a href="/userhtml/more">更多详情</a></li>
-            </ul>
+            <p th:text="'Hello, This is Thymeleaf Name: ' + ${name} + '!'" />
+            <li><a href="/userhtml/more">更多详情</a></li>
         </div>
     </div>
 </div>
