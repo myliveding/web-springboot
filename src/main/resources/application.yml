@@ -33,3 +33,18 @@ logging:
     level:
         com.dzr: DEBUG
     file: /home/wwwlogs/${spring.application.name}.log
+
+filter:
+  simpleProp: simplePropValue
+  arrayProps: 1,2,3,4,5
+  listProps:
+    - userJsp/*
+    - userHtml/*
+  mapProps:
+    key1: value1
+    key2: value2
+  mapListProps:
+    - name: abc
+      value: abcValue
+    - name: efg
+      value: efgValue

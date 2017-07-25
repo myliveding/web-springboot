@@ -2,6 +2,7 @@ package com.dzr.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -27,6 +28,8 @@ public class LoginFilter implements Filter{
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
+    @Autowired FilterUrl filterUrl;
+
     /**
      * 封装，不需要过滤的list列表
      */
@@ -34,11 +37,12 @@ public class LoginFilter implements Filter{
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        Pattern p = Pattern.compile("userJsp/*");
-        patterns.add(p);
-        Pattern p1 = Pattern.compile("userHtml/*");
-        patterns.add(p1);
-        logger.info("loginFilter filterConfig...");
+        logger.info("loginFilter filterConfig... " + filterUrl.getSimpleProp());
+        filterUrl.getListProps().forEach(t ->{
+            Pattern p = Pattern.compile(t);
+            patterns.add(p);
+        });
+        logger.info("loginFilter filterConfig... " + patterns.size());
     }
 
     @Override
