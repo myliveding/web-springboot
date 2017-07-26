@@ -3,14 +3,10 @@ package com.dzr.controller;
 import com.dzr.po.User;
 import com.dzr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
-import java.util.Map;
 
 /**
  * @author dingzr
