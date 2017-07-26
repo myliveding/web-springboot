@@ -137,12 +137,12 @@
 			<optional>true</optional>
 		</dependency>
 
-        <!-- json 不知道怎么的这个包已经被自动引用进来了 -->
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--<artifactId>jackson-databind</artifactId>-->
-            <!--<version>2.5.3</version>-->
-        <!--</dependency>-->
+        <!-- json 2.5.3版本不匹配了 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.0.pr3</version>
+        </dependency>
 
         <!-- 热加载 -->
         <dependency>
