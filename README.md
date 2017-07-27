@@ -6,17 +6,23 @@ web-springboot
 多数据库支持（现只有两个）
 
 # thymeleaf
-自动部署加载
+1. 自动部署加载
 spring.thymeleaf.cache=false
 如果使用的开发工具是idea,修改html后使用Ctrl+Shift+F9
 
+2. mybatis的逆向工程
+有个插件叫做MyBatisCodeHelper（需要自己先去定义po）
+现在我使用的是配置文件的形式
+
 # 待办事项
 待操作：
-1. 数据库单例一个
+10. 微信适用
 2. 分页插件 公共异常
+9. 页面编写
+5. CentOS 7 64位的服务器配置 java tomcat ftp 数据库
+7. 购买域名搭建微信平台
+
+1. 数据库单例一个
 3. 另一种文件读取形式
 4. 数据库动态切换
-5. CentOS 7 64位的服务器配置 java tomcat ftp 数据库
-6. 把study的方法迁移过来
-7. 购买域名搭建微信平台
 8. 微信小程序
