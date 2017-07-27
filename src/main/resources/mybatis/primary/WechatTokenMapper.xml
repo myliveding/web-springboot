@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dzr.mapper.primary.WechatTokenMapper">
+    <resultMap id="BaseResultMap" type="com.dzr.po.WechatToken">
+        <id column="appid" jdbcType="VARCHAR" property="appid"/>
+        <result column="appsecret" jdbcType="VARCHAR" property="appsecret"/>
+        <result column="wxname" jdbcType="VARCHAR" property="wxname"/>
+        <result column="access_token" jdbcType="VARCHAR" property="accessToken"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_time" jdbcType="INTEGER" property="createTime"/>
+        <result column="update_time" jdbcType="INTEGER" property="updateTime"/>
+        <result column="is_delete" jdbcType="BIT" property="isDelete"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    appid, appsecret, wxname, access_token, remark, create_time, update_time, is_delete
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wechat_token
+        where appid = #{appid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wechat_token
+    where appid = #{appid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.dzr.po.WechatToken">
+    insert into wechat_token (appid, appsecret, wxname, 
+      access_token, remark, create_time, 
+      update_time, is_delete)
+    values (#{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, #{wxname,jdbcType=VARCHAR}, 
+      #{accessToken,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=INTEGER}, #{isDelete,jdbcType=BIT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.dzr.po.WechatToken">
+        insert into wechat_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appid != null">
+                appid,
+            </if>
+            <if test="appsecret != null">
+                appsecret,
+            </if>
+            <if test="wxname != null">
+                wxname,
+            </if>
+            <if test="accessToken != null">
+                access_token,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appid != null">
+                #{appid,jdbcType=VARCHAR},
+            </if>
+            <if test="appsecret != null">
+                #{appsecret,jdbcType=VARCHAR},
+            </if>
+            <if test="wxname != null">
+                #{wxname,jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.dzr.po.WechatToken">
+        update wechat_token
+        <set>
+            <if test="appsecret != null">
+                appsecret = #{appsecret,jdbcType=VARCHAR},
+            </if>
+            <if test="wxname != null">
+                wxname = #{wxname,jdbcType=VARCHAR},
+            </if>
+            <if test="accessToken != null">
+                access_token = #{accessToken,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=BIT},
+            </if>
+        </set>
+        where appid = #{appid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.dzr.po.WechatToken">
+    update wechat_token
+    set appsecret = #{appsecret,jdbcType=VARCHAR},
+      wxname = #{wxname,jdbcType=VARCHAR},
+      access_token = #{accessToken,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=BIT}
+    where appid = #{appid,jdbcType=VARCHAR}
+  </update>
+</mapper>
