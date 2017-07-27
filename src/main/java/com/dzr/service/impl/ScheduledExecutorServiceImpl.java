@@ -4,22 +4,21 @@ import com.dzr.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
  * @author dingzr
  * @Description 计划任务方法类
- * @ClassName ScheduledExecutorService
+ * @ClassName ScheduledExecutorServiceImpl
  * @since 2017/7/20 11:01
  */
 
 @Component
 @ConditionalOnExpression("${scheduling.enabled} == true")
-public class ScheduledExecutorService {
+public class ScheduledExecutorServiceImpl {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScheduledExecutorService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScheduledExecutorServiceImpl.class);
 
     //上一次开始执行时间点之后5秒再执行
     @Scheduled(fixedRate = 5000)
