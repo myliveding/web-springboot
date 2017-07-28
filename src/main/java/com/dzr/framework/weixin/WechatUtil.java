@@ -18,12 +18,12 @@ import java.security.KeyStore;
 /**
  * @author dingzr
  * @Description 微信的工具类
- * @ClassName WeixinUtil
+ * @ClassName WechatUtil
  * @since 2017/7/27 14:24
  */
-public class weixinUtil {
+public class WechatUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(weixinUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(WechatUtil.class);
 
     //调用网页授权接口URL 通过code换取网页授权access_token
     public static final String OAUTH2_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
@@ -289,7 +289,7 @@ public class weixinUtil {
         StringBuffer buffer = new StringBuffer();
         try {
             // 证书文件(微信商户平台-账户设置-API安全-API证书-下载证书)
-            String keyStorePath = weixinUtil.class.getResource("/").getPath() + "/apiclient_cert.p12";
+            String keyStorePath = WechatUtil.class.getResource("/").getPath() + "/apiclient_cert.p12";
             // 证书密码（默认为商户ID）
             String password = Constant.MCH_ID;
             // 实例化密钥库
