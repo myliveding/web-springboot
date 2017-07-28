@@ -68,7 +68,27 @@ public class WechatUtil {
      */
     public static String webAuthorization(String appid, String appsecret, String code) {
         String userUrl = OAUTH2_ACCESS_TOKEN_URL.replace("APPID", appid).replace("SECRET", appsecret).replace("CODE", code);
-        return httpRequest(userUrl, "GET", null);
+        String authorJson = httpRequest(userUrl, "GET", null);
+        String openid = "";
+        if (!"".equals(authorJson)) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                Wechat weixin = objectMapper.readValue(authorJson, Wechat.class);
+                if (null == weixin.getOpenid() || "".equals(weixin.getOpenid())) {
+                    logger.info("网页授权失败：" + weixin.getErrmsg());
+                } else {
+                    openid = weixin.getOpenid();
+                }
+            } catch (JsonParseException e) {
+                logger.error("网页授权解析失败" + e.getMessage());
+            } catch (IOException e) {
+                logger.error("网页授权出现异常" + e.getMessage());
+            }
+        } else {
+            logger.info("去微信公众平台的网页授权结果为空");
+        }
+        return openid;
+
     }
 
     /**
@@ -113,18 +133,19 @@ public class WechatUtil {
     "expires_in":7200
     }
      */
-    public static Wechat getTicket(String accessToken) {
+    public static String getTicket(String accessToken) {
         String url = TICKET_URL.replace("ACCESS_TOKEN", accessToken);
         String ticket = httpRequest(url, "GET", null);
         logger.info("获取微信JS接口的临时票据:" + ticket);
-
-        Wechat weixin = new Wechat();
+        String jsTicket = "";
         if (!"".equals(ticket)) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                weixin = objectMapper.readValue(ticket, Wechat.class);
+                Wechat weixin = objectMapper.readValue(ticket, Wechat.class);
                 if (null == weixin.getTicket() || "".equals(weixin.getTicket())) {
                     logger.info("获取ticket失败：" + weixin.getErrmsg());
+                } else {
+                    jsTicket = weixin.getTicket();
                 }
             } catch (JsonParseException e) {
                 logger.error("获取ticket解析失败" + e.getMessage());
@@ -134,7 +155,7 @@ public class WechatUtil {
         } else {
             logger.info("去微信公众平台请求获取js临时票据的结果为空");
         }
-        return weixin;
+        return jsTicket;
     }
 
     /**

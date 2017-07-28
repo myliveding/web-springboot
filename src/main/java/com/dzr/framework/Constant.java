@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 public final class Constant {
 
+    //项目的域名
+    public static final String URL = "";
+
     //微信appid
     public static final String APP_ID = "";
 

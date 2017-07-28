@@ -5,13 +5,17 @@ import lombok.Data;
 @Data
 public class WechatToken {
 
+    private Integer id;
+
     private String appid;
 
     private String appsecret;
 
-    private String wxname;
+    private String name;
 
-    private String accessToken;
+    private Integer type;
+
+    private String token;
 
     private String remark;
 
