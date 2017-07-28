@@ -1,23 +1,19 @@
 package com.dzr.framework.weixin;
 
 import com.dzr.framework.Constant;
-import com.dzr.po.wx.AccessToken;
-import com.dzr.po.wx.Menu;
+import com.dzr.po.wx.WechatUser;
+import com.dzr.po.menu.Menu;
+import com.dzr.po.wx.Wechat;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JacksonJsonParser;
 
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.KeyStore;
 
 /**
  * @author dingzr
@@ -25,66 +21,203 @@ import java.util.Map;
  * @ClassName WeixinUtil
  * @since 2017/7/27 14:24
  */
-public class WeixinUtil {
+public class weixinUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(weixinUtil.class);
 
-    private static Logger logger = LoggerFactory.getLogger(WeixinUtil.class);
-    /**
-     * 调用access_token接口URL
-     */
+    //调用网页授权接口URL 通过code换取网页授权access_token
+    public static final String OAUTH2_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+
+    //调用access_token接口URL
     public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-    /**
-     * 调用创建菜单接口URL
-     */
-    public static final String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 
-    /**
-     * 调用获取菜单接口URL
-     */
-    public static final String MENU_GET_URL = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
+    //调用微信JS接口的临时票据
+    public static final String TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
-    /**
-     * 调用获取用户信息接口URL
-     */
+    //调用获取用于卡券接口签名的api_ticket
+    public static final String API_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=wx_card";
+
+    //调用获取用户信息接口URL
     public static final String USER_INFO_URL = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
 
-    /**
-     * 调用发送消息接口URL
-     */
-    public static final String MESSAGE_CUSTOM_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
-    /**
-     * 获取消息模板ID
-     */
+    //获取消息模板ID
     public static final String MESSAGE_TEMPLATE_ID_URL = "https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token=ACCESS_TOKEN";
-    /**
-     * 发送消息模板消息
-     */
+
+    //发送消息模板消息
     public static final String MESSAGE_TEMPLATE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
-    /**
-     * 调用生成二维码接口URL
-     */
+
+    //调用创建菜单接口URL
+    public static final String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+
+    //调用生成二维码接口URL
     public static final String QRCODE_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
-    /**
-     * 调用网页授权接口URL 通过code换取网页授权access_token
-     */
-    public static final String OAUTH2_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-    /**
-     * 调用微信JS接口的临时票据
-     */
-    public static final String TICKET_GETTICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
-    // 上传多媒体文件到微信服务器
-    public static final String UPLOAD_MEDIA_URL = "http://file.api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE";
-    public static final String DOWNLOAD_MEDIA_URL = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
-    //通过用户的OpenID查询其所在的GroupID
-    public static final String USER_GROUP = "https://api.weixin.qq.com/cgi-bin/groups/getid?access_token=ACCESS_TOKEN";
-    //移动用户分组
-    public static final String USER_GROUP_MOVE = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=ACCESS_TOKEN";
+    /**
+     * 网页授权,通过code换取网页授权access_token(只有openid是真实可用的)
+     * 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
+     * @param appid     应用ID
+     * @param appsecret 应用密钥
+     * @param code      填写第一步获取的code参数
+     * @return {"access_token":"ACCESS_TOKEN",
+    "expires_in":7200,
+    "refresh_token":"REFRESH_TOKEN",
+    "openid":"OPENID",
+    "scope":"SCOPE"
+    }
+    {"errcode":40029,"errmsg":"invalid code"}
+     */
+    public static String webAuthorization(String appid, String appsecret, String code) {
+        String userUrl = OAUTH2_ACCESS_TOKEN_URL.replace("APPID", appid).replace("SECRET", appsecret).replace("CODE", code);
+        return httpRequest(userUrl, "GET", null);
+    }
 
+    /**
+     * 获取真实可用的ACCESS_TOKEN
+     * @param appid     应用ID
+     * @param appsecret 应用密钥
+     * @return
+    {"access_token":"ACCESS_TOKEN","expires_in":7200}
+    {"errcode":40013,"errmsg":"invalid appid"}
+     */
+    public static Wechat getAccessToken(String appid, String appsecret) {
+        Wechat weixin = new Wechat();
+        String requestUrl = ACCESS_TOKEN_URL.replace("APPID", appid).replace("APPSECRET", appsecret);
+        String accessTokenTemp = httpRequest(requestUrl, "GET", null);
+        // 如果请求成功
+        if (!"".equals(accessTokenTemp)) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                weixin = objectMapper.readValue(accessTokenTemp, Wechat.class);
+                if (null == weixin.getAccess_token() || "".equals(weixin.getAccess_token())) {
+                    logger.info("获取access_token失败：" + weixin.getErrmsg());
+                }
+            } catch (JsonParseException e) {
+                logger.error("获取access_token解析失败" + e.getMessage());
+            } catch (IOException e) {
+                logger.error("获取access_token出现异常" + e.getMessage());
+            }
+        } else {
+            logger.info("去微信公众平台请求获取access_token的结果为空");
+        }
+        return weixin;
+    }
+
+    /**
+     * 获取微信JS接口的临时票据
+     * @param accessToken 有效的access_token
+     * @return
+     * {
+    "errcode":0,
+    "errmsg":"ok",
+    "ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
+    "expires_in":7200
+    }
+     */
+    public static Wechat getTicket(String accessToken) {
+        String url = TICKET_URL.replace("ACCESS_TOKEN", accessToken);
+        String ticket = httpRequest(url, "GET", null);
+        logger.info("获取微信JS接口的临时票据:" + ticket);
+
+        Wechat weixin = new Wechat();
+        if (!"".equals(ticket)) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                weixin = objectMapper.readValue(ticket, Wechat.class);
+                if (null == weixin.getTicket() || "".equals(weixin.getTicket())) {
+                    logger.info("获取ticket失败：" + weixin.getErrmsg());
+                }
+            } catch (JsonParseException e) {
+                logger.error("获取ticket解析失败" + e.getMessage());
+            } catch (IOException e) {
+                logger.error("获取ticket出现异常" + e.getMessage());
+            }
+        } else {
+            logger.info("去微信公众平台请求获取js临时票据的结果为空");
+        }
+        return weixin;
+    }
+
+    /**
+     * 创建菜单
+     * @param menu        菜单实例
+     * @param accessToken 有效的access_token
+     * @return 0表示成功，其他值表示失败
+     * {"errcode":0,"errmsg":"ok"}
+     * {"errcode":40018,"errmsg":"invalid button name size"}
+     */
+    public static void createMenu(Menu menu, String accessToken) throws IOException {
+        // 拼装创建菜单的url
+        String url = MENU_CREATE_URL.replace("ACCESS_TOKEN", accessToken);
+        // 将菜单对象转换成json字符串
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonMenu = mapper.writeValueAsString(menu);
+        // 调用接口创建菜单
+        String res = httpRequest(url, "POST", jsonMenu);
+        logger.info("创建菜单的返回值：" + res);
+    }
+
+    /**
+     * 获取用户详细信息
+     * @param accessToken 有效的access_token
+     * @param openid      对应的openid
+     * @return {
+    "subscribe": 1,
+    "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
+    "nickname": "Band",
+    "sex": 1,
+    "language": "zh_CN",
+    "city": "广州",
+    "province": "广东",
+    "country": "中国",
+    "headimgurl":  "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4
+    eMsv84eavHiaiceqxibJxCfHe/0",
+    "subscribe_time": 1382694957,
+    "unionid": " o6_bmasdasdsad6_2sgVt7hMZOPfL"
+    "remark": "",
+    "groupid": 0,
+    "tagid_list":[128,2] 用户被打上的标签ID列表
+    }
+     */
+    public static WechatUser getUserInfo(String accessToken, String openid) {
+        WechatUser wechatUser = new WechatUser();
+
+        String userUrl = USER_INFO_URL.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openid);
+        String userJson = httpRequest(userUrl, "GET", null);
+        if (!"".equals(userJson)) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                wechatUser = objectMapper.readValue(userJson, WechatUser.class);
+            } catch (JsonParseException e) {
+                logger.error("用户信息json解析失败" + e.getMessage());
+            } catch (IOException e) {
+                logger.error("获取用户信息出现异常" + e.getMessage());
+            }
+        } else {
+            logger.error("获取用户信息为空");
+        }
+        return wechatUser;
+    }
+
+    /**
+     * 发送模板消息
+     * @param accessToken 有效的access_token
+     * @param content     待发送的消息对象（json）
+     * @return   {
+    "errcode":0,
+    "errmsg":"ok",
+    "msgid":200228332
+    }
+     */
+    public static String sendTemplateMessage(String accessToken, String content) {
+        String url = MESSAGE_TEMPLATE_SEND_URL.replace("ACCESS_TOKEN", accessToken);
+        // 调用接口发送消息
+        String json = httpRequest(url, "POST", content);
+        logger.info("发送微信提醒模版，发送内容：" + content + "，结果：" + json);
+        return json;
+    }
 
     /**
      * http请求  handleRequest
-     *
      * @param requestUrl
      * @param requestMethod
      * @param outputStr
@@ -146,7 +279,6 @@ public class WeixinUtil {
 
     /**
      * https的请求（微信支付在https环境下需要加载微信api安全证书（下载自微信商户平台））
-     *
      * @param requestUrl
      * @param requestMethod
      * @param outputStr
@@ -157,7 +289,7 @@ public class WeixinUtil {
         StringBuffer buffer = new StringBuffer();
         try {
             // 证书文件(微信商户平台-账户设置-API安全-API证书-下载证书)
-            String keyStorePath = WeixinUtil.class.getResource("/").getPath() + "/apiclient_cert.p12";
+            String keyStorePath = weixinUtil.class.getResource("/").getPath() + "/apiclient_cert.p12";
             // 证书密码（默认为商户ID）
             String password = Constant.MCH_ID;
             // 实例化密钥库
@@ -200,7 +332,6 @@ public class WeixinUtil {
                 outputStream.write(outputStr.getBytes("UTF-8"));
                 outputStream.close();
             }
-
             // 将返回的输入流转换成字符串
             InputStream inputStream = httpUrlConn.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
@@ -222,164 +353,6 @@ public class WeixinUtil {
         } catch (Exception e) {
             logger.error("https request error:{}", e);
         }
-        return jsonObject;
-    }
-
-    /**
-     * 刷新accessToken
-     *
-     * @param appid     应用ID
-     * @param appsecret 应用密钥
-     * @return
-     */
-    public static AccessToken getAccessTokenForWXService(String appid, String appsecret) {
-
-        AccessToken accessToken = null;
-        String requestUrl = ACCESS_TOKEN_URL.replace("APPID", appid).replace("APPSECRET", appsecret);
-        String accessTokenTemp = httpRequest(requestUrl, "GET", null);
-        // 如果请求成功
-        if (!"".equals(accessTokenTemp)) {
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                accessToken = objectMapper.readValue(accessTokenTemp, AccessToken.class);
-
-                accessToken.setToken(jsonObject.getString("access_token"));
-                accessToken.setExpiresIn(jsonObject.getInt("expires_in"));
-            } catch (JsonParseException e) {
-                accessToken = null;
-                logger.error("获取token失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
-            } catch (IOException e) {
-
-            }
-        }
-        return accessToken;
-    }
-
-
-    /**
-     * 创建菜单
-     *
-     * @param menu        菜单实例
-     * @param accessToken 有效的access_token
-     * @return 0表示成功，其他值表示失败
-     */
-    public static int createMenu(Menu menu, String accessToken) {
-
-
-        int result = 0;
-
-        // 拼装创建菜单的url
-        String url = MENU_CREATE_URL.replace("ACCESS_TOKEN", accessToken);
-        // 将菜单对象转换成json字符串
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonMenu = mapper.writeValueAsString(menu);
-        // 调用接口创建菜单
-        String = httpRequest(url, "POST", jsonMenu);
-
-        if (null != jsonObject) {
-            if (0 != jsonObject.getInt("errcode")) {
-                result = jsonObject.getInt("errcode");
-                logger.error("创建菜单失败 errcode:{} errmsg:{}", jsonObject.getInt("errcode"), jsonObject.getString("errmsg"));
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * 获取菜单
-     *
-     * @param accessToken 有效的access_token
-     * @return
-     */
-    public static JSONObject getMenu(String accessToken) {
-        String userUrl = MENU_GET_URL.replace("ACCESS_TOKEN", accessToken);
-        JSONObject jsonObject = httpRequest(userUrl, "GET", null);
-        return jsonObject;
-    }
-
-    /**
-     * 获取用户详细信息
-     *
-     * @param accessToken 有效的access_token
-     * @param openid      对应的openid
-     * @return
-     */
-    public static JSONObject getUserInfo(String accessToken, String openid) {
-        String userUrl = USER_INFO_URL.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openid);
-        JSONObject jsonObject = httpRequest(userUrl, "GET", null);
-        return jsonObject;
-    }
-
-    /**
-     * 发送文本消息
-     *
-     * @param accessToken 有效的access_token
-     * @param context     待发送的文本对象
-     * @return
-     */
-    public static String setSendMessage(String accessToken, String context) {
-        String url = MESSAGE_TEMPLATE_SEND_URL.replace("ACCESS_TOKEN", accessToken);
-        // 将文本对象转换成json字符串
-        // 调用接口发送消息
-        logger.info("发送文本消息00：" + context);
-        JSONObject jsonObject = httpRequest(url, "POST", context);
-        logger.info("发送文本消息结果：" + jsonObject.toString());
-        return jsonObject;
-    }
-
-    /**
-     * 网页授权 通过code换取网页授权access_token
-     *
-     * @param appid     应用ID
-     * @param appsecret 应用密钥
-     * @param code      填写第一步获取的code参数
-     * @return
-     */
-    public static JSONObject getUserInfoOfScope(String appid, String appsecret, String code) {
-        String userUrl = OAUTH2_ACCESS_TOKEN_URL.replace("APPID", appid).replace("SECRET", appsecret).replace("CODE", code);
-        JSONObject jsonObject = httpRequest(userUrl, "GET", null);
-        return jsonObject;
-    }
-
-    /**
-     * 获取微信JS接口的临时票据
-     *
-     * @param accessToken 有效的access_token
-     * @return
-     */
-    public static JSONObject getJSAPITicket(String accessToken) {
-        String url = TICKET_GETTICKET_URL.replace("ACCESS_TOKEN", accessToken);
-        JSONObject jsonObject = httpRequest(url, "GET", null);
-        logger.info("获取微信JS接口的临时票据:" + jsonObject.toString());
-        return jsonObject;
-    }
-
-    /**
-     * 消息模版ID获取
-     *
-     * @param accessToken
-     * @param shortId
-     * @return
-     */
-    public static JSONObject getTemplateId(String accessToken, String shortId) {
-        String requestUrl = MESSAGE_TEMPLATE_ID_URL.replace("ACCESS_TOKEN", accessToken);
-        JSONObject jsonObject = httpRequest(requestUrl, "POST", shortId);
-        return jsonObject;
-    }
-
-    /**
-     * 发送模板消息
-     *
-     * @param accessToken 有效的access_token
-     * @param content     待发送的消息对象
-     * @return
-     */
-    public static JSONObject sendTemplateMessage(String accessToken, String content) {
-        String url = MESSAGE_TEMPLATE_SEND_URL.replace("ACCESS_TOKEN", accessToken);
-        // 调用接口发送消息
-        JSONObject jsonObject = httpRequest(url, "POST", content);
         return jsonObject;
     }
 

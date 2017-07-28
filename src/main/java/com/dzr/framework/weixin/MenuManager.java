@@ -81,7 +81,7 @@ public class MenuManager {
 
         System.out.println(url + " = " + appId);
         // 调用接口创建菜单
-        WeixinUtil.createMenu(getMenu(appId, url), accessToken);
+        weixinUtil.createMenu(getMenu(appId, url), accessToken);
     }
 
 }
