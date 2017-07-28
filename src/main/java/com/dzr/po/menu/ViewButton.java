@@ -1,4 +1,4 @@
-package com.dzr.po.wx;
+package com.dzr.po.menu;
 
 /**
  * view类型的菜单

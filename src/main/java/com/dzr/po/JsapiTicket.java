@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class JsapiTicket {
+
     private String appid;
 
     private String ticket;

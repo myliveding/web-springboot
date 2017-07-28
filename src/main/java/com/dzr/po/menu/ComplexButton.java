@@ -1,8 +1,7 @@
-package com.dzr.po.wx;
+package com.dzr.po.menu;
 
 /**
  * 复杂按钮（父按钮）
- *
  * @author wuhao
  * @date 2015-06-01
  */

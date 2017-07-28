@@ -1,19 +1,16 @@
 package com.dzr.framework.weixin;
 
-import com.dzr.po.wx.Button;
-import com.dzr.po.wx.ComplexButton;
-import com.dzr.po.wx.Menu;
-import com.dzr.po.wx.ViewButton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.dzr.po.menu.Button;
+import com.dzr.po.menu.ComplexButton;
+import com.dzr.po.menu.Menu;
+import com.dzr.po.menu.ViewButton;
+
+import java.io.IOException;
 
 public class MenuManager {
 
-    private static Logger logger = LoggerFactory.getLogger(MenuManager.class);
-
     /**
      * 组装菜单数据
-     *
      * @return
      */
     private static Menu getMenu(String appid, String url) {
@@ -75,7 +72,7 @@ public class MenuManager {
         return menu;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        System.err.println(WeixinUtil.getAccessTokenForWXService("wxbb336e8a40b636d6","aa389c3d29c333ebdad2d50b95160d64").getToken());
 
         String accessToken = "rIC1Cd6GoS5fPYRAtqk1g8jlId-y5YXJP0_flSrfGy7_yLff9rEmOauQYvp3kjWHCQOrcjd3k7tRH3xjrUOuJJMrCsOa4qTcvgTdYa4R1RCq7QKvTcETfva6uE9VrC47ITMaACABMF";
@@ -84,14 +81,7 @@ public class MenuManager {
 
         System.out.println(url + " = " + appId);
         // 调用接口创建菜单
-        int result = 1;
-        result = WeixinUtil.createMenu(getMenu(appId, url), accessToken);
-        // 判断菜单创建结果
-        if (0 == result) {
-            logger.info("菜单创建成功！");
-        } else {
-            logger.info("菜单创建失败，错误码：" + result);
-        }
+        WeixinUtil.createMenu(getMenu(appId, url), accessToken);
     }
 
 }

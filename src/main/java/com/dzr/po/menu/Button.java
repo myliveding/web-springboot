@@ -1,4 +1,4 @@
-package com.dzr.po.wx;
+package com.dzr.po.menu;
 
 /**
  * 按钮的基类

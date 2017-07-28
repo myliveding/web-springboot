@@ -1,8 +1,7 @@
-package com.dzr.po.wx;
+package com.dzr.po.menu;
 
 /**
  * 普通按钮（子按钮）
- *
  * @author wuhao
  * @date 2015-06-01
  */

@@ -1,8 +1,7 @@
-package com.dzr.po.wx;
+package com.dzr.po.menu;
 
 /**
  * 菜单
- *
  * @author wuhao
  * @date 2015-06-01
  */

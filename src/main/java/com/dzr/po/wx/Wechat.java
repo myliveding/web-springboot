@@ -5,19 +5,16 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Weixin {
+public class Wechat {
 
-    private String jsapiTicket; //js调用的凭据
-
-    @SerializedName("fullName")
-    private String access_token;    //accesstoken
-
+    private String ticket; //js调用的临时凭据
+    private String access_token; //accesstoken
     private String expires_in;
-
     private String refresh_token;
-
     private String openid;
     private String scope;
+    private Integer errcode; //错误code
+    private String errmsg; //错误信息
 
 
 }
