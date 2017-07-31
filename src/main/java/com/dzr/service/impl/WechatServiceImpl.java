@@ -1,7 +1,7 @@
 package com.dzr.service.impl;
 
 
-import com.dzr.framework.Constant;
+import com.dzr.config.WechatParams;
 import com.dzr.framework.weixin.WechatUtil;
 import com.dzr.mapper.primary.WechatTokenMapper;
 import com.dzr.po.WechatToken;
@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +28,8 @@ public class WechatServiceImpl implements WechatService {
 
     @Autowired
     private WechatTokenMapper wechatTokenMapper;
+    @Autowired
+    WechatParams wechatParams;
 
     public String getAccessToken(String appid) {
 
@@ -50,7 +49,7 @@ public class WechatServiceImpl implements WechatService {
                     token = wechatToken.getToken();
                     logger.info("当前使用的时间差小于6000s，取值数据库的accesstoken：" + token);
                 } else {
-                    Wechat accessToken = WechatUtil.getAccessToken(appid, Constant.APP_SECRET);
+                    Wechat accessToken = WechatUtil.getAccessToken(appid, wechatParams.getAppSecret());
                     if (null != accessToken.getAccess_token() && !"".equals(accessToken.getAccess_token())) {
                         logger.info("获取到微信平台的accesstoken：" + accessToken.getAccess_token());
                         token = accessToken.getAccess_token();
@@ -60,7 +59,7 @@ public class WechatServiceImpl implements WechatService {
                     }
                 }
             } else {
-                Wechat accessToken = WechatUtil.getAccessToken(appid, Constant.APP_SECRET);
+                Wechat accessToken = WechatUtil.getAccessToken(appid, wechatParams.getAppSecret());
                 if (null != accessToken.getAccess_token() && !"".equals(accessToken.getAccess_token())) {
                     token = accessToken.getAccess_token();
                     logger.info("数据库中有对象但是没有token的值，获取服务器accesstoken：" + token);
@@ -75,12 +74,12 @@ public class WechatServiceImpl implements WechatService {
             }
         } else {
             //appid对应的微信公众平台为空
-            Wechat accessToken = WechatUtil.getAccessToken(Constant.APP_ID, Constant.APP_SECRET);
+            Wechat accessToken = WechatUtil.getAccessToken(wechatParams.getAppId(), wechatParams.getAppSecret());
             if (null != accessToken.getAccess_token() && !"".equals(accessToken.getAccess_token())) {
                 token = accessToken.getAccess_token();
                 logger.info("数据库中没有初始值,此公众号第一次获取accesstoken: " + token);
-                wechatToken.setAppid(Constant.APP_ID);
-                wechatToken.setAppsecret(Constant.APP_SECRET);
+                wechatToken.setAppid(wechatParams.getAppId());
+                wechatToken.setAppsecret(wechatParams.getAppSecret());
                 wechatToken.setName("无忧保");
                 wechatToken.setType(0);
                 wechatToken.setToken(token);
@@ -139,8 +138,8 @@ public class WechatServiceImpl implements WechatService {
             ticket = WechatUtil.getTicket(accessToken);
             if (!"".equals(ticket)) {
                 logger.info("数据库中没有初始值,此公众号第一次获取ticket: " + jsapiTicket);
-                jsapiTicket.setAppid(Constant.APP_ID);
-                jsapiTicket.setAppsecret(Constant.APP_SECRET);
+                jsapiTicket.setAppid(wechatParams.getAppId());
+                jsapiTicket.setAppsecret(wechatParams.getAppSecret());
                 jsapiTicket.setName("无忧保");
                 jsapiTicket.setType(1);
                 jsapiTicket.setToken(ticket);
@@ -179,12 +178,12 @@ public class WechatServiceImpl implements WechatService {
      */
     public WechatUser getUserInfo(String appid, String openid) {
         //获取微信服务用户数据
-        String accessToken = this.getAccessToken(Constant.APP_ID);
+        String accessToken = this.getAccessToken(wechatParams.getAppId());
         logger.info("根据openid获取用户详细信息前,获取的accessToken：" + accessToken);
 
         WechatUser userInfo = WechatUtil.getUserInfo(accessToken, openid);
         if (null != userInfo.getErrmsg() && userInfo.getErrmsg().indexOf("access_token is invalid") > -1) {
-            accessToken = this.getAccessTokenForError(Constant.APP_ID);
+            accessToken = this.getAccessTokenForError(wechatParams.getAppId());
             logger.info("根据openid获取用户详细信息前,立即获取的accessToken：" + accessToken);
             userInfo = WechatUtil.getUserInfo(accessToken, openid);
         }
@@ -223,7 +222,7 @@ public class WechatServiceImpl implements WechatService {
         String token = "-1";
         Integer nowTime = DateUtils.getNowTime();
         //appid对应的微信公众平台为空
-        Wechat accessToken = WechatUtil.getAccessToken(Constant.APP_ID, Constant.APP_SECRET);
+        Wechat accessToken = WechatUtil.getAccessToken(wechatParams.getAppId(), wechatParams.getAppSecret());
         if (null != accessToken) {
             token = accessToken.getAccess_token();
             logger.info("数据库中值有误重新获取accesstoken：" + token);
@@ -243,7 +242,7 @@ public class WechatServiceImpl implements WechatService {
      */
     private void updateByAppId(Integer type, String token, String remark, Integer nowTime) {
         WechatToken wechatToken = new WechatToken();
-        wechatToken.setAppid(Constant.APP_ID);
+        wechatToken.setAppid(wechatParams.getAppId());
         wechatToken.setType(type);
         wechatToken.setToken(token);
         wechatToken.setUpdateTime(nowTime);

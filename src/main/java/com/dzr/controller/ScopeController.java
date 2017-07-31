@@ -1,10 +1,12 @@
 package com.dzr.controller;
 
+import com.dzr.config.WechatParams;
 import com.dzr.framework.Constant;
 import com.dzr.framework.weixin.WechatUtil;
 import com.dzr.service.WechatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +26,8 @@ public class ScopeController {
 
     @Resource
     private WechatService wechatService;
+    @Autowired
+    WechatParams wechatParams;
 
     @RequestMapping("/openid")
     public ModelAndView getUserOpenIdOfScope(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -39,8 +43,8 @@ public class ScopeController {
                 appid = appid.substring(0, 18);
             }
             logger.info("pram：" + pram + ",appid：" + appid);
-            String openid = WechatUtil.webAuthorization(appid, Constant.APP_SECRET, code);
-            logger.info("redirect:" + Constant.URL + "/" + nextPage + "?openid=" + openid + "&appid=" + appid + "#" + pram);
+            String openid = WechatUtil.webAuthorization(appid, wechatParams.getAppSecret(), code);
+            logger.info("redirect:" + wechatParams.getDomain() + "/" + nextPage + "?openid=" + openid + "&appid=" + appid + "#" + pram);
             HttpSession session = request.getSession();
             session.setAttribute("openid", openid);
             session.setAttribute("appid", appid);
@@ -48,10 +52,10 @@ public class ScopeController {
 
             if (!"".equals(pram)) {
                 logger.info(nextPage + "?" + pram);
-                return new ModelAndView("redirect:" + Constant.URL + "/" + nextPage + "?" + pram);
+                return new ModelAndView("redirect:" + wechatParams.getDomain() + "/" + nextPage + "?" + pram);
 
             } else {
-                return new ModelAndView("redirect:" + Constant.URL + "/" + nextPage);
+                return new ModelAndView("redirect:" + wechatParams.getDomain() + "/" + nextPage);
             }
 
         } else {

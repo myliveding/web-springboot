@@ -1,8 +1,10 @@
 package com.dzr.util;
 
+import com.dzr.config.WechatParams;
 import com.dzr.framework.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,12 +16,15 @@ import java.util.Arrays;
 
 
 public class SignUtil {
+
     //	private static String token = "wechat";
     private static Logger logger = LoggerFactory.getLogger(SignUtil.class);
 
+    @Autowired
+    static WechatParams wechatParams;
+
     /**
      * 验证签名
-     *
      * @param signature
      * @param timestamp
      * @param nonce
@@ -27,7 +32,7 @@ public class SignUtil {
      */
     public static boolean checkSignature(String signature, String timestamp,
                                          String nonce) {
-        String[] arr = new String[]{Constant.APP_TOKEN, timestamp, nonce};
+        String[] arr = new String[]{wechatParams.getAppToken(), timestamp, nonce};
         // 将token、timestamp、nonce三个参数进行字典序排序
         Arrays.sort(arr);
         StringBuilder content = new StringBuilder();

@@ -1,5 +1,6 @@
 package com.dzr.framework.weixin;
 
+import com.dzr.config.WechatParams;
 import com.dzr.framework.Constant;
 import com.dzr.po.wx.WechatUser;
 import com.dzr.po.menu.Menu;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -21,8 +23,12 @@ import java.security.KeyStore;
  * @ClassName WechatUtil
  * @since 2017/7/27 14:24
  */
+
+
 public class WechatUtil {
 
+    @Autowired
+    static WechatParams wechatParams;
     private static Logger logger = LoggerFactory.getLogger(WechatUtil.class);
 
     //调用网页授权接口URL 通过code换取网页授权access_token
@@ -312,7 +318,7 @@ public class WechatUtil {
             // 证书文件(微信商户平台-账户设置-API安全-API证书-下载证书)
             String keyStorePath = WechatUtil.class.getResource("/").getPath() + "/apiclient_cert.p12";
             // 证书密码（默认为商户ID）
-            String password = Constant.MCH_ID;
+            String password = wechatParams.getMchId();
             // 实例化密钥库
             KeyStore ks = KeyStore.getInstance("PKCS12");
             // 获得密钥库文件流
