@@ -1,5 +1,6 @@
 package com.dzr.po.wx;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 /**
@@ -10,9 +11,10 @@ import lombok.Data;
  */
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WechatUser {
 
-    private Integer subscribe;
+    private String subscribe;
     private String openid;
     private String nickname;
     private Integer sex;
@@ -24,4 +26,7 @@ public class WechatUser {
     private String unionid;
     private String remark;
     private Integer groupid;
+
+    private Integer errcode; //错误code
+    private String errmsg; //错误信息
 }

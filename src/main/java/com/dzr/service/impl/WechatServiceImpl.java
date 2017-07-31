@@ -6,6 +6,7 @@ import com.dzr.framework.weixin.WechatUtil;
 import com.dzr.mapper.primary.WechatTokenMapper;
 import com.dzr.po.WechatToken;
 import com.dzr.po.wx.Wechat;
+import com.dzr.po.wx.WechatUser;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
 import org.slf4j.Logger;
@@ -171,72 +172,25 @@ public class WechatServiceImpl implements WechatService {
     }
 
     /**
-     * 获取用于调用微信JS接口的临时票据
-     * @param appid 微信公众编号
-     * @return
-     */
-//    public Weixin getJSAPITicketIm(String appid) {
-//        logger.info("accessToken失效，重新获取");
-//        Weixin weixin = new Weixin();
-//        String accessToken = this.getAccessTOkenIm(appid);//获取accessToken
-//        JsapiTicket jsapiTicket = new JsapiTicket();
-//        String ticket = "-1";
-//        Date date = new Date();//创建现在的日期
-//        //appid对应的微信公众平台为空
-//        JSONObject jSONObject = WeixinUtil.getJSAPITicket(accessToken);
-//        if (jSONObject.getInt("errcode") == 0) {
-//            ticket = jSONObject.getString("ticket");
-//            jsapiTicket.setTicket(ticket);
-//            jsapiTicket.setCreateTime(date);
-//            jsapiTicket.setAppid(appid);
-//            jsapiTicketService.updateByPrimaryKeySelective(jsapiTicket);
-//        }
-//        weixin.setAccessToken(accessToken);
-//        weixin.setJsapiTicket(ticket);
-//        return weixin;
-//    }
-
-//    public String getAccessTOkenIm(String appid) {
-//        String token = "-1";
-//        Date date = new Date();//创建现在的日期
-//        //appid对应的微信公众平台为空
-//        TBWechat tBWechat = new TBWechat();
-//        AccessToken accessToken = WeixinUtil.getAccessTokenForWXService(Constant.APP_ID, Constant.APP_SECRET);
-//        if (null != accessToken) {
-//            token = accessToken.getToken();
-//            logger.info("数据库中值有误重新获取accesstoken=" + token);
-//            tBWechat.setAccessToken(token);
-//            tBWechat.setCreattime(date);
-//            tBWechat.setAppid(Constant.APP_ID);
-//            tBWechat.setAppsecret(Constant.APP_SECRET);
-//            tBWechat.setWxname("无忧保");
-//            tBWechatService.updateByPrimaryKeySelective(tBWechat);
-//        }
-//        return token;
-//    }
-
-    /**
      * 根据openid获取用户详细信息
      * @param appid  应用ID
      * @param openid
      * @return
      */
-//    public JSONObject getUserInfoOfOpenId(String appid, String openid) {
-//        //获取微信服务用户数据
-//        Weixin weixin = this.getJSAPITicket(Constant.APP_ID);
-//        String accessToken = weixin.getAccessToken();
-//        logger.info("根据openid获取用户详细信息前,获取的accessToken：" + accessToken);
-//
-//        JSONObject jsonObject = WeixinUtil.getUserInfo(accessToken, openid);
-//        if (jsonObject.toString().indexOf("access_token is invalid") > -1) {
-//            weixin = this.getJSAPITicketIm(Constant.APP_ID);
-//            accessToken = weixin.getAccessToken();
-//            logger.info("根据openid获取用户详细信息前,立即获取的accessToken：" + accessToken);
-//            jsonObject = WeixinUtil.getUserInfo(accessToken, openid);
-//        }
-//        logger.info("根据openid获取用户详细信息返回值：" + jsonObject);
-//        return jsonObject;
-//    }
+    public WechatUser getUserInfo(String appid, String openid) {
+        //获取微信服务用户数据
+        String accessToken = this.getAccessToken(Constant.APP_ID);
+        logger.info("根据openid获取用户详细信息前,获取的accessToken：" + accessToken);
+
+        WechatUser userInfo = WechatUtil.getUserInfo(accessToken, openid);
+        if (null != userInfo.getErrmsg() && userInfo.getErrmsg().indexOf("access_token is invalid") > -1) {
+            accessToken = this.getAccessTokenForError(Constant.APP_ID);
+            logger.info("根据openid获取用户详细信息前,立即获取的accessToken：" + accessToken);
+            userInfo = WechatUtil.getUserInfo(accessToken, openid);
+        }
+        logger.info("根据openid获取用户详细信息返回值：" + userInfo.getSubscribe());
+        return userInfo;
+    }
 
     /**
      * 根据appid和openid判断当前用户是否关注公众号
@@ -244,24 +198,57 @@ public class WechatServiceImpl implements WechatService {
      * @param openid
      * @return true为已关注  false未关注
      */
-//    public boolean IsSubscribe(String appid, String openid) {
-//        logger.info("根据appid和openid判断当前用户是否关注公众号,appid为：" + appid + ",openid为：" + openid);
-//        if (!"".equals(appid) && !"".equals(openid)) {
-//            try {
-//                JSONObject jSONObject = this.getUserInfoOfOpenId(appid, openid);
-//                String subscribe = jSONObject.getString("subscribe");
-//                logger.info("根据appid和openid判断当前用户是否关注公众号,结果为(0为未关注,1为已关注)：" + subscribe);
-//                if ("1".equalsIgnoreCase(subscribe)) { //已关注
-//                    return true;
-//                }
-//            } catch (Exception e) {
-//                logger.info("根据appid和openid判断当前用户是否关注公众号出错!" + e.getMessage());
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
-//        return false;
-//    }
+    public boolean isSubscribe(String appid, String openid) {
+        logger.info("根据appid和openid判断当前用户是否关注公众号,appid为：" + appid + ",openid为：" + openid);
+        if (!"".equals(appid) && !"".equals(openid)) {
+            WechatUser wechatUser = this.getUserInfo(appid, openid);
+            if (null != wechatUser.getSubscribe()) {
+                String subscribe = wechatUser.getSubscribe();
+                logger.info("根据appid和openid判断当前用户是否关注公众号,结果为(0为未关注,1为已关注)：" + subscribe);
+                if ("1".equalsIgnoreCase(subscribe)) { //已关注
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * AccessToken错误重新获取
+     *
+     * @param appid
+     * @return
+     */
+    public String getAccessTokenForError(String appid) {
+        String token = "-1";
+        Integer nowTime = DateUtils.getNowTime();
+        //appid对应的微信公众平台为空
+        Wechat accessToken = WechatUtil.getAccessToken(Constant.APP_ID, Constant.APP_SECRET);
+        if (null != accessToken) {
+            token = accessToken.getAccess_token();
+            logger.info("数据库中值有误重新获取accesstoken：" + token);
+            updateByAppId(0, token, "数据库中值有误重新获取accesstoken", nowTime);
+            logger.error("数据库中值有误重新获取accesstoken：" + token);
+        }
+        return token;
+    }
+
+    /**
+     * 把左心呃token存入数据库
+     *
+     * @param type
+     * @param token
+     * @param remark
+     * @param nowTime
+     */
+    private void updateByAppId(Integer type, String token, String remark, Integer nowTime) {
+        WechatToken wechatToken = new WechatToken();
+        wechatToken.setAppid(Constant.APP_ID);
+        wechatToken.setType(type);
+        wechatToken.setToken(token);
+        wechatToken.setUpdateTime(nowTime);
+        wechatToken.setRemark(remark);
+        wechatTokenMapper.updateByAppId(wechatToken);
+    }
 
 }

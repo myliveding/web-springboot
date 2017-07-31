@@ -22,4 +22,5 @@ public interface WechatTokenMapper {
 
     WechatToken selectTokenByAppId(Map<String, String> map);
 
+    int updateByAppId(WechatToken record);
 }

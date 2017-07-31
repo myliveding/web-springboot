@@ -144,6 +144,23 @@
             <version>2.9.0.pr3</version>
         </dependency>
 
+        <!-- xml文件解析 -->
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
         <!-- 热加载 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

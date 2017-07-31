@@ -104,7 +104,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.dzr.po.WechatToken">
-    update wechat_token
+        update wechat_token
         <set>
             <if test="appid != null">
                 appid = #{appid,jdbcType=VARCHAR},
@@ -161,5 +161,25 @@
         AND is_delete = 0
         AND type = #{type}
     </select>
+
+    <!-- 根据appid和type来更新token -->
+    <update id="updateByAppId" parameterType="com.dzr.po.WechatToken">
+        update wechat_token
+        <set>
+            <if test="token != null">
+                token = #{token},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where appid = #{appid}
+        AND type = #{type}
+        AND token != #{token}
+        AND is_delete = 0
+    </update>
 
 </mapper>
