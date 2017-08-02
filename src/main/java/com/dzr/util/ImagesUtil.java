@@ -1,4 +1,4 @@
-package com.dzr.util.file;
+package com.dzr.util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
