@@ -16,7 +16,6 @@ spring.thymeleaf.cache=false
 
 # 待办事项
 待操作：
-10. 微信适用
 2. 分页插件 公共异常
 9. 页面编写
 5. CentOS 7 64位的服务器配置 java tomcat ftp 数据库
