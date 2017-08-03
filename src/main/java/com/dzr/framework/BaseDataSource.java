@@ -1,5 +1,7 @@
 package com.dzr.framework;
 
+import com.dzr.framework.config.DataSourcePrimaryConfig;
+import com.dzr.framework.config.DataSourceSecondaryConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServlet;
