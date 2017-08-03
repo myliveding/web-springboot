@@ -22,9 +22,13 @@ spring:
 
     #h5页面 templates
     thymeleaf:
-      cache: false #用于页面热部署
+      cache: false
       encoding: UTF-8
       mode: HTML5
+      check-template-location: true
+      prefix: classpath:/templates/
+      suffix: .html
+      content-type: text/html
 
 server:
     port: 8088
