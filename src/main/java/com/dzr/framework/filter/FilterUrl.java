@@ -1,4 +1,4 @@
-package com.dzr.filter;
+package com.dzr.framework.filter;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

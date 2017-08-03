@@ -1,4 +1,4 @@
-package com.dzr.framework.weixin;
+package com.dzr.weixin;
 
 import com.dzr.po.menu.Button;
 import com.dzr.po.menu.ComplexButton;

@@ -1,7 +1,6 @@
 package com.dzr.util;
 
-import com.dzr.config.WechatParams;
-import com.dzr.framework.Constant;
+import com.dzr.framework.config.WechatParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

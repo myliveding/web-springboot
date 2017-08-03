@@ -1,7 +1,6 @@
-package com.dzr.framework.weixin;
+package com.dzr.weixin;
 
-import com.dzr.config.WechatParams;
-import com.dzr.framework.Constant;
+import com.dzr.framework.config.WechatParams;
 import com.dzr.po.wx.WechatUser;
 import com.dzr.po.menu.Menu;
 import com.dzr.po.wx.Wechat;

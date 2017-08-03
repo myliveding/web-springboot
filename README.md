@@ -13,7 +13,7 @@ spring.thymeleaf.cache=false
 2. mybatis的逆向工程
 有个插件叫做MyBatisCodeHelper（需要自己先去定义po）
 现在我使用的是配置文件的形式
-ps: war打包时请使用插件的形式
+ps: war打包时请不能使用插件形式（打包时需要把逆向工程的插件注释掉）
 
 3. tomcat需要8.0以上版本
 

@@ -1,4 +1,4 @@
-package com.dzr.framework.weixin;
+package com.dzr.weixin;
 
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;

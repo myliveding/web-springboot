@@ -1,4 +1,4 @@
-package com.dzr.framework;
+package com.dzr.util;
 
 public final class Constant {
 

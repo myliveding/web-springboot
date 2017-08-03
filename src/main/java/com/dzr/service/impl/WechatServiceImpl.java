@@ -1,8 +1,8 @@
 package com.dzr.service.impl;
 
 
-import com.dzr.config.WechatParams;
-import com.dzr.framework.weixin.WechatUtil;
+import com.dzr.framework.config.WechatParams;
+import com.dzr.weixin.WechatUtil;
 import com.dzr.mapper.primary.WechatTokenMapper;
 import com.dzr.po.WechatToken;
 import com.dzr.po.wx.Wechat;

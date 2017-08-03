@@ -1,4 +1,4 @@
-package com.dzr.config;
+package com.dzr.framework.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

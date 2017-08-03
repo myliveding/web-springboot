@@ -2,7 +2,7 @@ package com.dzr.controller;
 
 import com.dzr.po.User;
 import com.dzr.service.UserService;
-import com.dzr.config.YmlConfig;
+import com.dzr.framework.config.YmlConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

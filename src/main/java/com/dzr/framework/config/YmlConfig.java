@@ -1,4 +1,4 @@
-package com.dzr.config;
+package com.dzr.framework.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
