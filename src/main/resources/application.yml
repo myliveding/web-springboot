@@ -37,31 +37,3 @@ logging:
     level:
         com.dzr: DEBUG
     file: /home/wwwlogs/${spring.application.name}.log
-
-filter:
-  simpleProp: simplePropValue
-  arrayProps: 1,2,3,4,5
-  listProps:
-    - userJsp/*
-    - userHtml/*
-  mapProps:
-    key1: value1
-    key2: value2
-  mapListProps:
-    - name: abc
-      value: abcValue
-    - name: efg
-      value: efgValue
-
-wechat:
-  domain: http://www.aimplus.cn
-  appid:
-  appSecret:
-  appToken:
-  apiAddress:
-  #微信商户号
-  mchId:
-  #微信JS调用,这部分变量不需要根据环境去修改，生成签名的时间戳10位,一般是取时间里面的一段newDate().getTime()
-  timeStamp: 1401894705
-  #生成签名的时间戳10位，一般是取时间里面的一段,生成签名的随机串
-  noncestr: Wm3WZYTPz0wzccnW

@@ -14,8 +14,10 @@ spring.thymeleaf.cache=false
 有个插件叫做MyBatisCodeHelper（需要自己先去定义po）
 现在我使用的是配置文件的形式
 ps: war打包时请不能使用插件形式（打包时需要把逆向工程的插件注释掉）
-
+使用Lifecycle去打包，maven的插件不能编译（具体未研究）
 3. tomcat需要8.0以上版本
+
+4. 打包过滤器里面不能使用外部的变量（ps：这个项目，加入配置url的例外，一旦引用进来tomcat就启动不起来）
 
 # 待办事项
 待操作：

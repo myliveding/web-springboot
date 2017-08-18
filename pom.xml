@@ -45,6 +45,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
         <!-- jsp -->
         <!--<dependency>-->
             <!--<groupId>javax.servlet</groupId>-->
@@ -174,9 +179,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                </configuration>
 			</plugin>
 
             <!--<plugin>-->
