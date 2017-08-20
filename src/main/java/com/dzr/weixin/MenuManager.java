@@ -1,5 +1,6 @@
 package com.dzr.weixin;
 
+import com.dzr.framework.config.WechatUtil;
 import com.dzr.po.menu.Button;
 import com.dzr.po.menu.ComplexButton;
 import com.dzr.po.menu.Menu;

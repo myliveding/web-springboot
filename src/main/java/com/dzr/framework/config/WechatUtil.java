@@ -1,9 +1,9 @@
-package com.dzr.weixin;
+package com.dzr.framework.config;
 
-import com.dzr.framework.config.WechatParams;
-import com.dzr.po.wx.WechatUser;
 import com.dzr.po.menu.Menu;
 import com.dzr.po.wx.Wechat;
+import com.dzr.po.wx.WechatUser;
+import com.dzr.weixin.MyX509TrustManager;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -28,6 +28,7 @@ public class WechatUtil {
 
     @Autowired
     static WechatParams wechatParams;
+
     private static Logger logger = LoggerFactory.getLogger(WechatUtil.class);
 
     //调用网页授权接口URL 通过code换取网页授权access_token

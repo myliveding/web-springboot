@@ -1,7 +1,7 @@
 package com.dzr.controller;
 
 import com.dzr.framework.config.WechatParams;
-import com.dzr.weixin.WechatUtil;
+import com.dzr.framework.config.WechatUtil;
 import com.dzr.service.WechatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
