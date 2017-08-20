@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>臻品珠宝</title>
+</head>
+<script>
+    function font(w) {
+        var w = w || 640,
+                docEl = document.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 100 * (clientWidth / w) + 'px';
+                };
+        if (!document.addEventListener) return;
+        window.addEventListener(resizeEvt, recalc, false);
+        document.addEventListener('DOMContentLoaded', recalc, false);
+    }
+
+    font();
+</script>
+<body class="login-body">
+<header class="login-header">
+    <a href="mine.html"><img src="images/icon_left.png" alt="" class="nav-toback"></a>
+    <img src="images/icon_logo_white.png" alt="" class="login-logo">
+</header>
+<div class="login-container">
+    <ul class="nav nav-tabs login-tab" role="tablist">
+        <li role="presentation" class="active" id="tab-regist"><a href="#home" aria-controls="home" role="tab"
+                                                                  data-toggle="tab">注册</a></li>
+        <li role="presentation" id="tab-login"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">登录</a>
+        </li>
+    </ul>
+    <div class="login-con">
+        <div role="tabpanel" class="login-pane active" id="home">
+            <div class="flex-box login-item"><img src="images/icon_login_name.png" alt=""><input type="text"
+                                                                                                 placeholder="请填写您的真是姓名">
+            </div>
+            <div class="flex-box login-item"><img src="images/icon_login_birth.png" alt=""><input type="text"
+                                                                                                  placeholder="请填写您的生日(2010-10-10)">
+            </div>
+            <div class="flex-box login-item"><img src="images/icon_login_phone.png" alt=""><input type="text"
+                                                                                                  placeholder="请输入手机号码">
+            </div>
+            <div class="flex-box login-item"><img src="images/icon_login_four.png" alt=""><input type="text"
+                                                                                                 placeholder="请输入四位验证码">
+                <button class="login-yzm">发送验证码</button>
+            </div>
+            <div class="flex-box login-item"><img src="images/icon_login_pwd.png" alt=""><input type="text"
+                                                                                                placeholder="请输入6-20位密码">
+            </div>
+            <div class="self-btn pwd-btn login-btn"><a href="fillself.html">下一步</a></div>
+            <div class="login-agree"><input type="checkbox" name="" id="">同意<a href="">《臻品珠宝网络服务协议》</a></div>
+        </div>
+        <div role="tabpanel" class="login-pane" id="profile">
+            <div class="flex-box login-item regist-item"><img src="images/icon_login_phone.png" alt=""><input
+                    type="text" placeholder="请输入手机号码"></div>
+            <div class="flex-box login-item regist-item-pwd regist-item-active"><img src="images/icon_login_pwd.png"
+                                                                                     alt=""><input type="text"
+                                                                                                   placeholder="请输入6-20位密码">
+            </div>
+            <div class="flex-box login-item regist-item-yzm"><img src="images/icon_login_four.png" alt=""><input
+                    type="text" placeholder="请输入四位验证码">
+                <button class="login-yzm">发送验证码</button>
+            </div>
+            <div class="self-btn pwd-btn login-btn"><img src="images/icon_login_pwd.png" class="login-btn-img" alt="">
+                <button>登录</button>
+            </div>
+            <div class="regist-operate"><span class="regist-yzm regist-btn-active">验证码登录</span><span class="regist-pwd">密码登录</span><span>忘记密码</span>
+            </div>
+        </div>
+    </div>
+</div>
+<nav class="navbar-fixed-bottom">
+    <div class="container-fluid index-tabar">
+        <div class="col-xs-4"><a href="index.html"><img src="images/icon_home.png" height="20"></a>
+            <p>首页</p></div>
+        <div class="col-xs-4"><a href="active.html"><img src="images/icon_active.png" height="20"></a>
+            <p>活动</p></div>
+        <div class="col-xs-4"><a href="mine.html"><img src="images/icon_mine.png" height="20"></a>
+            <p>我的</p></div>
+    </div>
+</nav>
+<script src="js/jquery-1.12.3.min.js"></script>
+<script src="js/index.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/swiper.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        // mousewheelControl : true,
+    });
+</script>
+</body>
+</html>

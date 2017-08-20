@@ -2,7 +2,6 @@ package com.dzr.framework.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,25 +16,23 @@ import java.net.URL;
  * @Author dingzr
  * @CreateTime 2017/8/20 15:38 八月
  */
-public class Constant {
 
-    @Autowired
-    static InvokingUrl invokingUrl;
+public final class Constant {
+
     private static Logger logger = LoggerFactory.getLogger(Constant.class);
 
     //获取轮播图
-    public static final String BANNERS = invokingUrl.getPhp() + "/api/get_banners";
+    public static final String BANNERS = "/api/get_banners";
     //获取产品分类
-    public static final String PRODUCT_CATES = invokingUrl.getPhp() + "/api/get_product_cates";
+    public static final String PRODUCT_CATES = "/api/get_product_cates";
     //获取产品列表
-    public static final String PRODUCTS = invokingUrl.getPhp() + "/api/get_products";
+    public static final String PRODUCTS = "/api/get_products";
     //获取产品详情
-    public static final String PRODUCT_DETAIL = invokingUrl.getPhp() + "/api/get_product";
+    public static final String PRODUCT_DETAIL = "/api/get_product";
     //获取活动列表
-    public static final String ACTIVITYS = invokingUrl.getPhp() + "/api/get_activitys";
+    public static final String ACTIVITYS = "/api/get_activitys";
     //获取活动详情
-    public static final String ACTIVITY_DETAIL = invokingUrl.getPhp() + "/api/get_activity";
-
+    public static final String ACTIVITY_DETAIL = "/api/get_activity";
 
     /**
      * @param urlPath 接口地址

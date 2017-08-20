@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>臻品珠宝</title>
+</head>
+<script>
+    function font(w) {
+        var w = w || 640,
+                docEl = document.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 100 * (clientWidth / w) + 'px';
+                };
+        if (!document.addEventListener) return;
+        window.addEventListener(resizeEvt, recalc, false);
+        document.addEventListener('DOMContentLoaded', recalc, false);
+    }
+
+    font();
+</script>
+<body class="active-body">
+<div class="nav-top"><a href="mine.html"><img src="images/icon_left.png" alt="" class="nav-toback"></a>个人资料</div>
+<div class="flex-box self-container">
+    <div class="self-con">
+        <div class="flex-box self-item"><h4>姓名</h4><input type="text" value="用户名"></div>
+        <div class="flex-box self-item"><h4>手机号码</h4><input type="text" value="1868868888"></div>
+        <div class="flex-box self-item"><h4>微信</h4><input type="text" value="1868868888"></div>
+        <div class="flex-box self-item"><h4>性别</h4><input type="text" value="用户名"></div>
+        <div class="flex-box self-item"><h4>生日</h4></div>
+        <div class="flex-box self-item"><h4>收货地址</h4></div>
+        <div class="self-btn">
+            <button>修改资料</button>
+        </div>
+    </div>
+    <img src="images/icon_logo.png" alt="" class="flex1 self-bg">
+</div>
+<nav class="navbar-fixed-bottom">
+    <div class="container-fluid index-tabar">
+        <div class="col-xs-4"><a href="index.html"><img src="images/icon_home.png" height="20"></a>
+            <p>首页</p></div>
+        <div class="col-xs-4"><a href="active.html"><img src="images/icon_active.png" height="20"></a>
+            <p>活动</p></div>
+        <div class="col-xs-4"><a href="mine.html"><img src="images/icon_mine.png" height="20"></a>
+            <p>我的</p></div>
+    </div>
+</nav>
+<script src="js/jquery-1.12.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/swiper.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        // mousewheelControl : true,
+    });
+</script>
+</body>
+</html>
