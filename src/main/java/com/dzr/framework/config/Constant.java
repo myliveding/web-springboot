@@ -33,6 +33,20 @@ public final class Constant {
     public static final String ACTIVITYS = "/api/get_activitys";
     //获取活动详情
     public static final String ACTIVITY_DETAIL = "/api/get_activity";
+    //短信验证码
+    public static final String SMS_CODE = "/api/get_sms_code";
+    //注册接口
+    public static final String REGISTER = "/api/register";
+    //注册第二步骤以及更改资料接口
+    public static final String UPDATE_INFO = "/api/perfect_member";
+    //用户名密码登录
+    public static final String NORMAL_LOGIN = "/api/login";
+    //短信验证码登录
+    public static final String SMS_LOGIN = "/api/mobile_login";
+    //修改密码
+    public static final String CHANGE_PWD = "/api/editpwd";
+    //获取用户信息
+    public static final String USER_INFO = "/api/get_member";
 
     /**
      * @param urlPath 接口地址

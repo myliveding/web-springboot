@@ -1,14 +1,20 @@
+<%@ page language="java" pageEncoding="utf-8" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+，
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/static/";
+%>
+
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/swiper.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="<%=basePath%>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=basePath%>css/swiper.min.css">
+    <link rel="stylesheet" href="<%=basePath%>css/index.css">
     <title>臻品珠宝</title>
 </head>
 <script>
@@ -31,10 +37,14 @@ pageEncoding="UTF-8"%>
 <div class="bshow-back"><a href="brand.html"><img src="images/bshow_left.png" alt=""></a></div>
 <div class="swiper-container banner">
     <div class="swiper-wrapper">
-        <div class="swiper-slide"><a href=""><img src="images/brand_banner1.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href=""><img src="images/brand_banner1.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href=""><img src="images/brand_banner1.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href=""><img src="images/brand_banner1.jpg" alt=""></a></div>
+        <ul>
+            <c:forEach var="banner" items="${banners}">
+                <li>
+                    <div class="swiper-slide"><a href="${banner.id}"><img src="${banner.image_url}"
+                                                                          alt="">${banner.title}</a></div>
+                </li>
+            </c:forEach>
+        </ul>
     </div>
     <div class="swiper-pagination"></div>
 </div>

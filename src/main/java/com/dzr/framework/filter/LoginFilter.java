@@ -60,8 +60,15 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(httpRequest, httpResponse);
             return;
         } else {
-            RequestDispatcher rd = httpRequest.getRequestDispatcher("/404.jsp");
-            rd.forward(httpRequest, httpResponse);
+//            HttpSession session = httpRequest.getSession();
+            String userId = (String) httpRequest.getSession().getAttribute("userId");
+            if (null == userId || "".equals(userId)) {
+                RequestDispatcher rd = httpRequest.getRequestDispatcher("/404.jsp");
+                rd.forward(httpRequest, httpResponse);
+            } else {
+                filterChain.doFilter(httpRequest, httpResponse);
+                return;
+            }
             return;
         }
     }
