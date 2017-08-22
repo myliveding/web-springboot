@@ -21,7 +21,10 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
+        //获取轮播图
         model.addAttribute("banners", baseInfoService.getBanners());
-        return "bshow";
+        //获取用户信息
+        //获取卡券数量
+        return "index";
     }
 }
