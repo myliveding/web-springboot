@@ -47,6 +47,20 @@ public final class Constant {
     public static final String CHANGE_PWD = "/api/editpwd";
     //获取用户信息
     public static final String USER_INFO = "/api/get_member";
+    //获取充值消费记录列表接口
+    public static final String AMOUNT_RECORDS = "/api/get_amount_records";
+    //获取积分记录列表接口
+    public static final String INTEGRAL_RECORDS = "/api/get_integral_records";
+    //获取优惠券列表接口
+    public static final String COUPONS_LIST = "/api/get_coupons";
+    //获取打折卡列表接口
+    public static final String DISCOUNT_CARDS = "/api/get_discount_cards";
+    //获取团队列表接口
+    public static final String TEAMS_LIST = "/api/get_teams";
+    //获取会员充值设置列表接口
+    public static final String MEMBER_RECHARGES = "/api/get_member_recharges";
+    //充值成功处理接口
+    public static final String RECHARGE_SUC = "/api/recharge_suc";
 
     /**
      * @param urlPath 接口地址

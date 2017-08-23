@@ -2,12 +2,19 @@ package com.dzr.service.impl;
 
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
+import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description
@@ -24,6 +31,87 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     @Autowired
     UrlConfig urlConfig;
 
+
+//    String[] arr;
+//    String mystr = "";
+
+//    StringBuffer buffer = new StringBuffer();
+//    List<String> list = new ArrayList<String>();
+//    list.add("member_email" + memberEmail);
+//    buffer.append("member_email=").append(memberEmail);
+//    list.add("member_truename" + memberTruename);
+//    buffer.append("&member_truename=").append(memberTruename);
+//    JSONObject jsonObject = JSONObject.fromObject(map);
+//    list.add("data" + jsonObject);
+//    buffer.append("&data=").append(jsonObject);
+//    list.add("code" + code);
+//    buffer.append("&code=").append(code);
+
+//    mystr = buffer.toString();
+//    arr = list.toArray(new String[list.size()]);
+
+    /**
+     * 验证码
+     *
+     * @param mobile
+     */
+    public void sendSms(String mobile) {
+        if (StringUtils.isEmpty(mobile)) {
+            throw new ApiException(20101);
+        }
+        String[] arr = new String[]{"mobile" + mobile};
+        String mystr = "mobile=" + mobile;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SMS_CODE, mystr, arr));
+        throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+    }
+
+    /**
+     * 注册方法
+     *
+     * @param mobile
+     */
+    public void register(String name, String birth, String mobile, String password, String code, HttpServletRequest request) {
+        if (StringUtils.isEmpty(name)) {
+            throw new ApiException(10007, "姓名");
+        } else if (name.length() > 10) {
+            throw new ApiException(20104);
+        }
+        if (StringUtils.isEmpty(birth)) {
+            throw new ApiException(10007, "生日");
+        } else if (!StringUtils.isValidDate(birth)) {
+            throw new ApiException(20105);
+        }
+        if (StringUtils.isEmpty(mobile)) {
+            throw new ApiException(10007, "手机号");
+        } else if (!StringUtils.isMobileNo(mobile)) {
+            throw new ApiException(10008, "手机号码格式不正确");
+        }
+        if (StringUtils.isEmpty(code)) {
+            throw new ApiException(10007, "验证码");
+        } else if (code.length() > 4) {
+            throw new ApiException(10008, "验证码格式不正确");
+        }
+        if (StringUtils.isEmpty(password)) {
+            throw new ApiException(10007, "密码");
+        }
+        String[] arr = new String[]{"mobile" + mobile};
+        String mystr = "mobile=" + mobile;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            JSONObject data = JSONObject.fromObject(res.getString("data"));
+            //登录成功就加session
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", data.getString("member_id"));
+            session.setAttribute("mobile", data.getString("mobile"));
+        }
+        throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+    }
+
+    /**
+     * 获取轮播图
+     *
+     * @return
+     */
     public JSONArray getBanners() {
         JSONArray banners = null;
         String[] arr = new String[]{};
@@ -35,6 +123,74 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             logger.info("获取的轮播图返回值：" + bannersR.getInt("error_code"));
         }
         return banners;
+    }
+
+    /**
+     * 获取公司协议
+     *
+     * @return
+     */
+    public void getCompanyProtocol() {
+    }
+
+    /**
+     * 登录方法
+     *
+     * @param mobile
+     * @param password
+     * @param code
+     */
+    public void login(String mobile, String password, String code, HttpServletRequest request) {
+
+        if (StringUtils.isEmpty(mobile)) {
+            throw new ApiException(20101);
+        }
+        if (StringUtils.isEmpty(password) && StringUtils.isEmpty(code)) {
+            throw new ApiException(20102);
+        }
+        if (StringUtils.isNotEmpty(password) && StringUtils.isNotEmpty(code)) {
+            throw new ApiException(20103);
+        }
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+        list.add("mobile" + mobile);
+        buffer.append("mobile=").append(mobile);
+        if (StringUtils.isNotEmpty(password)) {
+            list.add("password" + password);
+            buffer.append("&password=").append(password);
+        }
+        if (StringUtils.isNotEmpty(code)) {
+            list.add("sms_code" + code);
+            buffer.append("&sms_code=").append(code);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        String url = StringUtils.isNotEmpty(password) ? Constant.NORMAL_LOGIN : Constant.SMS_LOGIN;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + url, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            JSONObject data = JSONObject.fromObject(res.getString("data"));
+            //登录成功就加session
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", data.getString("member_id"));
+            session.setAttribute("mobile", data.getString("mobile"));
+
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
+    }
+
+    /**
+     * 获取PHP的用户信息
+     *
+     * @param memberId
+     * @return
+     */
+    public JSONObject getUserInfo(String memberId) {
+        String[] arr = new String[]{"member_id" + memberId};
+        String mystr = "member_id=" + memberId;
+        return JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
     }
 
 }

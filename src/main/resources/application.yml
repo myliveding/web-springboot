@@ -32,6 +32,10 @@ spring:
 
 server:
     port: 9090
+    #for error page
+    error:
+      whitelabel:
+        enabled: false
 
 logging:
     level:

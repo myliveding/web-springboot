@@ -1,10 +1,11 @@
 package com.dzr.controller;
 
+import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.service.BaseInfoService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,17 +20,31 @@ import javax.servlet.http.HttpServletRequest;
  * @CreateTime 2017/8/20 16:16 八月
  */
 
-//@RestController
-@Controller
+@RestController
+//@Controller
 @RequestMapping("/login")
-public class LoginController {
+public class LoginController extends BaseController {
 
     @Autowired
     UrlConfig urlConfig;
+    @Autowired
+    BaseInfoService baseInfoService;
+
+    //调用去获取用户的信息
+    @RequestMapping("/perfectInfo")
+    public String register(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        JSONObject res = baseInfoService.getUserInfo(userId);
+        if (0 == res.getInt("error_code")) {
+            model.addAttribute("member", res.getJSONObject("member"));
+        } else {
+            return "error";
+        }
+        return "fillself";
+    }
 
     /**
      * 进入首页
-     *
      * @return
      */
     @RequestMapping("/index")

@@ -1,6 +1,6 @@
 package com.dzr.po.wx;
 
-import com.dzr.util.DataUtils;
+import com.dzr.util.StringUtils;
 
 /**
  * Emoji表情处理
@@ -8,7 +8,7 @@ import com.dzr.util.DataUtils;
 public class EmojiUtil {
 
     public static boolean containsEmoji(String source) {
-        if (DataUtils.isBlank(source)) {
+        if (StringUtils.isBlank(source)) {
             return false;
         }
 
