@@ -14,8 +14,9 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "url")
-public class InvokingUrl {
+public class UrlConfig {
 
     private String php;
+    private String domain;
 
 }

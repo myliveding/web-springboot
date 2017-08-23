@@ -1,6 +1,6 @@
 package com.dzr.controller;
 
-import com.dzr.framework.config.InvokingUrl;
+import com.dzr.framework.config.UrlConfig;
 import com.dzr.po.User;
 import com.dzr.service.UserService;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class UserJspController {
     @Autowired
     UserService userService;
     @Autowired
-    InvokingUrl invokingUrl;
+    UrlConfig urlConfig;
 
     @RequestMapping("/{name}")
     public String welcome(@PathVariable("name") String name, Model model) {
@@ -44,7 +44,7 @@ public class UserJspController {
         logger.info("测试log日志的位置。。。。");
         model.addAttribute("time", new Date());
         model.addAttribute("message", "第一个jsp页面");
-        logger.info("从配置文件中获取PHP调用地址：" + invokingUrl.getPhp());
+        logger.info("从配置文件中获取PHP调用地址：" + urlConfig.getPhp());
         User user = userService.getUserCityInfo(1, 1);
         model.addAttribute("address", user.getAddress());
         model.addAttribute("cityName", user.getCity().getName());

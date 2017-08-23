@@ -1,7 +1,7 @@
 package com.dzr.service.impl;
 
 import com.dzr.framework.config.Constant;
-import com.dzr.framework.config.InvokingUrl;
+import com.dzr.framework.config.UrlConfig;
 import com.dzr.service.BaseInfoService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -22,17 +22,16 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     private Logger logger = Logger.getLogger(BaseInfoServiceImpl.class);
 
     @Autowired
-    InvokingUrl invokingUrl;
+    UrlConfig urlConfig;
 
     public JSONArray getBanners() {
         JSONArray banners = null;
         String[] arr = new String[]{};
         String mystr = "";
-        JSONObject bannersR = JSONObject.fromObject(Constant.getInterface(invokingUrl.getPhp() + Constant.BANNERS, mystr, arr));
+        JSONObject bannersR = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.BANNERS, mystr, arr));
         if (0 == bannersR.getInt("error_code")) {
             banners = bannersR.getJSONArray("result");
         } else {
-//            throw new ApiE
             logger.info("获取的轮播图返回值：" + bannersR.getInt("error_code"));
         }
         return banners;

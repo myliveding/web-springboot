@@ -19,27 +19,27 @@ public class UserHtmlController {
     @RequestMapping("/{name}")
     public String hello(@PathVariable("name") String name, Model model) {
         model.addAttribute("name", name);
-        return "myonly/hello";
+        return "hello";
     }
 
     @RequestMapping("/more")
     public String more(){
-        return "myonly/hello2";
+        return "hello2";
     }
 
     @RequestMapping("/map")
     public String map() {
-        return "myonly/map";
+        return "map";
     }
 
     @RequestMapping("/mapDemo")
     public String mapDemo() {
-        return "myonly/mapDemo";
+        return "mapDemo";
     }
 
     @RequestMapping("/main")
     public String main() {
-        return "myonly/allmap";
+        return "allmap";
     }
 
 

@@ -43,6 +43,7 @@ wechat:
 #接口地址
 url:
   php: http://106.14.221.190:8080
+  domain: http://localhost:9090
 
 #定时器开关
 scheduling:

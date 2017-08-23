@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 
 @Order(1)
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/userHtml/*", "/userRest/*", "/userJsp/*"})
+@WebFilter(filterName = "loginFilter", urlPatterns = {"/userHtml/*", "/userRest/*", "/userJsp/*", "/login/*"})
 public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
@@ -63,7 +63,7 @@ public class LoginFilter implements Filter {
 //            HttpSession session = httpRequest.getSession();
             String userId = (String) httpRequest.getSession().getAttribute("userId");
             if (null == userId || "".equals(userId)) {
-                RequestDispatcher rd = httpRequest.getRequestDispatcher("/404.jsp");
+                RequestDispatcher rd = httpRequest.getRequestDispatcher("login");
                 rd.forward(httpRequest, httpResponse);
             } else {
                 filterChain.doFilter(httpRequest, httpResponse);
