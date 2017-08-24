@@ -4,6 +4,8 @@ import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.service.BaseInfoService;
+import com.dzr.util.StringUtils;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 需要校验登录信息的接口
@@ -30,17 +35,18 @@ public class LoginController extends BaseController {
     @Autowired
     BaseInfoService baseInfoService;
 
-    //调用去获取用户的信息
+    //进入完善资料页面
     @RequestMapping("/perfectInfo")
-    public String register(Model model, HttpServletRequest request) {
-        String userId = (String) request.getSession().getAttribute("userId");
-        JSONObject res = baseInfoService.getUserInfo(userId);
-        if (0 == res.getInt("error_code")) {
-            model.addAttribute("member", res.getJSONObject("member"));
-        } else {
-            return "error";
-        }
+    public String perfectInfo() {
         return "fillself";
+    }
+
+    //进入完善资料页面
+    @RequestMapping("/savePerfectInfo")
+    public Map<String, Object> savePerfectInfo(String name, String sex, String birth, String wechat, String adress, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        baseInfoService.savePerfectInfo(userId, name, sex, birth, wechat, adress);
+        return successResult("savePerfectInfo");
     }
 
     /**
@@ -48,9 +54,101 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/index")
-    public String index() {
+    public String index(Model model, HttpServletRequest request) {
+        JSONArray banners = baseInfoService.getBanners();
+        model.addAttribute("banners", banners);
+        String userId = (String) request.getSession().getAttribute("userId");
+        model.addAttribute("user", baseInfoService.getUserInfo(userId));
         return "index";
     }
+
+    /**
+     * 进去用户中心
+     *
+     * @return
+     */
+    @RequestMapping("/userCenter")
+    public String userCenter(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        model.addAttribute("user", baseInfoService.getUserInfo(userId));
+        return "mime";
+    }
+
+    /**
+     * 进入会员充值页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoVip")
+    public String gotoVip(Model model, HttpServletRequest request) {
+        return "vip";
+    }
+
+    /**
+     * 进入消费记录页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoConsumptionRecords")
+    public String gotoConsumptionRecords(Model model, HttpServletRequest request) {
+        return "consumption";
+    }
+
+    /**
+     * 进入积分兑换记录页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoRecharge")
+    public String gotoRecharge(Model model, HttpServletRequest request) {
+        return "recharge";
+    }
+
+    /**
+     * 进入团队页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoTeam")
+    public String gotoTeam(Model model, HttpServletRequest request) {
+        return "team";
+    }
+
+    /**
+     * 进入推广页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoBrand")
+    public String gotoBrand(Model model, HttpServletRequest request) {
+        return "brand";
+    }
+
+    /**
+     * 进入卡券发放页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoSendCard")
+    public String gotoCard(Model model, HttpServletRequest request) {
+        return "sendcard";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping("/activitys")
     public String getActivitys(Model model, HttpServletRequest request) {
@@ -58,16 +156,28 @@ public class LoginController extends BaseController {
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
         //获取活动列表
-        String[] arr = new String[]{"per_page" + perPage, "page" + page};
-        String mystr = "per_page=" + perPage + "&page=" + page;
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+        if (StringUtils.isNotEmpty(perPage)) {
+            list.add("perPage" + perPage);
+            buffer.append("&perPage=").append(perPage);
+        }
+        if (StringUtils.isNotEmpty(page)) {
+            list.add("page" + page);
+            buffer.append("&page=").append(page);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
         JSONObject bannersInfo = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITYS, mystr, arr));
         if (0 == bannersInfo.getInt("error_code")) {
             model.addAttribute("activitys", bannersInfo.getJSONArray("result"));
         }
-        return "map";
+        return "active";
     }
 
-    @RequestMapping("/{activityDetail}")
+    @RequestMapping("/activityDetail")
     public String getActivityDetail(@PathVariable("activityDetail") String activityDetail, Model model) {
 
         //获取活动详情
@@ -77,7 +187,7 @@ public class LoginController extends BaseController {
         if (0 == info.getInt("error_code")) {
             model.addAttribute("info", info.getJSONObject("result"));
         }
-        return "map";
+        return "activeInfo";
     }
 
     @RequestMapping("/productCates")

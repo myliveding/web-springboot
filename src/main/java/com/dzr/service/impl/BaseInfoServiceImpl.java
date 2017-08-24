@@ -70,17 +70,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      *
      * @param mobile
      */
-    public void register(String name, String birth, String mobile, String password, String code, HttpServletRequest request) {
-        if (StringUtils.isEmpty(name)) {
-            throw new ApiException(10007, "姓名");
-        } else if (name.length() > 10) {
-            throw new ApiException(20104);
-        }
-        if (StringUtils.isEmpty(birth)) {
-            throw new ApiException(10007, "生日");
-        } else if (!StringUtils.isValidDate(birth)) {
-            throw new ApiException(20105);
-        }
+    public void register(String name, String mobile, String password, String code, HttpServletRequest request) {
         if (StringUtils.isEmpty(mobile)) {
             throw new ApiException(10007, "手机号");
         } else if (!StringUtils.isMobileNo(mobile)) {
@@ -94,8 +84,21 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (StringUtils.isEmpty(password)) {
             throw new ApiException(10007, "密码");
         }
-        String[] arr = new String[]{"mobile" + mobile};
-        String mystr = "mobile=" + mobile;
+
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+        list.add("mobile" + mobile);
+        buffer.append("mobile=").append(mobile);
+        list.add("sms_code" + code);
+        buffer.append("&sms_code=").append(code);
+        list.add("password" + password);
+        buffer.append("&password=").append(password);
+        list.add("reg_invitation_code" + name);
+        buffer.append("&reg_invitation_code=").append(name);
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
         if (res.getInt("error_code") == 0) {
             JSONObject data = JSONObject.fromObject(res.getString("data"));
@@ -105,6 +108,66 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             session.setAttribute("mobile", data.getString("mobile"));
         }
         throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+    }
+
+    /**
+     * 注册第二步
+     *
+     * @param name
+     * @param sex
+     * @param birth
+     * @param wechat
+     * @param adress
+     */
+    public void savePerfectInfo(String userId, String name, String sex, String birth, String wechat, String adress) {
+
+        if (StringUtils.isEmpty(name)) {
+            throw new ApiException(10007, "姓名");
+        } else if (name.length() > 10) {
+            throw new ApiException(20104);
+        }
+        if (StringUtils.isNotEmpty(birth) && !StringUtils.isValidDate(birth)) {
+            throw new ApiException(20105);
+        }
+        if (StringUtils.isEmpty(wechat)) {
+            throw new ApiException(10007, "微信号");
+        }
+
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+        list.add("member_id" + userId);
+        buffer.append("member_id=").append(userId);
+        list.add("name" + name);
+        buffer.append("&name=").append(name);
+        list.add("wechat_num" + wechat);
+        buffer.append("&wechat_num=").append(wechat);
+        if (StringUtils.isNotEmpty(birth)) {
+            list.add("birthday" + birth);
+            buffer.append("&birthday=").append(birth);
+        }
+        if (StringUtils.isNotEmpty(sex)) {
+            int s = 0;
+            if (sex.equals("男")) {
+                s = 1;
+            } else if (sex.equals("女")) {
+                s = 2;
+            }
+            list.add("gender" + s);
+            buffer.append("&gender=").append(s);
+        }
+        if (StringUtils.isNotEmpty(adress)) {
+            list.add("address" + adress);
+            buffer.append("&address=").append(adress);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.UPDATE_INFO, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
     }
 
     /**
@@ -121,6 +184,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             banners = bannersR.getJSONArray("result");
         } else {
             logger.info("获取的轮播图返回值：" + bannersR.getInt("error_code"));
+            throw new ApiException(bannersR.getInt("error_code"), bannersR.getString("error_msg"));
         }
         return banners;
     }
@@ -190,7 +254,13 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     public JSONObject getUserInfo(String memberId) {
         String[] arr = new String[]{"member_id" + memberId};
         String mystr = "member_id=" + memberId;
-        return JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            res = JSONObject.fromObject(res.getString("member"));
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
+        return res;
     }
 
 }

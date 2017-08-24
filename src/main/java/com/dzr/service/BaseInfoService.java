@@ -25,8 +25,22 @@ public interface BaseInfoService {
      *
      * @param mobile
      */
-    void register(String name, String birth, String mobile, String password, String code, HttpServletRequest request);
+    void register(String name, String mobile, String password, String code, HttpServletRequest request);
 
+    /**
+     * 注册第二步
+     *
+     * @param name
+     * @param sex
+     * @param birth
+     * @param wechat
+     * @param adress
+     */
+    void savePerfectInfo(String userId, String name, String sex, String birth, String wechat, String adress);
+
+    /**
+     * @return
+     */
     JSONArray getBanners();
 
     /**

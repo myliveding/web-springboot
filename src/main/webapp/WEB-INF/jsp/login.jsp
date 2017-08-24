@@ -4,7 +4,7 @@
 <jsp:include page="head.jsp" flush="true"/>
 <body class="login-body">
 <header class="login-header">
-    <a href="mine.html"><img src="images/icon_left.png" alt="" class="nav-toback"></a>
+    <a href="mine.jsp"><img src="images/icon_left.png" alt="" class="nav-toback"></a>
     <img src="images/icon_logo_white.png" alt="" class="login-logo">
 </header>
 <div class="login-container">
@@ -17,12 +17,6 @@
     </ul>
     <div class="login-con">
         <div role="tabpanel" class="login-pane active" id="home">
-            <div class="flex-box login-item"><img src="images/icon_login_name.png" alt="">
-                <input class="r_name" type="text" placeholder="请填写您的真实姓名">
-            </div>
-            <div class="flex-box login-item"><img src="images/icon_login_birth.png" alt="">
-                <input class="r_birth" type="text" placeholder="请填写您的生日(2010-10-10)">
-            </div>
             <div class="flex-box login-item"><img src="images/icon_login_phone.png" alt="">
                 <input class="r_tel" type="text" placeholder="请输入手机号码">
             </div>
@@ -33,6 +27,9 @@
             <div class="flex-box login-item">
                 <img src="images/icon_login_pwd.png" alt="">
                 <input class="r_pdw" type="text" placeholder="请输入6-20位密码">
+            </div>
+            <div class="flex-box login-item"><img src="images/icon_login_name.png" alt="">
+                <input class="r_name" type="text" placeholder="请填写您推广人">
             </div>
             <div class="self-btn pwd-btn login-btn">
                 <a href="${pageContext.request.contextPath}/login/perfectInfo">下一步</a>
@@ -62,7 +59,7 @@
             <div class="regist-operate">
                 <span class="regist-yzm regist-btn-active">验证码登录</span>
                 <span class="regist-pwd">密码登录</span>
-                <span>忘记密码</span>
+                <%--<span>忘记密码</span>--%>
             </div>
         </div>
     </div>
@@ -96,18 +93,17 @@
 
     //注册
     function register() {
-        var name = $('.login-pane .r_name').val();
-        var birth = $('.login-pane .r_birth').val();
         var mobile = $('.login-pane .r_tel').val();
         var password = $('.login-pane .r_pdw').val();
         var code = $('.login-pane .r_code').val();
+        //推广人
+        var name = $('.login-pane .r_name').val();
         $.ajax({
             'url': "${pageContext.request.contextPath}/free/sendSms",
             'type': 'post',
             'dataType': 'json',
             'data': {
                 name: name,
-                birth: birth,
                 mobile: mobile,
                 password: password,
                 code: code

@@ -37,8 +37,8 @@ public class FreeController extends BaseController {
     }
 
     @RequestMapping("/register")
-    public Map<String, Object> register(String name, String birth, String mobile, String password, String code, HttpServletRequest request) {
-        baseInfoService.register(name, birth, mobile, password, code, request);
+    public Map<String, Object> register(String name, String mobile, String password, String code, HttpServletRequest request) {
+        baseInfoService.register(name, mobile, password, code, request);
         return successResult("register");
     }
 

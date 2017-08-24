@@ -5,7 +5,7 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <body class="active-body">
-<div class="bshow-back"><a href="brand.html"><img src="images/bshow_left.png" alt=""></a></div>
+<div class="bshow-back"><a href="brand.jsp"><img src="images/bshow_left.png" alt=""></a></div>
 <div class="swiper-container banner">
     <div class="swiper-wrapper">
         <ul>
