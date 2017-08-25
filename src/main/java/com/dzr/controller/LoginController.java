@@ -75,6 +75,42 @@ public class LoginController extends BaseController {
     }
 
     /**
+     * 进入个人资料页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoUserInfo")
+    public String gotoUserInfo(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        model.addAttribute("user", baseInfoService.getUserInfo(userId));
+        return "self";
+    }
+
+    /**
+     * 进入密码修改页面
+     *
+     * @return
+     */
+    @RequestMapping("/gotoPwd")
+    public String gotoPwd() {
+        return "pwd";
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param first
+     * @param secondary
+     * @param request
+     * @return
+     */
+    @RequestMapping("/resetPassword")
+    public Map<String, Object> resetPassword(String first, String secondary, HttpServletRequest request) {
+        baseInfoService.resetPassword(first, secondary, request);
+        return successResult("resetPassword");
+    }
+
+    /**
      * 进入会员充值页面
      *
      * @return
@@ -120,8 +156,22 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/gotoBrand")
-    public String gotoBrand(Model model, HttpServletRequest request) {
+    public String gotoBrand() {
         return "brand";
+    }
+
+    /**
+     * 进入我的优惠券
+     *
+     * @return
+     */
+    @RequestMapping("/gotoCard")
+    public String gotoCard(Model model, HttpServletRequest request) {
+        String status = request.getParameter("status");
+        String perPage = request.getParameter("perPage");
+        String page = request.getParameter("page");
+        model.addAttribute("cards", baseInfoService.gotoCard(perPage, page, status, request));
+        return "card";
     }
 
     /**
@@ -130,7 +180,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/gotoSendCard")
-    public String gotoCard(Model model, HttpServletRequest request) {
+    public String gotoSendCard(Model model, HttpServletRequest request) {
         return "sendcard";
     }
 
@@ -161,8 +211,8 @@ public class LoginController extends BaseController {
         StringBuffer buffer = new StringBuffer();
         List<String> list = new ArrayList<String>();
         if (StringUtils.isNotEmpty(perPage)) {
-            list.add("perPage" + perPage);
-            buffer.append("&perPage=").append(perPage);
+            list.add("per_page" + perPage);
+            buffer.append("&per_page=").append(perPage);
         }
         if (StringUtils.isNotEmpty(page)) {
             list.add("page" + page);

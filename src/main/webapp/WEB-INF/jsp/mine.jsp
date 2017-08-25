@@ -38,21 +38,39 @@
                     <a href="">积分规则 ></a>
                 </div>
             </div>
-            <div class="mine-item-sub"><a href="self.jsp" class="flex-box">
-                <div class="fl"><img src="images/icon_mine_person.png" alt="" class="mine-item-subimg"><span>个人资料</span>
-                </div>
-                <div class="fr mine-item-operate"><img src="images/mine_right.png" alt=""></div>
-            </a></div>
-            <div class="mine-item-sub"><a href="pwd.jsp" class="flex-box">
-                <div class="fl"><img src="images/icon_mine_pwd.png" alt="" class="mine-item-subimg"><span>修改登陆密码</span>
-                </div>
-                <div class="fr mine-item-operate"><img src="images/mine_right.png" alt=""></div>
-            </a></div>
-            <div class="mine-item-sub"><a href="card.jsp" class="flex-box">
-                <div class="fl"><img src="images/icon_mine_ticket.png" alt=""
-                                     class="mine-item-subimg"><span>我的优惠券</span></div>
-                <div class="fr mine-item-operate"><img src="images/mine_right.png" alt=""></div>
-            </a></div>
+            <div class="mine-item-sub">
+                <a href="${pageContext.request.contextPath}/login/gotoUserInfo" class="flex-box">
+                    <div class="fl">
+                        <img src="images/icon_mine_person.png" alt="" class="mine-item-subimg">
+                        <span>个人资料</span>
+                    </div>
+                    <div class="fr mine-item-operate">
+                        <img src="images/mine_right.png" alt="">
+                    </div>
+                </a>
+            </div>
+            <div class="mine-item-sub">
+                <a href="${pageContext.request.contextPath}/login/gotoPwd" class="flex-box">
+                    <div class="fl">
+                        <img src="images/icon_mine_pwd.png" alt="" class="mine-item-subimg">
+                        <span>修改登陆密码</span>
+                    </div>
+                    <div class="fr mine-item-operate">
+                        <img src="images/mine_right.png" alt="">
+                    </div>
+                </a>
+            </div>
+            <div class="mine-item-sub">
+                <a href="${pageContext.request.contextPath}/login/gotoCard" class="flex-box">
+                    <div class="fl">
+                        <img src="images/icon_mine_ticket.png" alt="" class="mine-item-subimg">
+                        <span>我的优惠券</span>
+                    </div>
+                    <div class="fr mine-item-operate">
+                        <img src="images/mine_right.png" alt="">
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

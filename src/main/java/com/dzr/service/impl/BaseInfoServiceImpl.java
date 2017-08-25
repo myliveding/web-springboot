@@ -31,25 +31,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     @Autowired
     UrlConfig urlConfig;
 
-
-//    String[] arr;
-//    String mystr = "";
-
-//    StringBuffer buffer = new StringBuffer();
-//    List<String> list = new ArrayList<String>();
-//    list.add("member_email" + memberEmail);
-//    buffer.append("member_email=").append(memberEmail);
-//    list.add("member_truename" + memberTruename);
-//    buffer.append("&member_truename=").append(memberTruename);
-//    JSONObject jsonObject = JSONObject.fromObject(map);
-//    list.add("data" + jsonObject);
-//    buffer.append("&data=").append(jsonObject);
-//    list.add("code" + code);
-//    buffer.append("&code=").append(code);
-
-//    mystr = buffer.toString();
-//    arr = list.toArray(new String[list.size()]);
-
     /**
      * 验证码
      *
@@ -131,6 +112,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         }
         if (StringUtils.isEmpty(wechat)) {
             throw new ApiException(10007, "微信号");
+        }
+        if (StringUtils.isNotEmpty(sex) && !sex.equals("1") && !sex.equals("0")) {
+            throw new ApiException(10008, "性别只能是男或女");
         }
 
         String[] arr;
@@ -261,6 +245,87 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
         }
         return res;
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param request
+     * @param first
+     * @param secondary
+     */
+    public void resetPassword(String first, String secondary, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        if (StringUtils.isEmpty(first) || StringUtils.isEmpty(secondary)) {
+            throw new ApiException(10007, "密码");
+        }
+
+        String userId = (String) request.getSession().getAttribute("userId");
+        String[] arr = new String[]{"member_id" + userId, "password" + first, "confirm_pwd" + secondary};
+        String mystr = "member_id=" + userId + "&password=" + first + "&confirm_pwd=" + secondary;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.CHANGE_PWD, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            //清空session
+            session.setAttribute("userId", "");
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
+    }
+
+    /**
+     * 优惠券列表
+     *
+     * @param perPage
+     * @param page
+     * @param status
+     * @param request
+     * @return
+     */
+    public JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request) {
+
+        JSONArray jsonArray;
+        //获取活动列表
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+
+        String userId = getUserId(request);
+        list.add("member_id" + userId);
+        buffer.append("&member_id=").append(userId);
+        if (StringUtils.isNotEmpty(status)) {
+            list.add("status" + status);
+            buffer.append("&status=").append(status);
+        }
+        if (StringUtils.isNotEmpty(perPage)) {
+            list.add("per_page" + perPage);
+            buffer.append("&per_page=").append(perPage);
+        }
+        if (StringUtils.isNotEmpty(page)) {
+            list.add("page" + page);
+            buffer.append("&page=").append(page);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        JSONObject coupons = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.COUPONS_LIST, mystr, arr));
+        if (coupons.getInt("error_code") != 0) {
+            throw new ApiException(coupons.getInt("error_code"), coupons.getString("error_msg"));
+        } else {
+            jsonArray = JSONArray.fromObject(coupons.getString("result"));
+        }
+
+        return jsonArray;
+    }
+
+    /**
+     * 获取session里面的用户ID
+     *
+     * @param request
+     * @return
+     */
+    private String getUserId(HttpServletRequest request) {
+        return (String) request.getSession().getAttribute("userId");
     }
 
 }

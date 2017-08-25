@@ -67,4 +67,23 @@ public interface BaseInfoService {
      */
     JSONObject getUserInfo(String memberId);
 
+    /**
+     * 重置密码
+     *
+     * @param first
+     * @param secondary
+     */
+    void resetPassword(String first, String secondary, HttpServletRequest request);
+
+    /**
+     * 优惠券列表
+     *
+     * @param perPage
+     * @param page
+     * @param status
+     * @param request
+     * @return
+     */
+    JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request);
+
 }
