@@ -47,6 +47,62 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     }
 
     /**
+     * 登录方法
+     *
+     * @param mobile
+     * @param password
+     * @param code
+     */
+    public void login(String mobile, String password, String code, HttpServletRequest request) {
+
+        if (StringUtils.isEmpty(mobile)) {
+            throw new ApiException(20101);
+        }
+        if (StringUtils.isEmpty(password) && StringUtils.isEmpty(code)) {
+            throw new ApiException(20102);
+        }
+        if (StringUtils.isNotEmpty(password) && StringUtils.isNotEmpty(code)) {
+            throw new ApiException(20103);
+        }
+
+        //登录成功就加session
+        HttpSession session = request.getSession();
+        String openId = session.getAttribute("openid").toString();
+
+        String[] arr;
+        String mystr = "";
+        StringBuilder buffer = new StringBuilder();
+        List<String> list = new ArrayList<String>();
+        list.add("mobile" + mobile);
+        buffer.append("mobile=").append(mobile);
+
+        list.add("openid" + openId);
+        buffer.append("&openid=").append(openId);
+
+        if (StringUtils.isNotEmpty(password)) {
+            list.add("password" + password);
+            buffer.append("&password=").append(password);
+        }
+        if (StringUtils.isNotEmpty(code)) {
+            list.add("sms_code" + code);
+            buffer.append("&sms_code=").append(code);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        String url = StringUtils.isNotEmpty(password) ? Constant.NORMAL_LOGIN : Constant.SMS_LOGIN;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + url, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            JSONObject data = JSONObject.fromObject(res.getString("data"));
+            //登录成功就加session
+            session.setAttribute("userId", data.getString("member_id"));
+            session.setAttribute("mobile", data.getString("mobile"));
+
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
+    }
+
+    /**
      * 注册方法
      *
      * @param mobile
@@ -66,6 +122,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             throw new ApiException(10007, "密码");
         }
 
+        //登录成功就加session
+        HttpSession session = request.getSession();
+        String openId = session.getAttribute("openid").toString();
+
         String[] arr;
         String mystr = "";
         StringBuffer buffer = new StringBuffer();
@@ -78,13 +138,14 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         buffer.append("&password=").append(password);
         list.add("reg_invitation_code" + name);
         buffer.append("&reg_invitation_code=").append(name);
+        list.add("openid" + openId);
+        buffer.append("&openid=").append(openId);
         mystr = buffer.toString();
         arr = list.toArray(new String[list.size()]);
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
         if (res.getInt("error_code") == 0) {
             JSONObject data = JSONObject.fromObject(res.getString("data"));
-            //登录成功就加session
-            HttpSession session = request.getSession();
+
             session.setAttribute("userId", data.getString("member_id"));
             session.setAttribute("mobile", data.getString("mobile"));
         }
@@ -179,54 +240,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @return
      */
     public void getCompanyProtocol() {
-    }
-
-    /**
-     * 登录方法
-     *
-     * @param mobile
-     * @param password
-     * @param code
-     */
-    public void login(String mobile, String password, String code, HttpServletRequest request) {
-
-        if (StringUtils.isEmpty(mobile)) {
-            throw new ApiException(20101);
-        }
-        if (StringUtils.isEmpty(password) && StringUtils.isEmpty(code)) {
-            throw new ApiException(20102);
-        }
-        if (StringUtils.isNotEmpty(password) && StringUtils.isNotEmpty(code)) {
-            throw new ApiException(20103);
-        }
-        String[] arr;
-        String mystr = "";
-        StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
-        list.add("mobile" + mobile);
-        buffer.append("mobile=").append(mobile);
-        if (StringUtils.isNotEmpty(password)) {
-            list.add("password" + password);
-            buffer.append("&password=").append(password);
-        }
-        if (StringUtils.isNotEmpty(code)) {
-            list.add("sms_code" + code);
-            buffer.append("&sms_code=").append(code);
-        }
-        mystr = buffer.toString();
-        arr = list.toArray(new String[list.size()]);
-        String url = StringUtils.isNotEmpty(password) ? Constant.NORMAL_LOGIN : Constant.SMS_LOGIN;
-        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + url, mystr, arr));
-        if (res.getInt("error_code") == 0) {
-            JSONObject data = JSONObject.fromObject(res.getString("data"));
-            //登录成功就加session
-            HttpSession session = request.getSession();
-            session.setAttribute("userId", data.getString("member_id"));
-            session.setAttribute("mobile", data.getString("mobile"));
-
-        } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
-        }
     }
 
     /**

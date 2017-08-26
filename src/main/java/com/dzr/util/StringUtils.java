@@ -28,7 +28,7 @@ public final class StringUtils {
      * @return true表示为空，false表示不为空
      */
     public static boolean isEmpty(String str) {
-        return null == str || "".equals(str) || "".equals(str.trim());
+        return null == str || "".equals(str) || "".equals(str.trim()) || str.length() == 0;
     }
 
     /**

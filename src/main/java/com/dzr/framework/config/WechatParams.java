@@ -20,9 +20,12 @@ public class WechatParams {
     private String appId;
     private String appSecret;
     private String appToken;
+    private String notifyUrl;
     private String apiAddress;
     private String mchId;
     private String timeStamp;
     private String noncestr;
+    private String key;
+    private String sdkVersion;
 
 }
