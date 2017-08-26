@@ -10,7 +10,7 @@
         <c:forEach var="activity" items="${activitys}">
             <li>
                 <div class="active-item">
-                    <a href="${pageContext.request.contextPath}/login/${activity.id}">
+                    <a href="${pageContext.request.contextPath}/login/activityDetail?id=${activity.id}">
                         <img src="${activity.image_url}" alt="">
                         <p>${activity.title}</p>
                     </a>

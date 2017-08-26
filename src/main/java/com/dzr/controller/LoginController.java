@@ -3,13 +3,13 @@ package com.dzr.controller;
 import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
 import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -116,7 +116,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/gotoVip")
-    public String gotoVip(Model model, HttpServletRequest request) {
+    public String gotoVip() {
         return "vip";
     }
 
@@ -127,6 +127,16 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/gotoConsumptionRecords")
     public String gotoConsumptionRecords(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        String[] arr = new String[]{"member_id" + userId};
+        String mystr = "member_id=" + userId;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.AMOUNT_RECORDS, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            model.addAttribute("balance", res.getDouble("balance"));
+            model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
         return "consumption";
     }
 
@@ -137,6 +147,16 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/gotoRecharge")
     public String gotoRecharge(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        String[] arr = new String[]{"member_id" + userId};
+        String mystr = "member_id=" + userId;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.INTEGRAL_RECORDS, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            model.addAttribute("integral", res.getDouble("integral"));
+            model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
         return "recharge";
     }
 
@@ -147,11 +167,14 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/gotoTeam")
     public String gotoTeam(Model model, HttpServletRequest request) {
+        String perPage = request.getParameter("perPage");
+        String page = request.getParameter("page");
+        model.addAttribute("teams", baseInfoService.gotoTeam(perPage, page, request));
         return "team";
     }
 
     /**
-     * 进入推广页面
+     * 进入产品推广页面
      *
      * @return
      */
@@ -175,31 +198,26 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * 进入卡券发放页面
+     * 进入打折卡券发放页面
      *
      * @return
      */
     @RequestMapping("/gotoSendCard")
     public String gotoSendCard(Model model, HttpServletRequest request) {
+        String status = request.getParameter("status");
+        String perPage = request.getParameter("perPage");
+        String page = request.getParameter("page");
+        model.addAttribute("cards", baseInfoService.gotoSendCard(perPage, page, status, request));
         return "sendcard";
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 进入活动页面
+     *
+     * @param model
+     * @param request
+     * @return
+     */
     @RequestMapping("/activitys")
     public String getActivitys(Model model, HttpServletRequest request) {
 
@@ -228,21 +246,21 @@ public class LoginController extends BaseController {
     }
 
     @RequestMapping("/activityDetail")
-    public String getActivityDetail(@PathVariable("activityDetail") String activityDetail, Model model) {
-
+    public String getActivityDetail(Model model, HttpServletRequest request) {
+        String activityDetail = request.getParameter("id");
         //获取活动详情
         String[] arr = new String[]{"activity_id" + activityDetail};
         String mystr = "activity_id=" + activityDetail;
         JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITY_DETAIL, mystr, arr));
         if (0 == info.getInt("error_code")) {
             model.addAttribute("info", info.getJSONObject("result"));
+            model.addAttribute("url", "${pageContext.request.contextPath}/login/activitys");
         }
-        return "activeInfo";
+        return "bshow";
     }
 
     @RequestMapping("/productCates")
     public String getproductCates(Model model) {
-
         //获取产品分类
         String[] arr = new String[]{};
         String mystr = "";
@@ -250,11 +268,11 @@ public class LoginController extends BaseController {
         if (0 == result.getInt("error_code")) {
             model.addAttribute("cates", result.getJSONArray("result"));
         }
-        return "myonly/map";
+        return "brand";
     }
 
     @RequestMapping("/products")
-    public String getProducts(Model model, HttpServletRequest request) {
+    public Map<String, Object> getProducts(HttpServletRequest request) {
         String cateId = request.getParameter("cateId");
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
@@ -263,22 +281,24 @@ public class LoginController extends BaseController {
         String mystr = "cate_id=" + cateId + "&per_page=" + perPage + "&page=" + page;
         JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCTS, mystr, arr));
         if (0 == info.getInt("error_code")) {
-            model.addAttribute("products", info.getJSONArray("result"));
+        } else {
+            throw new ApiException(info.getInt("error_code"), info.getString("error_msg"));
         }
-        return "myonly/map";
+        return successResult(info.getJSONArray("result"));
     }
 
-    @RequestMapping("/{productDetail}")
-    public String getProductDetail(@PathVariable("productDetail") String productDetail, Model model) {
-
+    @RequestMapping("/productDetail")
+    public String getProductDetail(Model model, HttpServletRequest request) {
+        String productDetail = request.getParameter("id");
         //获取产品详情
         String[] arr = new String[]{"product_id" + productDetail};
         String mystr = "product_id=" + productDetail;
         JSONObject productInfo = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCT_DETAIL, mystr, arr));
         if (0 == productInfo.getInt("error_code")) {
             model.addAttribute("info", productInfo.getJSONObject("result"));
+            model.addAttribute("url", "${pageContext.request.contextPath}/login/productCates");
         }
-        return "myonly/map";
+        return "bshow";
     }
 
 }

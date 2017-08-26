@@ -4,80 +4,73 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <body class="brand-body">
-<ul class="nav nav-tabs brand-nav" role="tablist">
-    <li role="presentation" class="active"><a href="#neck" aria-controls="neck" role="tab" data-toggle="tab">颈饰</a></li>
-    <li role="presentation"><a href="#handle" aria-controls="handle" role="tab" data-toggle="tab">手饰</a></li>
-    <li role="presentation"><a href="#ear" aria-controls="ear" role="tab" data-toggle="tab">耳饰</a></li>
-    <li role="presentation"><a href="#foot" aria-controls="foot" role="tab" data-toggle="tab">脚饰</a></li>
-</ul>
-<div role="tabpanel" class="flex-box brand-pane active" id="neck">
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
-    <div class="brand-item">
-        <a href="bshow.html">
-            <img src="images/brand_img.png" alt="">
-            <div class="brand-item-txt">
-                <p>臻品珠宝 产品名</p>
-                <span>询价</span>
-            </div>
-        </a>
-    </div>
+<div class="meal">
+    <ul class="nav nav-tabs brand-nav" role="tablist">
+        <c:forEach var="cate" items="${cates}">
+            <li role="presentation" class="active">
+                <input type="hidden" class="cateId" value="${cate.id}"/>
+                <a href="javascript:void(0);" aria-controls="neck" role="tab" data-toggle="tab">
+                        ${cate.name}
+                </a>
+            </li>
+        </c:forEach>
+    </ul>
 </div>
-<div role="tabpanel" class="flex-box brand-pane" id="handle">2</div>
-<div role="tabpanel" class="flex-box brand-pane" id="ear">3</div>
-<div role="tabpanel" class="flex-box brand-pane" id="foot">4</div>
+<div role="tabpanel" class="flex-box brand-pane active" id="neck">
+    <ul>
+    </ul>
+</div>
 <jsp:include page="foot.jsp" flush="true"/>
+<script>
+    var cateId;
+    $(document).ready(function () {
+        $('.meal li:eq(0)').addClass('act');
+        cateId = $('.meal li:eq(0)').find('.cateId').val();
+        getProductList(cateId);
+    });
+
+    $('.meal li').click(function () {
+        $('.meal li').removeClass('act');
+        $(this).addClass('act');
+        cateId = $(this).find('.cateId').val();
+        getProductList(cateId);
+    })
+
+    function getProductList(cateId) {
+        $.ajax({
+            'url': "${pageContext.request.contextPath}/login/products",
+            'type': 'post',
+            'dataType': 'json',
+            'data': {
+                cateId: cateId,
+                perPage: 10,
+                page: 1
+            },
+            success: function success(d) {
+                if (d.status == 0) {
+                    $(".flex-box .brand-pane .active ul").html('');
+                    var str = '';
+                    if (typeof(d.data) != "undefined") {
+                        for (var i = 0; i < d.data.length; i++) {
+                            str = str + '<li><div class="brand-item">'
+                                    + '<a href="${pageContext.request.contextPath}/login/productDetail?id=' + d.data[i].id + '">'
+                                    + '<img src="' + d.data[i].image_url + '" alt="">'
+                                    + '<div class="brand-item-txt">'
+                                    + '<p>' + d.data[i].title + '臻品珠宝 产品名</p>'
+                                    + '</div>'
+                                    + '</a>'
+                                    + '</div></li>';
+                        }
+                        $(".flex-box .brand-pane .active ul").html(str);
+                    }
+                } else {
+                    alert(d.msg);
+                }
+            }
+        });
+    }
+
+
+</script>
 </body>
 </html>

@@ -274,6 +274,46 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     }
 
     /**
+     * 团队列表
+     *
+     * @param perPage
+     * @param page
+     * @param request
+     * @return
+     */
+    public JSONArray gotoTeam(String perPage, String page, HttpServletRequest request) {
+
+        JSONArray jsonArray;
+        String[] arr;
+        String mystr = "";
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<String>();
+
+        String userId = getUserId(request);
+        list.add("member_id" + userId);
+        buffer.append("&member_id=").append(userId);
+        if (StringUtils.isNotEmpty(perPage)) {
+            list.add("per_page" + perPage);
+            buffer.append("&per_page=").append(perPage);
+        }
+        if (StringUtils.isNotEmpty(page)) {
+            list.add("page" + page);
+            buffer.append("&page=").append(page);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        JSONObject teams = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.TEAMS_LIST, mystr, arr));
+        if (teams.getInt("error_code") != 0) {
+            throw new ApiException(teams.getInt("error_code"), teams.getString("error_msg"));
+        } else {
+            jsonArray = JSONArray.fromObject(teams.getString("result"));
+        }
+
+        return jsonArray;
+    }
+
+
+    /**
      * 优惠券列表
      *
      * @param perPage
@@ -283,7 +323,37 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @return
      */
     public JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request) {
+        JSONArray jsonArray = getCardList(perPage, page, status, request, Constant.COUPONS_LIST);
+        return jsonArray;
+    }
 
+
+    /**
+     * 打折券发放列表
+     *
+     * @param perPage
+     * @param page
+     * @param status
+     * @param request
+     * @return
+     */
+    public JSONArray gotoSendCard(String perPage, String page, String status, HttpServletRequest request) {
+
+        JSONArray jsonArray = getCardList(perPage, page, status, request, Constant.DISCOUNT_CARDS);
+        return jsonArray;
+    }
+
+    /**
+     * 调用去获取卡券列表
+     *
+     * @param perPage
+     * @param page
+     * @param status
+     * @param request
+     * @param url
+     * @return
+     */
+    private JSONArray getCardList(String perPage, String page, String status, HttpServletRequest request, String url) {
         JSONArray jsonArray;
         //获取活动列表
         String[] arr;
@@ -308,7 +378,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         }
         mystr = buffer.toString();
         arr = list.toArray(new String[list.size()]);
-        JSONObject coupons = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.COUPONS_LIST, mystr, arr));
+        JSONObject coupons = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + url, mystr, arr));
         if (coupons.getInt("error_code") != 0) {
             throw new ApiException(coupons.getInt("error_code"), coupons.getString("error_msg"));
         } else {

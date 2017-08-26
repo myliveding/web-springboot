@@ -86,4 +86,25 @@ public interface BaseInfoService {
      */
     JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request);
 
+    /**
+     * 打折券发放列表
+     *
+     * @param perPage
+     * @param page
+     * @param status
+     * @param request
+     * @return
+     */
+    JSONArray gotoSendCard(String perPage, String page, String status, HttpServletRequest request);
+
+    /**
+     * 优惠券列表
+     *
+     * @param perPage
+     * @param page
+     * @param request
+     * @return
+     */
+    JSONArray gotoTeam(String perPage, String page, HttpServletRequest request);
+
 }

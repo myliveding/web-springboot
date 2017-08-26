@@ -4,64 +4,49 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <body class="consumption-body">
-<div class="nav-top nav-recharge-top"><a href="index.html"><img src="images/icon_left.png" alt=""
-                                                                class="nav-toback"></a>积分记录
+<div class="nav-top nav-recharge-top">
+    <a href="${pageContext.request.contextPath}/login/index">
+        <img src="images/icon_left.png" alt="" class="nav-toback">
+    </a>
+    积分记录
 </div>
 <div class="consumption-header recharge-header">
-    <h4>18888</h4>
+    <h4>${integral}</h4>
     <p>当前积分</p>
 </div>
+<c:forEach var="it" items="${list}">
+<c:choose>
+<c:when test="${it.time eq '本月'}">
 <div class="flex-box consumption-top recharge-top">
-    <span>本月</span>
-    <div class="consumption-top-txt"><span>减少</span>-688<span>增加</span>+888</div>
-</div>
-<!-- consumption-item -->
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span class="consumption-status-Recharge">充值</span>
-    <div class="consumption-item-right"><img src="images/icon_recharge_back.png" alt="">+600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span>消费</span>
-    <div class="consumption-item-right">-600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span class="consumption-status-Recharge">充值</span>
-    <div class="consumption-item-right"><img src="images/icon_recharge_back.png" alt="">+600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span>消费</span>
-    <div class="consumption-item-right">-168</div>
-</div>
-<!-- consumption-item -->
-<div class="flex-box consumption-top consumption-center">
-    <span>2017年7月</span>
-    <div class="consumption-top-txt"><span>减少</span>-688<span>增加</span>+888</div>
-</div>
-<!-- consumption-item -->
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span class="consumption-status-Recharge">充值</span>
-    <div class="consumption-item-right"><img src="images/icon_recharge_back.png" alt="">+600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span>消费</span>
-    <div class="consumption-item-right">-600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span class="consumption-status-Recharge">充值</span>
-    <div class="consumption-item-right"><img src="images/icon_recharge_back.png" alt="">+600</div>
-</div>
-<div class="flex-box consumption-item recharge-item">
-    <p>2017-08-12 07:30</p>
-    <span>消费</span>
-    <div class="consumption-item-right">-168</div>
-</div>
+    </c:when>
+    <c:otherwise>
+    <div class="flex-box consumption-top consumption-center">
+        </c:otherwise>
+        </c:choose>
+        <span>${it.time}</span>
+        <div class="consumption-top-txt">
+            <span>减少</span>${it.reduce}
+            <span>增加</span>${it.increase}
+        </div>
+    </div>
+    <c:forEach var="t" items="${it.record}">
+    <!-- consumption-item -->
+    <div class="flex-box consumption-item recharge-item">
+        <p>${t.create_time}</p>
+        <c:choose>
+            <c:when test="${t.type eq '返'}">
+                <span class="consumption-status-Recharge">${t.type}</span>
+            </c:when>
+            <c:otherwise>
+                <span>${t.type}</span>
+            </c:otherwise>
+        </c:choose>
+        <div class="consumption-item-right">
+                ${t.integral}
+        </div>
+    </div>
+    </c:forEach>
+    </c:forEach>
 <!-- consumption-item -->
 <div class="cb20"></div>
 <jsp:include page="foot.jsp" flush="true"/>
