@@ -34,7 +34,7 @@
         $(this).addClass('act');
         cateId = $(this).find('.cateId').val();
         getProductList(cateId);
-    })
+    });
 
     function getProductList(cateId) {
         $.ajax({
