@@ -1,15 +1,16 @@
 package com.dzr.controller.wechat;
 
+import com.dzr.framework.config.Constant;
+import com.dzr.framework.config.UrlConfig;
 import com.dzr.po.wx.MessageUtil;
-import com.dzr.service.BaseInfoService;
 import com.dzr.util.StringUtils;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -17,10 +18,11 @@ import java.util.Map;
 @RequestMapping("/wechat/pay")
 @Controller
 public class WechatNotifyController {
+
     private final Logger logger = Logger.getLogger(this.getClass());
 
-    @Resource
-    BaseInfoService baseInfoService;
+    @Autowired
+    UrlConfig urlConfig;
 
     @RequestMapping(value = "/notify", method = RequestMethod.POST)
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -77,14 +79,12 @@ public class WechatNotifyController {
                 /**
                  * 订单业务
                  */
-                String userId = "";
                 if (StringUtils.isNotEmpty(orderNo)) {
-                    thirdPayAmt = thirdPayAmt.replaceAll(",", "");
-                    WechatMember member = memberService.getObjectByOpenid(openid);
-                    if (null != member) {
-                        String[] arr = new String[]{"member_id" + member.getId(), "order_code" + orderNo, "serial_no" + serialNo};
-                        String mystr = "member_id=" + member.getId() + "&order_code=" + orderNo + "&serial_no=" + serialNo;
-                        JSONObject resultStr = JSONObject.fromObject(JoYoUtil.getInterface(JoYoUtil.PAY_ORDER, mystr, arr));
+                    if (!"".equals(openid)) {
+                        String[] arr = new String[]{"openid" + openid, "member_recharge_id" + orderNo, "serial_no" + serialNo};
+                        String mystr = "openid=" + openid + "&member_recharge_id=" + orderNo + "&serial_no=" + serialNo;
+
+                        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECHARGE_SUC, mystr, arr));
                         if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
                             logger.info("微信支付确认订单完成:" + orderNo);
                         } else {

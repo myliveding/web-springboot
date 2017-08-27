@@ -116,7 +116,18 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/gotoVip")
-    public String gotoVip() {
+    public String gotoVip(Model model, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        String[] arr = new String[]{"member_id" + userId};
+        String mystr = "member_id=" + userId;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.MEMBER_RECHARGES, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            model.addAttribute("balance", res.getDouble("balance"));
+            model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
+        } else {
+            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        }
+
         return "vip";
     }
 

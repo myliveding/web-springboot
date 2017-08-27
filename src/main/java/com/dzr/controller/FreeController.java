@@ -25,7 +25,6 @@ public class FreeController extends BaseController {
 
     @RequestMapping("/sendSms")
     public Map<String, Object> sendSms(String mobile, HttpServletRequest request) {
-//        String tel = request.getParameter("tel");
         baseInfoService.sendSms(mobile);
         return successResult("sendSms");
     }
