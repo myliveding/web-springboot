@@ -107,4 +107,11 @@ public interface BaseInfoService {
      */
     JSONArray gotoTeam(String perPage, String page, HttpServletRequest request);
 
+    /**
+     * 获取系统信息
+     *
+     * @return
+     */
+    JSONObject getSystemInfo();
+
 }

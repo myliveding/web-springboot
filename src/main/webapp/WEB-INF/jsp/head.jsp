@@ -1,9 +1,9 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/swiper.min.css">
-<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/swiper.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 <title>臻品珠宝</title>
 
 <script type="text/javascript">

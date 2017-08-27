@@ -3,8 +3,10 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <body class="fillself-body">
-<div class="nav-top"><a href="${pageContext.request.contextPath}/login/userCenter"><img src="images/icon_left.png"
-                                                                                        alt="" class="nav-toback"></a>填写个人资料
+<div class="nav-top">
+    <a href="${pageContext.request.contextPath}/login/userCenter">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
+    </a>填写个人资料
 </div>
 <div class="fillself-container">
     <div class="flex-box fillself-item">

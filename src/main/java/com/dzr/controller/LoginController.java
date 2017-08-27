@@ -9,9 +9,9 @@ import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ import java.util.Map;
  * @CreateTime 2017/8/20 16:16 八月
  */
 
-@RestController
-//@Controller
+//@RestController
+@Controller
 @RequestMapping("/login")
 public class LoginController extends BaseController {
 
@@ -71,7 +71,7 @@ public class LoginController extends BaseController {
     public String userCenter(Model model, HttpServletRequest request) {
         String userId = (String) request.getSession().getAttribute("userId");
         model.addAttribute("user", baseInfoService.getUserInfo(userId));
-        return "mime";
+        return "mine";
     }
 
     /**
@@ -120,9 +120,13 @@ public class LoginController extends BaseController {
         String userId = (String) request.getSession().getAttribute("userId");
         String[] arr = new String[]{"member_id" + userId};
         String mystr = "member_id=" + userId;
+        JSONObject user = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
+        if (user.getInt("error_code") == 0) {
+            model.addAttribute("member", JSONObject.fromObject(user.getString("member")));
+        }
+
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.MEMBER_RECHARGES, mystr, arr));
         if (res.getInt("error_code") == 0) {
-            model.addAttribute("balance", res.getDouble("balance"));
             model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
         } else {
             throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));

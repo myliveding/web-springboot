@@ -61,6 +61,8 @@ public final class Constant {
     public static final String MEMBER_RECHARGES = "/api/get_member_recharges";
     //充值成功处理接口
     public static final String RECHARGE_SUC = "/api/recharge_suc";
+    //获取系统设置
+    public static final String SYSTEM_SETTING = "/api/get_system_setting";
 
     /**
      * @param urlPath 接口地址

@@ -44,12 +44,13 @@ public class FreeController extends BaseController {
 
     @RequestMapping("/login")
     public Map<String, Object> login(String mobile, String password, String code, HttpServletRequest request) {
-
-//        String tel = request.getParameter("tel");
-//        String pwd = request.getParameter("pwd");
-//        String code = request.getParameter("code");
         baseInfoService.login(mobile, password, code, request);
         return successResult("login");
+    }
+
+    @RequestMapping("/systemInfo")
+    public Map<String, Object> getSystemInfo() {
+        return successResult(baseInfoService.getSystemInfo());
     }
 
 }

@@ -4,8 +4,10 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <body class="active-body">
-<div class="nav-top"><a href="${pageContext.request.contextPath}/login/userCenter"><img src="images/icon_left.png"
-                                                                                        alt="" class="nav-toback"></a>个人资料
+<div class="nav-top">
+    <a href="${pageContext.request.contextPath}/login/userCenter">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
+    </a>个人资料
 </div>
 <div class="flex-box self-container">
     <div class="self-con">
@@ -31,7 +33,7 @@
         </div>
         <div class="flex-box self-item">
             <h4>生日</h4>
-            <input class="birth" type="text" value="${user.birthday}">
+            <input class="birth" type="text" placeholder="生日格式1990-01-05" value="${user.birthday}">
         </div>
         <div class="flex-box self-item">
             <h4>收货地址</h4>
@@ -41,7 +43,7 @@
             <button onclick="update()">修改资料</button>
         </div>
     </div>
-    <img src="images/icon_logo.png" alt="" class="flex1 self-bg">
+    <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="flex1 self-bg">
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
@@ -51,6 +53,7 @@
         var sex = $('.sex').val();
         var birth = $('.birth').val();
         var address = $('.address').val();
+
         $.ajax({
             'url': "${pageContext.request.contextPath}/login/savePerfectInfo",
             'type': 'post',
@@ -63,7 +66,7 @@
                 address: address
             },
             success: function success(d) {
-                if (d.errcode == 0) {
+                if (d.status == 0) {
                     window.location.reload();
                 } else {
                     alert(d.errmsg);

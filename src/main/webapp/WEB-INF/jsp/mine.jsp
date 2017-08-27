@@ -7,10 +7,11 @@
 <div class="nav-top">用户中心</div>
 <div class="mine-container">
     <div class="mine-vip">
-        <img src="images/mine_vip_bg.jpg" alt="" class="mine-vip-bg">
+        <img src="${pageContext.request.contextPath}/images/mine_vip_bg.jpg" alt="" class="mine-vip-bg">
         <div class="mine-vip-bottom">
             <%--<div class="fl mine-vip-number">NO.6868668</div>--%>
-            <div class="fr mine-vip-level"><img src="images/icon_vip.png" alt=""><span></span></div>
+            <div class="fr mine-vip-level"><img src="${pageContext.request.contextPath}/images/icon_vip.png"
+                                                alt=""><span></span></div>
         </div>
     </div>
     <div class="mine-txt">
@@ -24,7 +25,7 @@
             <div class="mine-item-sub flex-box mine-item-sub-h4">
                 <div class="flex-box fl mine-item-sub-h4txt">
                     <h4>${user.name}</h4>
-                    <img src="images/icon_mine_vip.png">
+                    <img src="${pageContext.request.contextPath}/images/icon_mine_vip.png">
                     <c:choose>
                         <c:when test="${user.member_type eq '1'}">
                             <span>普通用户</span>
@@ -41,33 +42,36 @@
             <div class="mine-item-sub">
                 <a href="${pageContext.request.contextPath}/login/gotoUserInfo" class="flex-box">
                     <div class="fl">
-                        <img src="images/icon_mine_person.png" alt="" class="mine-item-subimg">
+                        <img src="${pageContext.request.contextPath}/images/icon_mine_person.png" alt=""
+                             class="mine-item-subimg">
                         <span>个人资料</span>
                     </div>
                     <div class="fr mine-item-operate">
-                        <img src="images/mine_right.png" alt="">
+                        <img src="${pageContext.request.contextPath}/images/mine_right.png" alt="">
                     </div>
                 </a>
             </div>
             <div class="mine-item-sub">
                 <a href="${pageContext.request.contextPath}/login/gotoPwd" class="flex-box">
                     <div class="fl">
-                        <img src="images/icon_mine_pwd.png" alt="" class="mine-item-subimg">
+                        <img src="${pageContext.request.contextPath}/images/icon_mine_pwd.png" alt=""
+                             class="mine-item-subimg">
                         <span>修改登陆密码</span>
                     </div>
                     <div class="fr mine-item-operate">
-                        <img src="images/mine_right.png" alt="">
+                        <img src="${pageContext.request.contextPath}/images/mine_right.png" alt="">
                     </div>
                 </a>
             </div>
             <div class="mine-item-sub">
                 <a href="${pageContext.request.contextPath}/login/gotoCard" class="flex-box">
                     <div class="fl">
-                        <img src="images/icon_mine_ticket.png" alt="" class="mine-item-subimg">
+                        <img src="${pageContext.request.contextPath}/images/icon_mine_ticket.png" alt=""
+                             class="mine-item-subimg">
                         <span>我的优惠券</span>
                     </div>
                     <div class="fr mine-item-operate">
-                        <img src="images/mine_right.png" alt="">
+                        <img src="${pageContext.request.contextPath}/images/mine_right.png" alt="">
                     </div>
                 </a>
             </div>

@@ -43,6 +43,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         String[] arr = new String[]{"mobile" + mobile};
         String mystr = "mobile=" + mobile;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SMS_CODE, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+            throw new ApiException(10008, res.getString("error_msg"));
+        }
         throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
     }
 
@@ -67,7 +70,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
         //登录成功就加session
         HttpSession session = request.getSession();
-        String openId = session.getAttribute("openid").toString();
+        Object openIdObject = session.getAttribute("openid");
+        String openId = null != openIdObject ? openIdObject.toString() : null;
+        openId = "oyAM9vwa6FN6trSrUweXCdK0Jh8s";
 
         String[] arr;
         String mystr = "";
@@ -124,7 +129,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
         //登录成功就加session
         HttpSession session = request.getSession();
-        String openId = session.getAttribute("openid").toString();
+        Object openIdObject = session.getAttribute("openid");
+        String openId = null != openIdObject ? openIdObject.toString() : null;
+        openId = "oyAM9vwa6FN6trSrUweXCdK0Jh8s";
 
         String[] arr;
         String mystr = "";
@@ -174,7 +181,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (StringUtils.isEmpty(wechat)) {
             throw new ApiException(10007, "微信号");
         }
-        if (StringUtils.isNotEmpty(sex) && !sex.equals("1") && !sex.equals("0")) {
+        if (StringUtils.isNotEmpty(sex) && !sex.equals("男") && !sex.equals("女")) {
             throw new ApiException(10008, "性别只能是男或女");
         }
 
@@ -211,7 +218,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.UPDATE_INFO, mystr, arr));
         if (res.getInt("error_code") == 0) {
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
     }
 
@@ -409,6 +416,21 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      */
     private String getUserId(HttpServletRequest request) {
         return (String) request.getSession().getAttribute("userId");
+    }
+
+    /**
+     * 获取系统信息
+     *
+     * @return
+     */
+    public JSONObject getSystemInfo() {
+        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SYSTEM_SETTING, "", new String[]{}));
+        if (info.getInt("error_code") == 0) {
+            info = JSONObject.fromObject(info.getString("result"));
+        } else {
+            throw new ApiException(info.getInt("error_code"), info.getString("error_msg"));
+        }
+        return info;
     }
 
 }

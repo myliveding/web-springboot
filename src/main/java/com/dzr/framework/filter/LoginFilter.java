@@ -52,25 +52,21 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
         String url = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+        String uri = httpRequest.getServletPath();
         if (url.startsWith("/") && url.length() > 1) {
             url = url.substring(1);
         }
+        logger.info("loginFilter--uri：" + uri);
         logger.info("loginFilter--getRequestURI：" + httpRequest.getRequestURI() + "--url:" + url);
-        if (isInclude(url)) {
-            filterChain.doFilter(httpRequest, httpResponse);
-            return;
-        } else {
-//            HttpSession session = httpRequest.getSession();
+        if (!isInclude(url)) {
             String userId = (String) httpRequest.getSession().getAttribute("userId");
             if (null == userId || "".equals(userId)) {
-                RequestDispatcher rd = httpRequest.getRequestDispatcher("login");
+                RequestDispatcher rd = httpRequest.getRequestDispatcher("/");
                 rd.forward(httpRequest, httpResponse);
-            } else {
-                filterChain.doFilter(httpRequest, httpResponse);
                 return;
             }
-            return;
         }
+        filterChain.doFilter(httpRequest, httpResponse);
     }
 
     @Override
