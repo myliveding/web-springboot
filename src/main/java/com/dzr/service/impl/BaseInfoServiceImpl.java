@@ -433,4 +433,52 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         return info;
     }
 
+    /**
+     * 获取活动列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public JSONArray getActivitysPaging(String page, String pageSize) {
+
+        //获取活动列表
+        String[] arr;
+        String mystr;
+        StringBuilder buffer = new StringBuilder();
+        List<String> list = new ArrayList<String>();
+
+        if (StringUtils.isNotEmpty(page)) {
+            list.add("page" + page);
+            buffer.append("&page=").append(page);
+        }
+        if (StringUtils.isNotEmpty(pageSize)) {
+            list.add("per_page" + pageSize);
+            buffer.append("&per_page=").append(pageSize);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+        final JSONObject acts = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITYS, mystr, arr));
+        JSONArray jsonArray = null;
+        if (acts.getInt("error_code") == 0) {
+            jsonArray = acts.getJSONArray("result");
+        } else {
+            throw new ApiException(10008, acts.getString("error_msg"));
+        }
+        return jsonArray;
+    }
+
+    public JSONObject getActivityDetail(String activityDetail) {
+        //获取活动详情
+        String[] arr = new String[]{"activity_id" + activityDetail};
+        String mystr = "activity_id=" + activityDetail;
+        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITY_DETAIL, mystr, arr));
+        if (0 == info.getInt("error_code")) {
+            info = info.getJSONObject("result");
+        } else {
+            throw new ApiException(10008, info.getString("error_msg"));
+        }
+        return info;
+    }
+
 }

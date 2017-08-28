@@ -5,17 +5,18 @@ import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
-import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -238,39 +239,36 @@ public class LoginController extends BaseController {
 
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
-        //获取活动列表
-        String[] arr;
-        String mystr = "";
-        StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
-        if (StringUtils.isNotEmpty(perPage)) {
-            list.add("per_page" + perPage);
-            buffer.append("&per_page=").append(perPage);
-        }
-        if (StringUtils.isNotEmpty(page)) {
-            list.add("page" + page);
-            buffer.append("&page=").append(page);
-        }
-        mystr = buffer.toString();
-        arr = list.toArray(new String[list.size()]);
-        JSONObject bannersInfo = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITYS, mystr, arr));
-        if (0 == bannersInfo.getInt("error_code")) {
-            model.addAttribute("activitys", bannersInfo.getJSONArray("result"));
-        }
+        model.addAttribute("activitys", baseInfoService.getActivitysPaging(page, perPage));
         return "active";
+    }
+
+    /**
+     * 页面加载更多数据
+     * 这个有两种实现方式还有一种在rest里面
+     *
+     * @param model
+     * @param request
+     * @return
+     */
+    @RequestMapping("/activitysPaging")
+    public
+    @ResponseBody
+    Object getActivitysPaging(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String perPage = request.getParameter("perPage");
+        String page = request.getParameter("page");
+        response.setContentType("text/html; charset=utf-8");
+        PrintWriter out = response.getWriter();
+        out.println(baseInfoService.getActivitysPaging(page, perPage));
+        return null;
     }
 
     @RequestMapping("/activityDetail")
     public String getActivityDetail(Model model, HttpServletRequest request) {
         String activityDetail = request.getParameter("id");
         //获取活动详情
-        String[] arr = new String[]{"activity_id" + activityDetail};
-        String mystr = "activity_id=" + activityDetail;
-        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.ACTIVITY_DETAIL, mystr, arr));
-        if (0 == info.getInt("error_code")) {
-            model.addAttribute("info", info.getJSONObject("result"));
-            model.addAttribute("url", "${pageContext.request.contextPath}/login/activitys");
-        }
+        model.addAttribute("info", baseInfoService.getActivityDetail(activityDetail));
+        model.addAttribute("url", "login/activitys");
         return "bshow";
     }
 

@@ -114,4 +114,15 @@ public interface BaseInfoService {
      */
     JSONObject getSystemInfo();
 
+    /**
+     * 获取活动列表
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    JSONArray getActivitysPaging(String page, String pageSize);
+
+    JSONObject getActivityDetail(String activityDetail);
+
 }

@@ -6,8 +6,8 @@
 <jsp:include page="head.jsp" flush="true"/>
 <body class="active-body">
 <div class="bshow-back">
-    <a href="${url}">
-        <img src="images/bshow_left.png" alt="">
+    <a href="${pageContext.request.contextPath}/${url}">
+        <img src="${pageContext.request.contextPath}/images/bshow_left.png" alt="">
     </a>
 </div>
 <div class="swiper-container banner">
@@ -26,17 +26,14 @@
     <h4>臻品珠宝 产品广告语 说明</h4>
 </div>
 <div class="bshow-con">
-    <img src="images/bshow_img1.jpg" alt="" class="bshow-btn">
+    <img src="${pageContext.request.contextPath}/images/bshow_img1.jpg" alt="" class="bshow-btn">
 </div>
 <div class="bshow-box">
     <div class="bshow-box-shadow"></div>
     <div class="bshow-box-con">
-        <img src="images/brand_banner1.jpg" alt="">
+        <img src="${pageContext.request.contextPath}/images/brand_banner1.jpg" alt="">
         <div class="bshow-box-txt">
             ${info.content}
-            <h4>臻品珠宝 产品</h4>
-            <p>臻品珠宝 产品广告语说明</p>
-            <span>推</span>
         </div>
     </div>
 </div>

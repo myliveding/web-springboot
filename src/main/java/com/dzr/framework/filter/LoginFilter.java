@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 
 @Order(1)
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/userHtml/*", "/userRest/*", "/userJsp/*", "/login/*"})
+@WebFilter(filterName = "loginFilter", urlPatterns = {"/userHtml/*", "/userRest/*", "/userJsp/*", "/login/*", "/rest/*"})
 public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
