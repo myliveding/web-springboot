@@ -44,13 +44,6 @@ public interface BaseInfoService {
     JSONArray getBanners();
 
     /**
-     * 获取公司协议
-     *
-     * @return
-     */
-    void getCompanyProtocol();
-
-    /**
      * 登录方法
      *
      * @param mobile
@@ -84,7 +77,7 @@ public interface BaseInfoService {
      * @param request
      * @return
      */
-    JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request);
+    JSONArray gotoCouponsCard(String perPage, String page, String status, HttpServletRequest request);
 
     /**
      * 打折券发放列表
@@ -95,7 +88,7 @@ public interface BaseInfoService {
      * @param request
      * @return
      */
-    JSONArray gotoSendCard(String perPage, String page, String status, HttpServletRequest request);
+    JSONArray gotoDiscountCard(String perPage, String page, String status, HttpServletRequest request);
 
     /**
      * 优惠券列表

@@ -47,7 +47,7 @@
                                     html += '<p>' + d.data[i].title + '</p>'
                                     html += '</a></div>'
                                 }
-                                $(".active-container").append(html)
+                                $(".active-container").append(html);
                             } else {
                                 alert("没有更多了");
                             }

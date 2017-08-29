@@ -194,9 +194,30 @@ public class LoginController extends BaseController {
      *
      * @return
      */
-    @RequestMapping("/gotoBrand")
-    public String gotoBrand() {
+    @RequestMapping("/productCates")
+    public String getproductCates(Model model) {
+        //获取产品分类
+        String[] arr = new String[]{};
+        String mystr = "";
+        JSONObject result = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCT_CATES, mystr, arr));
+        if (0 == result.getInt("error_code")) {
+            model.addAttribute("cates", result.getJSONArray("result"));
+        }
         return "brand";
+    }
+
+    @RequestMapping("/productDetail")
+    public String getProductDetail(Model model, HttpServletRequest request) {
+        String productDetail = request.getParameter("id");
+        //获取产品详情
+        String[] arr = new String[]{"product_id" + productDetail};
+        String mystr = "product_id=" + productDetail;
+        JSONObject productInfo = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCT_DETAIL, mystr, arr));
+        if (0 == productInfo.getInt("error_code")) {
+            model.addAttribute("info", productInfo.getJSONObject("result"));
+            model.addAttribute("url", "login/productCates");
+        }
+        return "bshow";
     }
 
     /**
@@ -204,12 +225,12 @@ public class LoginController extends BaseController {
      *
      * @return
      */
-    @RequestMapping("/gotoCard")
-    public String gotoCard(Model model, HttpServletRequest request) {
+    @RequestMapping("/gotoCouponsCard")
+    public String gotoCouponsCard(Model model, HttpServletRequest request) {
         String status = request.getParameter("status");
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
-        model.addAttribute("cards", baseInfoService.gotoCard(perPage, page, status, request));
+        model.addAttribute("cards", baseInfoService.gotoCouponsCard(perPage, page, status, request));
         return "card";
     }
 
@@ -218,12 +239,12 @@ public class LoginController extends BaseController {
      *
      * @return
      */
-    @RequestMapping("/gotoSendCard")
-    public String gotoSendCard(Model model, HttpServletRequest request) {
+    @RequestMapping("/gotoDiscountCard")
+    public String gotoDiscountCard(Model model, HttpServletRequest request) {
         String status = request.getParameter("status");
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
-        model.addAttribute("cards", baseInfoService.gotoSendCard(perPage, page, status, request));
+        model.addAttribute("cards", baseInfoService.gotoDiscountCard(perPage, page, status, request));
         return "sendcard";
     }
 
@@ -272,46 +293,10 @@ public class LoginController extends BaseController {
         return "bshow";
     }
 
-    @RequestMapping("/productCates")
-    public String getproductCates(Model model) {
-        //获取产品分类
-        String[] arr = new String[]{};
-        String mystr = "";
-        JSONObject result = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCT_CATES, mystr, arr));
-        if (0 == result.getInt("error_code")) {
-            model.addAttribute("cates", result.getJSONArray("result"));
-        }
-        return "brand";
-    }
-
-    @RequestMapping("/products")
-    public Map<String, Object> getProducts(HttpServletRequest request) {
-        String cateId = request.getParameter("cateId");
-        String perPage = request.getParameter("perPage");
-        String page = request.getParameter("page");
-        //获取产品列表
-        String[] arr = new String[]{"cate_id" + cateId, "per_page" + perPage, "page" + page};
-        String mystr = "cate_id=" + cateId + "&per_page=" + perPage + "&page=" + page;
-        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCTS, mystr, arr));
-        if (0 == info.getInt("error_code")) {
-        } else {
-            throw new ApiException(info.getInt("error_code"), info.getString("error_msg"));
-        }
-        return successResult(info.getJSONArray("result"));
-    }
-
-    @RequestMapping("/productDetail")
-    public String getProductDetail(Model model, HttpServletRequest request) {
-        String productDetail = request.getParameter("id");
-        //获取产品详情
-        String[] arr = new String[]{"product_id" + productDetail};
-        String mystr = "product_id=" + productDetail;
-        JSONObject productInfo = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCT_DETAIL, mystr, arr));
-        if (0 == productInfo.getInt("error_code")) {
-            model.addAttribute("info", productInfo.getJSONObject("result"));
-            model.addAttribute("url", "${pageContext.request.contextPath}/login/productCates");
-        }
-        return "bshow";
+    @RequestMapping("/gotoCode")
+    public String gotoCode(Model model, HttpServletRequest request) {
+        String codeId = request.getParameter("id");
+        return "code";
     }
 
 }

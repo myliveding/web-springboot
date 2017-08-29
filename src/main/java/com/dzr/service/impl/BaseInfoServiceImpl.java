@@ -71,18 +71,19 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         //登录成功就加session
         HttpSession session = request.getSession();
         Object openIdObject = session.getAttribute("openid");
-        String openId = null != openIdObject ? openIdObject.toString() : null;
-        openId = "oyAM9vwa6FN6trSrUweXCdK0Jh8s";
+        String openId = null != openIdObject ? openIdObject.toString() : "";
 
         String[] arr;
-        String mystr = "";
+        String mystr;
         StringBuilder buffer = new StringBuilder();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("mobile" + mobile);
         buffer.append("mobile=").append(mobile);
 
-        list.add("openid" + openId);
-        buffer.append("&openid=").append(openId);
+        if (!"".equals(openId)) {
+            list.add("openid" + openId);
+            buffer.append("&openid=").append(openId);
+        }
 
         if (StringUtils.isNotEmpty(password)) {
             list.add("password" + password);
@@ -130,13 +131,12 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         //登录成功就加session
         HttpSession session = request.getSession();
         Object openIdObject = session.getAttribute("openid");
-        String openId = null != openIdObject ? openIdObject.toString() : null;
-        openId = "oyAM9vwa6FN6trSrUweXCdK0Jh8s";
+        String openId = null != openIdObject ? openIdObject.toString() : "";
 
         String[] arr;
-        String mystr = "";
+        String mystr;
         StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("mobile" + mobile);
         buffer.append("mobile=").append(mobile);
         list.add("sms_code" + code);
@@ -145,8 +145,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         buffer.append("&password=").append(password);
         list.add("reg_invitation_code" + name);
         buffer.append("&reg_invitation_code=").append(name);
-        list.add("openid" + openId);
-        buffer.append("&openid=").append(openId);
+        if (!"".equals(openId)) {
+            list.add("openid" + openId);
+            buffer.append("&openid=").append(openId);
+        }
         mystr = buffer.toString();
         arr = list.toArray(new String[list.size()]);
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
@@ -242,14 +244,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     }
 
     /**
-     * 获取公司协议
-     *
-     * @return
-     */
-    public void getCompanyProtocol() {
-    }
-
-    /**
      * 获取PHP的用户信息
      *
      * @param memberId
@@ -307,7 +301,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         String[] arr;
         String mystr = "";
         StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         String userId = getUserId(request);
         list.add("member_id" + userId);
@@ -324,11 +318,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         arr = list.toArray(new String[list.size()]);
         JSONObject teams = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.TEAMS_LIST, mystr, arr));
         if (teams.getInt("error_code") != 0) {
-            throw new ApiException(teams.getInt("error_code"), teams.getString("error_msg"));
+            throw new ApiException(10008, teams.getString("error_msg"));
         } else {
             jsonArray = JSONArray.fromObject(teams.getString("result"));
         }
-
         return jsonArray;
     }
 
@@ -342,7 +335,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @param request
      * @return
      */
-    public JSONArray gotoCard(String perPage, String page, String status, HttpServletRequest request) {
+    public JSONArray gotoCouponsCard(String perPage, String page, String status, HttpServletRequest request) {
         JSONArray jsonArray = getCardList(perPage, page, status, request, Constant.COUPONS_LIST);
         return jsonArray;
     }
@@ -357,8 +350,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @param request
      * @return
      */
-    public JSONArray gotoSendCard(String perPage, String page, String status, HttpServletRequest request) {
-
+    public JSONArray gotoDiscountCard(String perPage, String page, String status, HttpServletRequest request) {
         JSONArray jsonArray = getCardList(perPage, page, status, request, Constant.DISCOUNT_CARDS);
         return jsonArray;
     }
@@ -377,9 +369,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         JSONArray jsonArray;
         //获取活动列表
         String[] arr;
-        String mystr = "";
-        StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
+        String mystr;
+        StringBuilder buffer = new StringBuilder();
+        List<String> list = new ArrayList<>();
 
         String userId = getUserId(request);
         list.add("member_id" + userId);
@@ -400,11 +392,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         arr = list.toArray(new String[list.size()]);
         JSONObject coupons = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + url, mystr, arr));
         if (coupons.getInt("error_code") != 0) {
-            throw new ApiException(coupons.getInt("error_code"), coupons.getString("error_msg"));
+            throw new ApiException(10008, coupons.getString("error_msg"));
         } else {
             jsonArray = JSONArray.fromObject(coupons.getString("result"));
         }
-
         return jsonArray;
     }
 
@@ -446,7 +437,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         String[] arr;
         String mystr;
         StringBuilder buffer = new StringBuilder();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         if (StringUtils.isNotEmpty(page)) {
             list.add("page" + page);
@@ -480,5 +471,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         }
         return info;
     }
+
 
 }

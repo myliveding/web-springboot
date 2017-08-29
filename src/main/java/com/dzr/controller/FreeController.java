@@ -29,11 +29,6 @@ public class FreeController extends BaseController {
         return successResult("sendSms");
     }
 
-    @RequestMapping("/getProtocol")
-    public Map<String, Object> getProtocol() {
-        baseInfoService.getCompanyProtocol();
-        return successResult("getProtocol");
-    }
 
     @RequestMapping("/register")
     public Map<String, Object> register(String name, String mobile, String password, String code, HttpServletRequest request) {
