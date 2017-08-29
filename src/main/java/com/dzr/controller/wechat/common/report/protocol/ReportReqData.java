@@ -50,7 +50,7 @@ public class ReportReqData {
 
 
     public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         Field[] fields = this.getClass().getDeclaredFields();
         for (Field field : fields) {
             Object obj;
