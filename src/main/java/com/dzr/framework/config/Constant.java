@@ -63,6 +63,8 @@ public final class Constant {
     public static final String RECHARGE_SUC = "/api/recharge_suc";
     //获取系统设置
     public static final String SYSTEM_SETTING = "/api/get_system_setting";
+    //领取打折卡接口
+    public static final String RECEIVE_DISCOUNT_CARD = "/api/receive_discount_card";
 
     /**
      * @param urlPath 接口地址

@@ -13,25 +13,13 @@
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
         <div class="sendcard-item">
-            <c:choose>
-                <c:when test="${card.status eq '2'}">
-                    <img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">
-                </c:when>
-                <c:when test="${card.status eq '1'}">
-                    <img src="${pageContext.request.contextPath}/images/sendcard_yellow.png" alt="">
-                </c:when>
-                <c:otherwise>
-                    <img src="${pageContext.request.contextPath}/images/sendcard_purple.png" alt="">
-                </c:otherwise>
-            </c:choose>
+            <img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">
             <div class="flex-box sendcard-txt">
                 <img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">
                 <p>全场消费满${card.user_price}元<span>即可使用</span></p>
                 <div class="sendcard-number sendcard-txt-green">${card.discount}<span>折</span></div>
             </div>
-            <c:if test="${card.status eq '2'}">
-                <a href="" class="sendcard-status-green">赠送</a>
-            </c:if>
+            <a href="" class="sendcard-status-green">赠送</a>
         </div>
     </c:forEach>
 </div>
@@ -71,7 +59,7 @@
                                     html += '<a href="" class="sendcard-status-green">赠送</a>'
                                     html += '</div>'
                                 }
-                                $(".flex-box .team-con").append(html);
+                                $(".sendcard-container").append(html);
                             } else {
                                 alert("没有更多了");
                             }

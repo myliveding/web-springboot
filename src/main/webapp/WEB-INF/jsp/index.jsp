@@ -86,7 +86,7 @@
                 src="${pageContext.request.contextPath}/images/icon_nav5.png" alt="">
             <p>臻品推广</p><span>(兼职赚钱)</span></a></div>
         <div class="flex-box nav-item">
-            <a href="${pageContext.request.contextPath}/login/gotoSendCard">
+            <a href="${pageContext.request.contextPath}/login/gotoDiscountCard">
                 <img src="${pageContext.request.contextPath}/images/icon_nav6.png" alt="">
                 <p>卡券赠送</p>
                 <c:if test="${user.card_count > 0}">

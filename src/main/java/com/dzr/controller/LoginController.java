@@ -5,6 +5,7 @@ import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
+import com.dzr.util.DateUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -231,6 +232,7 @@ public class LoginController extends BaseController {
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
         model.addAttribute("cards", baseInfoService.gotoCouponsCard(perPage, page, status, request));
+        model.addAttribute("now", DateUtils.getDateNowDay());
         return "card";
     }
 
@@ -278,7 +280,7 @@ public class LoginController extends BaseController {
     Object getActivitysPaging(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
-        response.setContentType("text/html; charset=utf-8");
+        response.setContentType("text/json; charset=utf-8");
         PrintWriter out = response.getWriter();
         out.println(baseInfoService.getActivitysPaging(page, perPage));
         return null;
@@ -297,6 +299,11 @@ public class LoginController extends BaseController {
     public String gotoCode(Model model, HttpServletRequest request) {
         String codeId = request.getParameter("id");
         return "code";
+    }
+
+    @RequestMapping("/receiveCard")
+    public String receiveDiscountCard() {
+        return "";
     }
 
 }

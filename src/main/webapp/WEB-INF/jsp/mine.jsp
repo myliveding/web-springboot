@@ -64,7 +64,7 @@
                 </a>
             </div>
             <div class="mine-item-sub">
-                <a href="${pageContext.request.contextPath}/login/gotoCard" class="flex-box">
+                <a href="${pageContext.request.contextPath}/login/gotoCouponsCard" class="flex-box">
                     <div class="fl">
                         <img src="${pageContext.request.contextPath}/images/icon_mine_ticket.png" alt=""
                              class="mine-item-subimg">

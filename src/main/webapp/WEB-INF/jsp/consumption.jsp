@@ -6,7 +6,7 @@
 <body class="consumption-body">
 <div class="nav-top">
     <a href="${pageContext.request.contextPath}/login/index">
-        <img src="images/icon_left.png" alt="" class="nav-toback">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
     </a>
     消费记录
 </div>
@@ -30,7 +30,6 @@
         </div>
     </div>
     <c:forEach var="t" items="${it.record}">
-    <!-- consumption-item -->
     <div class="flex-box consumption-item">
         <p>${t.create_time}</p>
         <c:choose>
@@ -45,7 +44,6 @@
     </div>
     </c:forEach>
     </c:forEach>
-<!-- consumption-item -->
 <div class="cb20"></div>
 <jsp:include page="foot.jsp" flush="true"/>
 </body>

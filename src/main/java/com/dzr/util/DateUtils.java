@@ -3,7 +3,6 @@ package com.dzr.util;
 import org.hibernate.validator.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.StaticLoggerBinder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,12 +16,16 @@ public final class DateUtils {
 
     private static Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM HH:mm:ss");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyyMMdd");
 
     public static String getDateNowTime() {
         return dateFormat.format(new Date());
     }
 
+    public static String getDateNowDay() {
+        return dateFormatDay.format(new Date());
+    }
 
     /**
      * 返回int类型的当前时间

@@ -6,7 +6,7 @@
 <body class="consumption-body">
 <div class="nav-top nav-recharge-top">
     <a href="${pageContext.request.contextPath}/login/index">
-        <img src="images/icon_left.png" alt="" class="nav-toback">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
     </a>
     积分记录
 </div>
@@ -27,10 +27,9 @@
         <div class="consumption-top-txt">
             <span>减少</span>${it.reduce}
             <span>增加</span>${it.increase}
-        </div>
+    </div>
     </div>
     <c:forEach var="t" items="${it.record}">
-    <!-- consumption-item -->
     <div class="flex-box consumption-item recharge-item">
         <p>${t.create_time}</p>
         <c:choose>
@@ -47,7 +46,6 @@
     </div>
     </c:forEach>
     </c:forEach>
-<!-- consumption-item -->
 <div class="cb20"></div>
 <jsp:include page="foot.jsp" flush="true"/>
 </body>
