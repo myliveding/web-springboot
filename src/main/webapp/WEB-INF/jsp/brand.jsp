@@ -16,6 +16,7 @@
         </c:forEach>
     </ul>
 </div>
+
 <div role="tabpanel" class="flex-box brand-pane active nextPanel" id="neck">
 </div>
 <%--<div class="flex-box show-loading">--%>
@@ -24,18 +25,19 @@
 <%--</div>--%>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    var isChange = false;
     var cateId;
     var page = 1;
-
     $(document).ready(function () {
         $('.meal li:eq(0)').addClass('active');
         cateId = $('.meal li:eq(0)').find('.cateId').val();
+        getProductList(cateId);
     });
 
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
-                alert("滚动条已经到达顶部为0");
+                alert("滚动条已经到达顶部");
             }
             if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
                 getProductList(cateId);
@@ -49,6 +51,7 @@
         $(this).addClass('active');
         cateId = $(this).find('.cateId').val();
         page = 1;
+        isChange = true;
         getProductList(cateId);
     });
 
@@ -78,8 +81,12 @@
                             str += '</a>'
                             str += '</div>';
                         }
-                        alert(str);
-                        $(".nextPanel").append(str);
+                        if (isChange == true) {
+                            isChange = false;
+                            $(".nextPanel").html(str);
+                        } else {
+                            $(".nextPanel").append(str);
+                        }
                     } else {
                         alert("该类型没有更多了");
                     }
