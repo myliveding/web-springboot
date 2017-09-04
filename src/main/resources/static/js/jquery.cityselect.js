@@ -60,7 +60,7 @@
 				return;
 			}
 			;
-
+			
 			// 遍历赋值市级下拉列表
 			temp_html = select_prehtml;
 			$.each(city_json.citylist[prov_id].c, function (i, city) {
@@ -91,7 +91,7 @@
 				return;
 			}
 			;
-
+			
 			// 遍历赋值市级下拉列表
 			temp_html = select_prehtml;
 			$.each(city_json.citylist[prov_id].c[city_id].a, function (i, dist) {

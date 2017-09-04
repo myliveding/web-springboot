@@ -39,7 +39,7 @@
             </div>
             <div class="login-agree">
                 <input type="checkbox" name="" id="service">同意
-                <a href="${pageContext.request.contextPath}/free/perfectInfo">《臻品珠宝网络服务协议》</a>
+                <a href="${pageContext.request.contextPath}/login/systemInfo?type=2">《臻品珠宝网络服务协议》</a>
             </div>
         </div>
 

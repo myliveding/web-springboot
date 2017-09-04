@@ -19,10 +19,10 @@
 
 <div role="tabpanel" class="flex-box brand-pane active nextPanel" id="neck">
 </div>
-<%--<div class="flex-box show-loading">--%>
-<%--<img src="${pageContext.request.contextPath}/images/loading.gif" alt="">--%>
-<%--<p>加载更多</p>--%>
-<%--</div>--%>
+<div class="flex-box show-loading">
+    <img src="${pageContext.request.contextPath}/images/loading.gif" alt="">
+    <p>加载更多</p>
+</div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
     var isChange = false;
@@ -56,6 +56,7 @@
     });
 
     function getProductList(cateId) {
+        $(".show-loading").show();
         $.ajax({
             'url': "${pageContext.request.contextPath}/rest/products",
             'type': 'post',
@@ -93,6 +94,7 @@
                 } else {
                     alert(d.errmsg);
                 }
+                $(".show-loading").hide();
             }
         });
     }

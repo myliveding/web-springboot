@@ -15,10 +15,10 @@
         </div>
     </c:forEach>
 </div>
-<%--<div class="flex-box show-loading">--%>
-<%--<img src="${pageContext.request.contextPath}/images/loading.gif" alt="">--%>
-<%--<p>加载更多</p>--%>
-<%--</div>--%>
+<div class="flex-box show-loading">
+    <img src="${pageContext.request.contextPath}/images/loading.gif" alt="">
+    <p>加载更多</p>
+</div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
     var page = 2;
@@ -28,6 +28,7 @@
                 alert("滚动条已经到达顶部");
             }
             if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
+                $(".show-loading").show();
                 $.ajax({
                     'url': "${pageContext.request.contextPath}/rest/activitysPaging",
                     'type': 'post',
@@ -54,6 +55,7 @@
                         } else {
                             alert(d.errmsg);
                         }
+                        $(".show-loading").hide();
                     }
                 });
             }

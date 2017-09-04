@@ -28,7 +28,7 @@ public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
-    private static final String excludedUrls = "userJsp/*,userHtml/*";
+    private static final String excludedUrls = "userJsp/*,userHtml/*,login/systemInfo";
 
     /**
      * 封装，不需要过滤的list列表

@@ -72,6 +72,7 @@ public class LoginController extends BaseController {
     @RequestMapping("/userCenter")
     public String userCenter(Model model, HttpServletRequest request) {
         String userId = (String) request.getSession().getAttribute("userId");
+        model.addAttribute("info", baseInfoService.getSystemInfo("1"));
         model.addAttribute("user", baseInfoService.getUserInfo(userId));
         return "mine";
     }
@@ -304,6 +305,23 @@ public class LoginController extends BaseController {
     @RequestMapping("/receiveCard")
     public String receiveDiscountCard() {
         return "";
+    }
+
+
+    @RequestMapping("/systemInfo")
+    public String getSystemInfo(Model model, String type) {
+
+        model.addAttribute("info", baseInfoService.getSystemInfo(type));
+        if (!"".equals(type)) {
+            if ("2".equals(type)) {
+                model.addAttribute("backUrl", "/");
+            } else if ("3".equals(type)) {
+                model.addAttribute("backUrl", "login/userCenter");
+            } else if ("4".equals(type)) {
+                model.addAttribute("backUrl", "login/userCenter");
+            }
+        }
+        return "vipqy";
     }
 
 }

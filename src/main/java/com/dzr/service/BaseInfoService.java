@@ -105,7 +105,7 @@ public interface BaseInfoService {
      *
      * @return
      */
-    JSONObject getSystemInfo();
+    JSONObject getSystemInfo(String type);
 
     /**
      * 获取活动列表

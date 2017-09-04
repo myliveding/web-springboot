@@ -439,6 +439,7 @@ a:hover {
 	background-color: #ffffff;
 	margin-bottom: 1px;
 	padding: 6px 15px;
+	align-items: center;
 }
 
 .self-item > input {
@@ -468,6 +469,17 @@ a:hover {
 	width: 2rem;
 	padding-bottom: 20px;
 }
+
+.self-radio {
+	align-items: center;
+	flex-direction: row;
+	vertical-align: middle;
+}
+
+.self-radio input {
+	margin: 0 5px;
+}
+
 
 /*pwd*/
 .pwd-container {
@@ -1483,9 +1495,25 @@ a:hover {
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
+	display: none;
 }
 
 .show-loading > img {
 	width: 40px;
 	height: 40px;
+}
+
+.service-box {
+	font-size: 0.25rem;
+	padding: 10px 10px;
+}
+
+.service-box {
+	font-size: 0.25rem;
+	padding: 10px 10px;
+}
+
+.vipqy-box {
+	font-size: 0.25rem;
+	padding: 10px 10px;
 }

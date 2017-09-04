@@ -20,20 +20,16 @@
         </div>
         <div class="flex-box self-item">
             <h4>性别</h4>
-            <input class="sex" type="text"
-            <c:choose>
-            <c:when test="${user.gender eq '2'}">
-                   value="女"
-            </c:when>
-            <c:otherwise>
-                   value="男"
-            </c:otherwise>
-            </c:choose>
-            >
+            <div class="flex self-radio">
+                <input type="radio" name="sex1" id="sex1" value="1">男
+                <input type="radio" name="sex2" id="sex2" value="2">女
+            </div>
         </div>
         <div class="flex-box self-item">
             <h4>生日</h4>
-            <input class="birth" type="text" placeholder="生日格式1990-01-05" value="${user.birthday}">
+            <input type="text" class="birth" name="" id="" onclick="new Calendar().show(this);"
+                   readonly="readonly" placeholder="生日格式1990-01-05"
+                   value="${user.birthday}" class="start-time-day">
         </div>
         <div class="flex-box self-item">
             <h4>收货地址</h4>
@@ -47,13 +43,30 @@
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    var sex = ${user.gender};
+    $(document).ready(function () {
+        $("#sex" + sex).attr("checked", "checked");
+    });
+
+    $(function () {
+        $("#sex1").click(function () {
+            $("#sex1").attr("checked", "checked");
+            $("#sex2").removeAttr("checked");
+            sex = $("#sex1").val();
+        });
+        $("#sex2").click(function () {
+            $("#sex2").attr("checked", "checked");
+            $("#sex1").removeAttr("checked");
+            sex = $("#sex2").val();
+        });
+    });
+
     function update() {
         var name = $('.name').val();
         var wechat = $('.wechat').val();
-        var sex = $('.sex').val();
         var birth = $('.birth').val();
         var address = $('.address').val();
-
+        return false;
         $.ajax({
             'url': "${pageContext.request.contextPath}/login/savePerfectInfo",
             'type': 'post',

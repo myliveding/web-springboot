@@ -43,9 +43,4 @@ public class FreeController extends BaseController {
         return successResult("login");
     }
 
-    @RequestMapping("/systemInfo")
-    public Map<String, Object> getSystemInfo() {
-        return successResult(baseInfoService.getSystemInfo());
-    }
-
 }

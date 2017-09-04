@@ -31,7 +31,7 @@
             <div class="myinfo-t">${user.name}
                 <c:choose>
                     <c:when test="${user.gender eq '2'}">
-                        <img src="${pageContext.request.contextPath}/images/icon_woman.jpg" alt="" class="my-cover">
+                        <img src="${pageContext.request.contextPath}/images/icon_woman.png" alt="">
                     </c:when>
                     <c:otherwise>
                         <img src="${pageContext.request.contextPath}/images/icon_man.png" alt="">

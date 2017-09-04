@@ -183,14 +183,14 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (StringUtils.isEmpty(wechat)) {
             throw new ApiException(10007, "微信号");
         }
-        if (StringUtils.isNotEmpty(sex) && !sex.equals("男") && !sex.equals("女")) {
+        if (StringUtils.isNotEmpty(sex) && !sex.equals("1") && !sex.equals("2")) {
             throw new ApiException(10008, "性别只能是男或女");
         }
 
         String[] arr;
-        String mystr = "";
+        String mystr;
         StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("member_id" + userId);
         buffer.append("member_id=").append(userId);
         list.add("name" + name);
@@ -202,14 +202,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             buffer.append("&birthday=").append(birth);
         }
         if (StringUtils.isNotEmpty(sex)) {
-            int s = 0;
-            if (sex.equals("男")) {
-                s = 1;
-            } else if (sex.equals("女")) {
-                s = 2;
-            }
-            list.add("gender" + s);
-            buffer.append("&gender=").append(s);
+            list.add("gender" + sex);
+            buffer.append("&gender=").append(sex);
         }
         if (StringUtils.isNotEmpty(adress)) {
             list.add("address" + adress);
@@ -411,11 +405,17 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
     /**
      * 获取系统信息
-     *
+     * @param type 默认为全部 1会员卡封面 2服务协议 3会员权益 4积分规则
      * @return
      */
-    public JSONObject getSystemInfo() {
-        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SYSTEM_SETTING, "", new String[]{}));
+    public JSONObject getSystemInfo(String type) {
+        if ("".equals(type)) {
+            throw new ApiException(10007, "类型");
+        }
+
+        String[] arr = new String[]{"type" + type};
+        String mystr = "type=" + type;
+        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SYSTEM_SETTING, mystr, arr));
         if (info.getInt("error_code") == 0) {
             info = JSONObject.fromObject(info.getString("result"));
         } else {

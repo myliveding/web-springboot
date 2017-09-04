@@ -10,12 +10,14 @@
         <img src="${pageContext.request.contextPath}/images/mine_vip_bg.jpg" alt="" class="mine-vip-bg">
         <div class="mine-vip-bottom">
             <%--<div class="fl mine-vip-number">NO.6868668</div>--%>
-            <div class="fr mine-vip-level"><img src="${pageContext.request.contextPath}/images/icon_vip.png"
-                                                alt=""><span></span></div>
+            <div class="fr mine-vip-level">
+                <img src="${info.card_image}" alt="">
+                <span></span>
+            </div>
         </div>
     </div>
     <div class="mine-txt">
-        <h4><a href="login.jsp">会员权益 ></a></h4>
+        <h4><a href="${pageContext.request.contextPath}/login/systemInfo?type=3">会员权益 ></a></h4>
         <div class="mine-txt-item">
             <div class="fl mine-txt-integral"><p>${user.integral}</p><span>当前积分</span></div>
             <div class="fr mine-txt-balance"><p>￥${user.balance}</p><span>当前余额</span></div>
@@ -36,7 +38,7 @@
                     </c:choose>
                 </div>
                 <div class="fr">
-                    <a href="">积分规则 ></a>
+                    <a href="${pageContext.request.contextPath}/login/systemInfo?type=4">积分规则 ></a>
                 </div>
             </div>
             <div class="mine-item-sub">
