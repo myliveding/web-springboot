@@ -5,6 +5,7 @@ import com.dzr.po.wx.Wechat;
 import com.dzr.po.wx.WechatUser;
 import com.dzr.weixin.MyX509TrustManager;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +95,6 @@ public class WechatUtil {
             logger.info("去微信公众平台的网页授权结果为空");
         }
         return openid;
-
     }
 
     /**
@@ -114,11 +114,13 @@ public class WechatUtil {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 weixin = objectMapper.readValue(accessTokenTemp, Wechat.class);
-                if (null == weixin.getAccess_token() || "".equals(weixin.getAccess_token())) {
+                if ((null == weixin.getAccess_token()) || "".equals(weixin.getAccess_token())) {
                     logger.info("获取access_token失败：" + weixin.getErrmsg());
                 }
             } catch (JsonParseException e) {
                 logger.error("获取access_token解析失败" + e.getMessage());
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 logger.error("获取access_token出现异常" + e.getMessage());
             }
@@ -216,6 +218,8 @@ public class WechatUtil {
                 wechatUser = objectMapper.readValue(userJson, WechatUser.class);
             } catch (JsonParseException e) {
                 logger.error("用户信息json解析失败" + e.getMessage());
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 logger.error("获取用户信息出现异常" + e.getMessage());
             }

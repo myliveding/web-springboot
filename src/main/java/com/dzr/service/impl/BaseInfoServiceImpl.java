@@ -3,7 +3,9 @@ package com.dzr.service.impl;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
+import com.dzr.po.wx.WechatUser;
 import com.dzr.service.BaseInfoService;
+import com.dzr.service.WechatService;
 import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,6 +32,8 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
     @Autowired
     UrlConfig urlConfig;
+    @Autowired
+    WechatService wechatService;
 
     /**
      * 验证码
@@ -128,11 +132,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             throw new ApiException(10007, "密码");
         }
 
-        //登录成功就加session
-        HttpSession session = request.getSession();
-        Object openIdObject = session.getAttribute("openid");
-        String openId = null != openIdObject ? openIdObject.toString() : "";
-
         String[] arr;
         String mystr;
         StringBuffer buffer = new StringBuffer();
@@ -145,20 +144,48 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         buffer.append("&password=").append(password);
         list.add("reg_invitation_code" + name);
         buffer.append("&reg_invitation_code=").append(name);
-        if (!"".equals(openId)) {
-            list.add("openid" + openId);
-            buffer.append("&openid=").append(openId);
-        }
+
+        //登录成功就加session
+        HttpSession session = request.getSession();
+        getUserInfoFromWechat(list, buffer, session);
+
         mystr = buffer.toString();
         arr = list.toArray(new String[list.size()]);
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
         if (res.getInt("error_code") == 0) {
             JSONObject data = JSONObject.fromObject(res.getString("data"));
 
-            session.setAttribute("userId", data.getString("member_id"));
+            String memberId = data.getString("member_id");
+            session.setAttribute("userId", memberId);
             session.setAttribute("mobile", data.getString("mobile"));
         }
         throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+    }
+
+    /**
+     * 获取微信用户信息并添加到用户信息表
+     *
+     * @param list
+     * @param buffer
+     * @param session
+     */
+    private void getUserInfoFromWechat(List<String> list, StringBuffer buffer, HttpSession session) {
+        Object openIdObject = session.getAttribute("openid");
+        String openId = null != openIdObject ? openIdObject.toString() : "";
+        if (!"".equals(openId)) {
+            list.add("openid" + openId);
+            buffer.append("&openid=").append(openId);
+            //去获取微信用户信息
+            WechatUser user = wechatService.getUserInfo(openId);
+            if (null != user.getNickname()) {
+                list.add("wechat_nickname" + user.getNickname());
+                buffer.append("&wechat_nickname=").append(user.getNickname());
+            }
+            if (null != user.getHeadimgurl()) {
+                list.add("head_url" + user.getHeadimgurl());
+                buffer.append("&head_url=").append(user.getHeadimgurl());
+            }
+        }
     }
 
     /**

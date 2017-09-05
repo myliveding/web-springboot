@@ -29,9 +29,9 @@ spring:
 
 wechat:
   domain: http://www.aimplus.cn
-  appid:
-  appSecret:
-  appToken:
+  appid: wx3fd4e92d3d58ac7a
+  appSecret: ddf709a5f7ef407a2d5a9e438daceec0
+  appToken: oVtxkkYDu3vCkbngh7OIjOTQuVrUCM2iR_YbhKDg7EFkqDRVp32o3eDQed0sHRSAjtXpIHzv0nB6IAbSTJJCCH0B9QBkdBH3P0f-fPLLhPeJVRIXOVhSgXeFqf5lZEdqVBDhAGANTV
   apiAddress:
   #微信商户号
   mchId:

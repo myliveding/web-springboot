@@ -1,5 +1,7 @@
 package com.dzr.service;
 
+import com.dzr.po.wx.WechatUser;
+
 /**
  * @author dingzr
  * @Description
@@ -8,5 +10,12 @@ package com.dzr.service;
  */
 public interface WechatService {
 
+    /**
+     * 根据openid获取用户详细信息
+     *
+     * @param openid
+     * @return
+     */
+    WechatUser getUserInfo(String openid);
 
 }

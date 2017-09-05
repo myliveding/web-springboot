@@ -172,11 +172,10 @@ public class WechatServiceImpl implements WechatService {
 
     /**
      * 根据openid获取用户详细信息
-     * @param appid  应用ID
      * @param openid
      * @return
      */
-    public WechatUser getUserInfo(String appid, String openid) {
+    public WechatUser getUserInfo(String openid) {
         //获取微信服务用户数据
         String accessToken = this.getAccessToken(wechatParams.getAppId());
         logger.info("根据openid获取用户详细信息前,获取的accessToken：" + accessToken);
@@ -193,14 +192,13 @@ public class WechatServiceImpl implements WechatService {
 
     /**
      * 根据appid和openid判断当前用户是否关注公众号
-     * @param appid
      * @param openid
      * @return true为已关注  false未关注
      */
-    public boolean isSubscribe(String appid, String openid) {
-        logger.info("根据appid和openid判断当前用户是否关注公众号,appid为：" + appid + ",openid为：" + openid);
-        if (!"".equals(appid) && !"".equals(openid)) {
-            WechatUser wechatUser = this.getUserInfo(appid, openid);
+    public boolean isSubscribe(String openid) {
+        logger.info("根据appid和openid判断当前用户是否关注公众号,openid为：" + openid);
+        if (!"".equals(openid)) {
+            WechatUser wechatUser = this.getUserInfo(openid);
             if (null != wechatUser.getSubscribe()) {
                 String subscribe = wechatUser.getSubscribe();
                 logger.info("根据appid和openid判断当前用户是否关注公众号,结果为(0为未关注,1为已关注)：" + subscribe);
