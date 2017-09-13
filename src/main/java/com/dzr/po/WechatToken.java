@@ -7,9 +7,9 @@ public class WechatToken {
 
     private Integer id;
 
-    private String appid;
+    private String appId;
 
-    private String appsecret;
+    private String appSecret;
 
     private String name;
 

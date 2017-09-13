@@ -3,7 +3,7 @@ spring:
     primary:
       #无需指定，除非系统无法自动识别
       driverClassName: com.mysql.jdbc.Driver
-      jdbcurl: jdbc:mysql://42.121.131.12:3306/flight?useUnicode=true&characterEncoding=UTF-8
+      jdbcurl: jdbc:mysql://42.121.131.12:3306/zhenpin?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: root
       #连接只读数据库时配置为true， 保证安全
