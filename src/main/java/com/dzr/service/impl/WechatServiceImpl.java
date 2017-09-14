@@ -1,14 +1,18 @@
 package com.dzr.service.impl;
 
 
+import com.dzr.framework.config.TemplateConfig;
 import com.dzr.framework.config.WechatParams;
 import com.dzr.framework.config.WechatUtil;
 import com.dzr.mapper.primary.WechatTokenMapper;
 import com.dzr.po.WechatToken;
+import com.dzr.po.wx.TemplateData;
 import com.dzr.po.wx.Wechat;
 import com.dzr.po.wx.WechatUser;
+import com.dzr.po.wx.Template;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
+import com.dzr.util.StringUtils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +31,13 @@ public class WechatServiceImpl implements WechatService {
 
     private final WechatTokenMapper wechatTokenMapper;
     private final WechatParams wechatParams;
+    private final TemplateConfig templateConfig;
 
     @Autowired
-    public WechatServiceImpl(WechatParams wechatParams, WechatTokenMapper wechatTokenMapper) {
+    public WechatServiceImpl(WechatParams wechatParams, WechatTokenMapper wechatTokenMapper, TemplateConfig templateConfig) {
         this.wechatParams = wechatParams;
         this.wechatTokenMapper = wechatTokenMapper;
+        this.templateConfig = templateConfig;
     }
 
     private Logger logger = LoggerFactory.getLogger(WechatServiceImpl.class);
@@ -254,169 +260,63 @@ public class WechatServiceImpl implements WechatService {
         wechatTokenMapper.updateByAppId(wechatToken);
     }
 
-
     /**
      * 发送模板消息
-     *
-     * @param type 待发送的消息
+     * @param openId
+     * @param remarkStr
+     * @param url 跳转的路径
+     * @param firstStr 第一个字段
+     * @param keywordStr 发送的关键字
      * @return
      */
-    public JSONObject sendTemplateMessageByType(String type, String firstStr, String keyword1Str, String keyword2Str, String keyword3Str, String keyword4Str, String keyword5Str, String openId, String remarkStr, String url) {
-//     String type=request.getParameter("type"); //0 业务服务提醒 ；  1 认证通知；2 消息提醒 ；3 获得代金券通知；4注册通知；
-//5 参保成功通知；6参保失败通知；7停保成功通知；8停保失败通知；9退款成功通知；10服务到期提醒；11业务办理取消通知；12订单未支付通知;13订单支付成功；14业务动态提醒；15手机号绑定提醒
-        WxTemplate t = new WxTemplate();
-        if (StringUtils.isEmpty(remarkStr)) {
-            if (type.equals("2")) {
-                remarkStr = "感谢您对我们工作的支持！如有疑问，请拨打咨询热线400-111-8900。";
-            } else if (type.equals("3")) {
-                firstStr = "恭喜您获得了一张代金券！";
-                remarkStr = "在参保或续费时，代金券可用于抵扣服务费，如有疑问，请拨打咨询热线400-111-8900。";
-                url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constant.APP_ID + "&redirect_uri=" + Constant.URL + "/scope/openid.do?next=personsocial/gotovoucher.do" + Constant.APP_ID + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-            } else if (type.equals("0")) {
-                remarkStr = "请在截止日前及时办理。";
-            } else if (type.equals("4")) {
-                firstStr = "恭喜您已成功注册为无忧保用户！";
-                remarkStr = "感谢您对我们工作的支持！如有疑问，请拨打咨询热线400-111-8900。";
-            }
+    @Override
+    public JSONObject sendTemplateMessage(String openId, String remarkStr, String url,
+                                          String firstStr, String... keywordStr) {
+        Template template = new Template();
+
+        if (StringUtils.isNotEmpty(url)) {
+            template.setUrl(url);
         }
-        t.setUrl(url);
-        t.setTouser(openId);
-        //   t.setTopcolor("#0000FF");
-        Map<String, TemplateData> m = new HashMap<String, TemplateData>();
+        template.setTouser(openId);
+        template.setColor("#0000FF");
+        template.setTemplate_id(templateConfig.getBuySuss());
+
+        Map<String, TemplateData> mData = new HashMap<>();
         TemplateData first = new TemplateData();
-//         first.setColor("#0000FF");
+        first.setColor("#6397A9");
         first.setValue(firstStr + "\n");
-        m.put("first", first);
-        TemplateData keyword1 = new TemplateData();
-//         keyword1.setColor("#0000FF");
-        keyword1.setValue(keyword1Str);
-        TemplateData keyword2 = new TemplateData();
-//         keyword2.setColor("#0000FF");
-        keyword2.setValue(keyword2Str);
-        TemplateData keyword3 = new TemplateData();
-//         keyword3.setColor("#0000FF");
-        keyword3.setValue(keyword3Str);
-        TemplateData keyword4 = new TemplateData();
-        keyword4.setValue(keyword4Str);
-        TemplateData keyword5 = new TemplateData();
-        keyword5.setValue(keyword5Str);
-        TemplateData remark = new TemplateData();
-//         remark.setColor("#0000FF");
-        remark.setValue(remarkStr);
-        if (type.equals("0")) {//业务服务提醒
-            t.setTemplate_id(Constant.TEMPLATE_SERVICE);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
+        mData.put("first", first);
+
+        if (StringUtils.isNotEmpty(keywordStr[0])) {
+            TemplateData keynote1 = new TemplateData();
+            keynote1.setColor("#6397A9");
+            keynote1.setValue(keywordStr[0]);
+            mData.put("keynote1", keynote1);
         }
-        if (type.equals("1")) {//认证通知
-            t.setTemplate_id(Constant.TEMPLATE_AUTHENTICATION);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
+
+        if (StringUtils.isNotEmpty(keywordStr[1])) {
+            TemplateData keynote2 = new TemplateData();
+            keynote2.setColor("#6397A9");
+            keynote2.setValue(keywordStr[1]);
+            mData.put("keynote2", keynote2);
         }
-        if (type.equals("2")) {//消息提醒
-            t.setTemplate_id(Constant.TEMPLATE_REMIND);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
+
+        if (StringUtils.isNotEmpty(remarkStr)) {
+            TemplateData remark = new TemplateData();
+            remark.setColor("#6397A9");
+            remark.setValue(remarkStr);
+            mData.put("remark", remark);
         }
-        if (type.equals("3")) {//获得代金券通知
-            t.setTemplate_id(Constant.TEMPLATE_VOUCHER);
-            m.put("coupon", keyword1);
-            m.put("expDate", keyword2);
-        }
-        if (type.equals("4")) {//注册通知
-            t.setTemplate_id(Constant.TEMPLATE_REGISTERED);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("5")) {//参保成功通知
-            t.setTemplate_id(Constant.TEMPLATE_SERVICE_SUCC);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("6")) {//参保失败通知
-            t.setTemplate_id(Constant.TEMPLATE_SERVICE_FAIL);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("7")) {//停保成功通知
-            t.setTemplate_id(Constant.TEMPLATE_STOP_SUCC);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("8")) {//停保失败通知
-            t.setTemplate_id(Constant.TEMPLATE_STOP_FAIL);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("9")) {//退款成功通知
-            t.setTemplate_id(Constant.TEMPLATE_REFUND_SUCC);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("10")) {//续保提醒
-            t.setTemplate_id(Constant.TEMPLATE_SERVICE_EXPIRE);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("11")) {//业务办理取消通知
-            t.setTemplate_id(Constant.TEMPLATE_DEAL_CANCEL);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("12")) {//订单未支付通知v2
-            t.setTemplate_id(Constant.TEMPLATE_UNPAY);
-            m.put("type", keyword1);
-            m.put("e_title", keyword2);
-            m.put("o_id", keyword3);
-            m.put("order_date", keyword4);
-            m.put("o_money", keyword5);
-        }
-        if (type.equals("13")) {//订单支付成功
-            t.setTemplate_id(Constant.TEMPLATE_PAY_SUCC);
-            m.put("orderMoneySum", keyword1);
-            m.put("orderProductName", keyword2);
-            m.put("Remark", remark);
-        }
-        if (type.equals("14")) {//业务动态提醒
-            t.setTemplate_id(Constant.TEMPLATE_BUS_DYNAMICS);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("15")) {//手机号绑定提醒
-            t.setTemplate_id(Constant.TEMPLATE_BUILD_MOBILE);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("16")) {//参保材料通知
-            t.setTemplate_id(Constant.TEMPLATE_INSURED_MATERIAL);
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        m.put("remark", remark);
-        t.setData(m);
-        String content = JSONObject.fromObject(t).toString();
+        template.setData(mData);
+
+        String content = JSONObject.fromObject(template).toString();
         logger.info("发送消息" + content);
-        Weixin weixin = this.getJSAPITicket(Constant.APP_ID);
-        String accessToken = weixin.getAccessToken();
-        JSONObject jsonObject = WeixinUtil.sendTemplateMessage(accessToken, content);
+        String accessToken = getAccessToken(wechatParams.getAppId());
+        JSONObject jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));
         if ((jsonObject != null) && (jsonObject.getInt("errcode") != 0)) {
             if (jsonObject.getInt("errcode") == 40001) {
-                weixin = this.getJSAPITicketIm(Constant.APP_ID);
-                accessToken = weixin.getAccessToken();
-                jsonObject = WeixinUtil.sendTemplateMessage(accessToken, content);
+                accessToken = getAccessToken(wechatParams.getAppId());
+                jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));
             }
         }
         if (null != jsonObject) {

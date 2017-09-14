@@ -1,6 +1,7 @@
 package com.dzr.controller;
 
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.config.WechatParams;
 import com.dzr.service.BaseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorController;
@@ -22,6 +23,8 @@ public class ErrorPageController implements ErrorController {
 
     @Autowired
     UrlConfig urlConfig;
+    @Autowired
+    WechatParams wechatParams;
 
     /**
      * 项目的默认首页
@@ -36,7 +39,7 @@ public class ErrorPageController implements ErrorController {
         if (null == userId || "".equals(userId)) {
             return "login";
         } else {
-            return "redirect:" + urlConfig.getDomain() + "/login/index";
+            return "redirect:" + wechatParams.getDomain() + "/login/index";
         }
 //        return "index";
     }

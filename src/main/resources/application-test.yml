@@ -28,7 +28,7 @@ spring:
       maximumPoolSize: 15
 
 wechat:
-  domain: http://www.aimplus.cn
+  domain: http://localhost:9090
   appid:
   appSecret:
   appToken:
@@ -51,7 +51,11 @@ wechat:
 #接口地址
 url:
   php: http://106.14.221.190:8080
-  domain: http://localhost:9090
+
+#通知模板
+template:
+  #购买成功
+  buySuss: F1XimexykWgRCllGIyu7K2LAT4QY-H-OkXs-JJ00rX8
 
 #定时器开关
 scheduling:

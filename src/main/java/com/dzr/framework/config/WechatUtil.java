@@ -233,7 +233,8 @@ public class WechatUtil {
      * 发送模板消息
      * @param accessToken 有效的access_token
      * @param content     待发送的消息对象（json）
-     * @return   {
+     * @return
+    {
     "errcode":0,
     "errmsg":"ok",
     "msgid":200228332

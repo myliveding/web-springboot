@@ -5,17 +5,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description 接口的调用地址
- * @FileName InvokingUrl
- * @Author dingzr
- * @CreateTime 2017/8/20 15:35 八月
+ * @author dingzr
+ * @Description
+ * @ClassName TemplateConfig
+ * @since 2017/9/14 10:07
  */
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "url")
-public class UrlConfig {
+@ConfigurationProperties(prefix = "template")
+public class TemplateConfig {
 
-    private String php;
+    private String buySuss;
 
 }
