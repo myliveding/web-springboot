@@ -153,7 +153,7 @@ public class WechatServiceImpl implements WechatService {
             //appid对应的微信公众平台为空
             ticket = WechatUtil.getTicket(accessToken);
             if (!"".equals(ticket)) {
-                logger.info("数据库中没有初始值,此公众号第一次获取ticket: " + jsapiTicket);
+                logger.info("数据库中没有初始值,此公众号第一次获取ticket: " + ticket);
                 jsapiTicket.setAppId(wechatParams.getAppId());
                 jsapiTicket.setAppSecret(wechatParams.getAppSecret());
                 jsapiTicket.setName("臻品");
