@@ -34,7 +34,7 @@ wechat:
   appToken: oVtxkkYDu3vCkbng
   apiAddress:
   #微信商户号
-  mchId:
+  mchId: 1490515532
   #微信JS调用,这部分变量不需要根据环境去修改，生成签名的时间戳10位,一般是取时间里面的一段newDate().getTime()
   timeStamp: 1401894705
   #生成签名的时间戳10位，一般是取时间里面的一段,生成签名的随机串
