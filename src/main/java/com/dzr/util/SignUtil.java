@@ -29,10 +29,9 @@ public class SignUtil {
      * @param nonce
      * @return
      */
-    public static boolean checkSignature(String signature, String timestamp,
-                                         String nonce) {
-        logger.info(wechatParams.getAppToken());
-        String[] arr = new String[]{wechatParams.getAppToken(), timestamp, nonce};
+    public static boolean checkSignature(String appToken, String signature, String timestamp, String nonce) {
+
+        String[] arr = new String[]{appToken, timestamp, nonce};
         // 将token、timestamp、nonce三个参数进行字典序排序
         Arrays.sort(arr);
         StringBuilder content = new StringBuilder();
@@ -53,7 +52,7 @@ public class SignUtil {
 
         content = null;
         // 将sha1加密后的字符串可与signature对比，标识该请求来源于微信
-        return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+        return tmpStr != null && tmpStr.equals(signature.toUpperCase());
     }
 
     /**
@@ -148,10 +147,6 @@ public class SignUtil {
             sb.append(byteToHexStr(b));
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        checkSignature("a9a2b3b238543f902ab569f0fdd6b8646ca16ba0", "1508233089", "3331299495");
     }
 
 }

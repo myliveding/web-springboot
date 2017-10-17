@@ -29,8 +29,8 @@ spring:
 
 wechat:
   domain: http://www.zxbmm.cn
-  appid:
-  appSecret:
+  appid: wx3fd4e92d3d58ac7a
+  appSecret: ddf709a5f7ef407a2d5a9e438daceec0
   appToken: oVtxkkYDu3vCkbng
   #这个就是自己要保管好的私有Key了（切记只能放在自己的后台代码里，不能放在任何可能被看到源代码的客户端程序中）
   #每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
@@ -50,7 +50,7 @@ wechat:
 
 #接口地址
 url:
-  php: http://106.14.221.190:8080
+  php: http://back.zxbmm.cn
 
 #通知模板
 template:

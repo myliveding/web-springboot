@@ -32,7 +32,7 @@ wechat:
   appid: wx3fd4e92d3d58ac7a
   appSecret: ddf709a5f7ef407a2d5a9e438daceec0
   appToken: oVtxkkYDu3vCkbng
-  apiAddress:
+  apiAddress: http://back.zxbmm.cn
   #微信商户号
   mchId: 1490515532
   #微信JS调用,这部分变量不需要根据环境去修改，生成签名的时间戳10位,一般是取时间里面的一段newDate().getTime()
