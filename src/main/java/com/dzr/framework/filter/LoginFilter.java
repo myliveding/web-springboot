@@ -33,7 +33,7 @@ public class LoginFilter implements Filter {
     /**
      * 封装，不需要过滤的list列表
      */
-    private List<Pattern> patterns = new ArrayList<Pattern>();
+    private List<Pattern> patterns = new ArrayList<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

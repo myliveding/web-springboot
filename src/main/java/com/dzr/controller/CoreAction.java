@@ -3,6 +3,7 @@ package com.dzr.controller;
 
 import com.dzr.service.impl.CoreServiceImpl;
 import com.dzr.util.SignUtil;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +15,9 @@ import java.io.PrintWriter;
 /**
  * 核心请求处理类
  */
-public class CoreController extends HttpServlet {
+public class CoreAction extends HttpServlet {
     private static final long serialVersionUID = 4440739483644821986L;
-
+    private Logger logger = Logger.getLogger(CoreAction.class);
     /**
      * 确认请求来自微信服务器
      */
@@ -29,6 +30,8 @@ public class CoreController extends HttpServlet {
         String nonce = request.getParameter("nonce");
         // 随机字符串  
         String echostr = request.getParameter("echostr");
+        logger.info("signature--" + signature + "--timestamp--" + timestamp
+                + "--nonce--" + nonce + "--echostr--" + echostr);
 
         PrintWriter out = response.getWriter();
         // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败  
