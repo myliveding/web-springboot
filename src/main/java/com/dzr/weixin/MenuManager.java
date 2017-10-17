@@ -70,9 +70,9 @@ public class MenuManager {
     public static void main(String[] args) throws IOException {
 //        System.err.println(WeixinUtil.getAccessTokenForWXService("wxbb336e8a40b636d6","aa389c3d29c333ebdad2d50b95160d64").getToken());
 
-        String accessToken = "jiQk1_laZWdLv2kqViI92dSp9qphxXcuBVrnqw3EjDSfvHaFnCF8Lhsns_znmSR5NDnOwkJ2xQp6ruhlh1eU5DkEn2pvXjNV5nVU1xCVFcwrHDb5inS4z9MEypeXkStjVRIbAAADZQ";
+        String accessToken = "br4GtmFsCi7p6DnjplSMLqoo2HNLqshNPsKNmo6QNegt8qZV1wC96XjYhWy45g7qwn8OyGK2K6FQOffzuY6km8qbNVg7pbm5_2dcRion0GwDvckggiGG_W_ufbhsnppWMMUfACAQQY";
         String url = "http://www.zxbmm.cn";
-        String appId = "wx3fd4e92d3d58ac7a";
+        String appId = "wxfb086a201e1de746";
 
         System.out.println(url + " = " + appId);
         // 调用接口创建菜单
