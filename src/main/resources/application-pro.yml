@@ -3,7 +3,7 @@ spring:
     primary:
       #无需指定，除非系统无法自动识别
       driverClassName: com.mysql.jdbc.Driver
-      jdbcurl: jdbc:mysql://localhost:3306/flight?useUnicode=true&characterEncoding=UTF-8
+      jdbcurl: jdbc:mysql://42.121.131.12:3306/zhenpin?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: root
       #连接只读数据库时配置为true， 保证安全
@@ -27,5 +27,36 @@ spring:
       maxLifetime: 1800000
       maximumPoolSize: 15
 
+wechat:
+  domain: http://www.zxbmm.cn
+  appid: wxfb086a201e1de746
+  appSecret: ee9e24f4750649cb99326bfdfa557ec3
+  appToken: oVtxkkYDu3vCkbng
+  #这个就是自己要保管好的私有Key了（切记只能放在自己的后台代码里，不能放在任何可能被看到源代码的客户端程序中）
+  #每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
+  #收到API的返回的时候也要用这个key来对返回的数据算下签名，跟API的Sign数据进行比较，如果值不一致，有可能数据被第三方给篡改
+  key: DShengshiKTVwechat4501AToFu0N5jD
+  #本项目微信支付异步通知地址
+  notifyUrl: http://www.zxbmm.cn/wechat/pay/notify
+  #sdk的版本号
+  sdkVersion: java sdk 1.0.1
+  apiAddress:
+  #微信商户号
+  mchId: 1490515532
+  #微信JS调用,这部分变量不需要根据环境去修改，生成签名的时间戳10位,一般是取时间里面的一段newDate().getTime()
+  timeStamp: 1401894705
+  #生成签名的时间戳10位，一般是取时间里面的一段,生成签名的随机串
+  noncestr: Wm3WZYTPz0wzccnW
+
+#接口地址
+url:
+  php: http://back.zxbmm.cn
+
+#通知模板
+template:
+  #购买成功
+  buySuss: F1XimexykWgRCllGIyu7K2LAT4QY-H-OkXs-JJ00rX8
+
+#定时器开关
 scheduling:
   enabled: false
