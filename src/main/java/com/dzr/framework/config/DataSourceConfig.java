@@ -24,38 +24,38 @@ import javax.sql.DataSource;
  */
 
 @Configuration
-@MapperScan(basePackages = "com.dzr.mapper.primary", sqlSessionTemplateRef = "primarySqlSessionTemplate")
-public class DataSourcePrimaryConfig {
+@MapperScan(basePackages = "com.dzr.mapper", sqlSessionTemplateRef = "sqlSessionTemplate")
+public class DataSourceConfig {
 
     @Primary
-    @Bean(name = "primaryDataSource")
-    @Qualifier("primaryDataSource")
-    @ConfigurationProperties(prefix="spring.datasource.primary")
+    @Bean(name = "dataSource")
+    @Qualifier("dataSource")
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource primaryDataSource() {
         //下面这个是使用的Hikari连接池，相应的会出现一个属性叫jdbcurl
         return DataSourceBuilder.create().build();
     }
 
 
-    @Bean(name = "primarySqlSessionFactory")
+    @Bean(name = "sqlSessionFactory")
     @Primary
-    public SqlSessionFactory primarySqlSessionFactory(@Qualifier("primaryDataSource") DataSource primaryDataSource) throws Exception {
+    public SqlSessionFactory primarySqlSessionFactory(@Qualifier("dataSource") DataSource primaryDataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(primaryDataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/primary/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/*.xml"));
         bean.setTypeAliasesPackage("com.dzr.po");
         return bean.getObject();
     }
 
-    @Bean(name = "primaryTransactionManager")
+    @Bean(name = "transactionManager")
     @Primary
-    public DataSourceTransactionManager primaryTransactionManager(@Qualifier("primaryDataSource") DataSource primaryDataSource) {
+    public DataSourceTransactionManager primaryTransactionManager(@Qualifier("dataSource") DataSource primaryDataSource) {
         return new DataSourceTransactionManager(primaryDataSource);
     }
 
-    @Bean(name = "primarySqlSessionTemplate")
+    @Bean(name = "sqlSessionTemplate")
     @Primary
-    public SqlSessionTemplate primarySqlSessionTemplate(@Qualifier("primarySqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate primarySqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
