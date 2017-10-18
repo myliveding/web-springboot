@@ -27,7 +27,7 @@ import java.util.*;
 
 
 @SuppressWarnings("deprecation")
-@RequestMapping("/wechat/pay")
+@RequestMapping("/wechatPay")
 @Controller
 public class WechatPayController {
 
@@ -126,7 +126,7 @@ public class WechatPayController {
     }
 
     public String getSign(Map<String, String> map) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (entry.getValue() != "") {
                 list.add(entry.getKey() + "=" + entry.getValue() + "&");

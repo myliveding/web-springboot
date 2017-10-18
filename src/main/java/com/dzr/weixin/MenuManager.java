@@ -70,7 +70,7 @@ public class MenuManager {
     public static void main(String[] args) throws IOException {
 //        System.err.println(WeixinUtil.getAccessTokenForWXService("wxbb336e8a40b636d6","aa389c3d29c333ebdad2d50b95160d64").getToken());
 
-        String accessToken = "br4GtmFsCi7p6DnjplSMLqoo2HNLqshNPsKNmo6QNegt8qZV1wC96XjYhWy45g7qwn8OyGK2K6FQOffzuY6km8qbNVg7pbm5_2dcRion0GwDvckggiGG_W_ufbhsnppWMMUfACAQQY";
+        String accessToken = "T0D--YnOe3SbQ-ChJcD6hpGzK3V5B1Xgo1CqotssUrJGktmIwlWQWqUgEAgb361r_iVOxtcaD7TYj4BoeYUUM7ZWYdhLHSiw0Bsf2bV5Xp6JFkWG5nCBuJYQrYfHhXL5GEGgAFAOMO";
         String url = "http://www.zxbmm.cn";
         String appId = "wxfb086a201e1de746";
 
