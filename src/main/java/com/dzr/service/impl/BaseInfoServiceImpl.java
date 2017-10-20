@@ -72,11 +72,6 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             throw new ApiException(20103);
         }
 
-        //登录成功就加session
-        HttpSession session = request.getSession();
-        Object openIdObject = session.getAttribute("openid");
-        String openId = null != openIdObject ? openIdObject.toString() : "";
-
         String[] arr;
         String mystr;
         StringBuilder buffer = new StringBuilder();
@@ -84,10 +79,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         list.add("mobile" + mobile);
         buffer.append("mobile=").append(mobile);
 
-        if (!"".equals(openId)) {
-            list.add("openid" + openId);
-            buffer.append("&openid=").append(openId);
-        }
+        //登录成功就加session
+        HttpSession session = request.getSession();
+        getUserInfoFromWechat(list, buffer, session);
 
         if (StringUtils.isNotEmpty(password)) {
             list.add("password" + password);
@@ -134,7 +128,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
 
         String[] arr;
         String mystr;
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         List<String> list = new ArrayList<>();
         list.add("mobile" + mobile);
         buffer.append("mobile=").append(mobile);
@@ -169,7 +163,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @param buffer
      * @param session
      */
-    private void getUserInfoFromWechat(List<String> list, StringBuffer buffer, HttpSession session) {
+    private void getUserInfoFromWechat(List<String> list, StringBuilder buffer, HttpSession session) {
         Object openIdObject = session.getAttribute("openid");
         String openId = null != openIdObject ? openIdObject.toString() : "";
         if (!"".equals(openId)) {

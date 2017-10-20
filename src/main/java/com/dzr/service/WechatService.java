@@ -1,7 +1,11 @@
 package com.dzr.service;
 
+import com.dzr.po.WechatShare;
 import com.dzr.po.wx.WechatUser;
 import net.sf.json.JSONObject;
+import org.springframework.ui.Model;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author dingzr
@@ -24,7 +28,15 @@ public interface WechatService {
      *
      * @return
      */
-    public JSONObject sendTemplateMessage(String openId, String remarkStr, String url,
-                                          String firstStr, String... keywordStr);
+    JSONObject sendTemplateMessage(String openId, String remarkStr, String url,
+                                   String firstStr, String... keywordStr);
+
+    /**
+     * 获取页面分享信息
+     *
+     * @param request
+     * @return
+     */
+    void getWechatShare(Model model, HttpServletRequest request);
 
 }

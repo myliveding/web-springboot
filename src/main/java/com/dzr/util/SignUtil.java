@@ -74,7 +74,7 @@ public class SignUtil {
         try {
             md = MessageDigest.getInstance("SHA-1");
             // 将三个参数字符串拼接成一个字符串进行sha1加密
-            byte[] digest = md.digest(content.toString().getBytes());
+            byte[] digest = md.digest(content.getBytes());
             tmpStr = byteToStr(digest);
         } catch (NoSuchAlgorithmException e) {
             logger.error("网页授权接口签名验证出现异常！" + e.getMessage(), e);

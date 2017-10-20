@@ -4,10 +4,14 @@ import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
+import com.dzr.po.WechatShare;
 import com.dzr.service.BaseInfoService;
+import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +41,10 @@ public class LoginController extends BaseController {
     UrlConfig urlConfig;
     @Autowired
     BaseInfoService baseInfoService;
+    @Autowired
+    WechatService wechatService;
+
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     //进入完善资料页面
     @RequestMapping("/perfectInfo")
@@ -61,6 +70,8 @@ public class LoginController extends BaseController {
         model.addAttribute("banners", banners);
         String userId = (String) request.getSession().getAttribute("userId");
         model.addAttribute("user", baseInfoService.getUserInfo(userId));
+        //微信分享相关
+        wechatService.getWechatShare(model, request);
         return "index";
     }
 
@@ -134,6 +145,8 @@ public class LoginController extends BaseController {
         } else {
             throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
         }
+        //微信分享调用
+        wechatService.getWechatShare(model, request);
 
         return "vip";
     }

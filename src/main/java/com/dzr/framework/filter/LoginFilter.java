@@ -23,12 +23,12 @@ import java.util.regex.Pattern;
  */
 
 @Order(1)
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/userHtml/*", "/userRest/*", "/userJsp/*", "/login/*", "/rest/*"})
+@WebFilter(filterName = "loginFilter", urlPatterns = {"/login/*", "/rest/*"})
 public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
-    private static final String excludedUrls = "userJsp/*,userHtml/*,login/systemInfo";
+    private static final String excludedUrls = "login/systemInfo";
 
     /**
      * 封装，不需要过滤的list列表

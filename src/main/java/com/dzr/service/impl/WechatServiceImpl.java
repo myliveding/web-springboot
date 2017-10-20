@@ -1,10 +1,12 @@
 package com.dzr.service.impl;
 
 
+import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.TemplateConfig;
 import com.dzr.framework.config.WechatParams;
 import com.dzr.framework.config.WechatUtil;
 import com.dzr.mapper.primary.WechatTokenMapper;
+import com.dzr.po.WechatShare;
 import com.dzr.po.WechatToken;
 import com.dzr.po.wx.TemplateData;
 import com.dzr.po.wx.Wechat;
@@ -12,6 +14,7 @@ import com.dzr.po.wx.WechatUser;
 import com.dzr.po.wx.Template;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
+import com.dzr.util.SignUtil;
 import com.dzr.util.StringUtils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +58,7 @@ public class WechatServiceImpl implements WechatService {
         String token = "-1";
 
         Map<String, String> map = new HashMap<>();
-        map.put("appid", appId);
+        map.put("appId", appId);
         map.put("type", "0");
         WechatToken wechatToken = wechatTokenMapper.selectTokenByAppId(map);
         if (wechatToken != null) {
@@ -121,9 +126,8 @@ public class WechatServiceImpl implements WechatService {
         String ticket;
         Integer nowTime = DateUtils.getNowTime();
         String accessToken = this.getAccessToken(appId);
-
         Map<String, String> map = new HashMap<>();
-        map.put("appid", appId);
+        map.put("appId", appId);
         map.put("type", "1");
         WechatToken jsapiTicket = wechatTokenMapper.selectTokenByAppId(map);
         if (jsapiTicket != null) {
@@ -326,4 +330,42 @@ public class WechatServiceImpl implements WechatService {
         }
         return jsonObject;
     }
+
+    /**
+     * 获取页面分享信息
+     *
+     * @param request
+     * @return
+     */
+    public void getWechatShare(Model model, HttpServletRequest request) {
+
+        String url = wechatParams.getDomain()
+                + request.getContextPath() // 项目名称
+                + request.getServletPath(); // 请求页面或其他地址
+//        String url = request.getScheme()
+//                + "://" + request.getServerName() // 服务器地址
+//                + ":" + request.getServerPort()
+//                + request.getContextPath() // 项目名称
+//                + request.getServletPath(); // 请求页面或其他地址
+        if (StringUtils.isNotEmpty(request.getQueryString())) {
+            url = url + "?" + (request.getQueryString()); //url后面的参数
+        }
+        logger.info("JS调用时的确切路径，需要在加密时使用：" + url); // 当前网页的URL，不包含#及其后面部分
+        try {
+            String jsTicket = getJsTicket(wechatParams.getAppId());
+            logger.info("jsapi_ticket:" + jsTicket);
+            model.addAttribute("ticket", jsTicket);
+            String signature = SignUtil.getSignature(jsTicket,
+                    wechatParams.getTimeStamp(), wechatParams.getNoncestr(), url);
+            logger.info("signature:" + signature);
+            model.addAttribute("signature", signature);
+        } catch (Exception e) {
+            logger.error("调用去获取分享相关信息出错..." + e.getMessage());
+            e.printStackTrace();
+        }
+        model.addAttribute("timestamp", wechatParams.getTimeStamp());
+        model.addAttribute("noncestr", wechatParams.getNoncestr());
+        model.addAttribute("appid", wechatParams.getAppId());
+    }
+
 }

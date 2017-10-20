@@ -3,8 +3,8 @@
 <mapper namespace="com.dzr.mapper.primary.WechatTokenMapper">
     <resultMap id="BaseResultMap" type="com.dzr.po.WechatToken">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="appid" jdbcType="VARCHAR" property="appid"/>
-        <result column="appsecret" jdbcType="VARCHAR" property="appsecret"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="app_secret" jdbcType="VARCHAR" property="appSecret"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="token" jdbcType="VARCHAR" property="token"/>
@@ -14,7 +14,7 @@
         <result column="is_delete" jdbcType="BIT" property="isDelete"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, appid, appsecret, name, type, token, remark, create_time, update_time, is_delete
+        id, app_id, app_secret, name, type, token, remark, create_time, update_time, is_delete
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -27,11 +27,11 @@
         where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.dzr.po.WechatToken">
-        insert into wechat_token (id, appid, appsecret,
+        insert into wechat_token (id, app_id, app_secret,
         name, type, token, remark,
         create_time, update_time, is_delete
         )
-        values (#{id,jdbcType=INTEGER}, #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{appSecret,jdbcType=VARCHAR},
         #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
         #{createTime,jdbcType=INTEGER}, #{updateTime,jdbcType=INTEGER}, #{isDelete,jdbcType=BIT}
         )
@@ -42,11 +42,11 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="appid != null">
-                appid,
+            <if test="appId != null">
+                app_id,
             </if>
-            <if test="appsecret != null">
-                appsecret,
+            <if test="appSecret != null">
+                app_secret,
             </if>
             <if test="name != null">
                 name,
@@ -74,11 +74,11 @@
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="appid != null">
-                #{appid,jdbcType=VARCHAR},
+            <if test="appId != null">
+                #{appId,jdbcType=VARCHAR},
             </if>
-            <if test="appsecret != null">
-                #{appsecret,jdbcType=VARCHAR},
+            <if test="appSecret != null">
+                #{appSecret,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
@@ -106,11 +106,11 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.dzr.po.WechatToken">
         update wechat_token
         <set>
-            <if test="appid != null">
-                appid = #{appid,jdbcType=VARCHAR},
+            <if test="appId != null">
+                app_id = #{appId,jdbcType=VARCHAR},
             </if>
-            <if test="appsecret != null">
-                appsecret = #{appsecret,jdbcType=VARCHAR},
+            <if test="appSecret != null">
+                app_secret = #{appSecret,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
@@ -138,8 +138,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.dzr.po.WechatToken">
         update wechat_token
-        set appid = #{appid,jdbcType=VARCHAR},
-        appsecret = #{appsecret,jdbcType=VARCHAR},
+        set app_id = #{appId,jdbcType=VARCHAR},
+        app_secret = #{appSecret,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
         type = #{type,jdbcType=INTEGER},
         token = #{token,jdbcType=VARCHAR},
@@ -157,7 +157,7 @@
         FROM
         wechat_token
         WHERE
-        appid = #{appid}
+        app_id = #{appId}
         AND is_delete = 0
         AND type = #{type}
     </select>
@@ -176,7 +176,7 @@
                 update_time = #{updateTime},
             </if>
         </set>
-        where appid = #{appid}
+        where app_id = #{appId}
         AND type = #{type}
         AND token != #{token}
         AND is_delete = 0
