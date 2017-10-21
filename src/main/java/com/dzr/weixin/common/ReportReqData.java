@@ -1,7 +1,7 @@
-package com.dzr.controller.wechat.common.report.protocol;
+package com.dzr.weixin.common;
 
 
-import com.dzr.controller.wechat.common.Signature;
+import com.dzr.framework.config.WechatConstant;
 import com.dzr.framework.config.WechatParams;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
@@ -23,12 +23,12 @@ public class ReportReqData {
     WechatParams wechatParams;
 
     //每个字段具体的意思请查看API文档
-    private String appid = wechatParams.getAppId();
-    private String attach;
+    private String appid = WechatConstant.APP_ID;
+    private String attach; //附加信息可作为自定义参数使用
     private String body;
-    private String mch_id = wechatParams.getMchId();
+    private String mch_id = WechatConstant.MCH_ID;
     private String nonce_str;
-    private String notify_url = wechatParams.getNotifyUrl();
+    private String notify_url = WechatConstant.NOTIFY_URL;
     private String openid;
     private String out_trade_no;
     private String spbill_create_ip;
@@ -37,8 +37,9 @@ public class ReportReqData {
     private String sign;
 
 
-    public ReportReqData(String goodname, String openid, String orderid, String ip, String totalfee, String nonceStr) {
-        setAttach(goodname);
+    public ReportReqData(String goodId, String goodname, String openid,
+                         String orderid, String ip, String totalfee, String nonceStr) {
+        setAttach(goodId);
         setBody(goodname);
         setOpenid(openid);
         setNonce_str(nonceStr);

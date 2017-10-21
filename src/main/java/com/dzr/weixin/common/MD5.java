@@ -1,4 +1,4 @@
-package com.dzr.controller.wechat.common;
+package com.dzr.weixin.common;
 
 import java.security.MessageDigest;
 

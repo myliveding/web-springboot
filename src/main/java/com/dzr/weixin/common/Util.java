@@ -1,4 +1,4 @@
-package com.dzr.controller.wechat.common;
+package com.dzr.weixin.common;
 
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;

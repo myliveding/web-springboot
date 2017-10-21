@@ -4,7 +4,6 @@ import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
-import com.dzr.po.WechatShare;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -146,7 +144,7 @@ public class LoginController extends BaseController {
             throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
         }
         //微信分享调用
-        wechatService.getWechatShare(model, request);
+//        wechatService.getWechatShare(model, request);
 
         return "vip";
     }

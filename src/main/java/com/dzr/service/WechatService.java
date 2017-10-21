@@ -1,11 +1,11 @@
 package com.dzr.service;
 
-import com.dzr.po.WechatShare;
 import com.dzr.po.wx.WechatUser;
 import net.sf.json.JSONObject;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author dingzr
@@ -38,5 +38,9 @@ public interface WechatService {
      * @return
      */
     void getWechatShare(Model model, HttpServletRequest request);
+
+    String wechatPay(HttpServletRequest req, Model model);
+
+    void wechatNotify(HttpServletRequest request, HttpServletResponse response);
 
 }

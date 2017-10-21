@@ -1,4 +1,4 @@
-package com.dzr.controller.wechat.common.report.protocol;
+package com.dzr.weixin.common;
 
 import lombok.Data;
 

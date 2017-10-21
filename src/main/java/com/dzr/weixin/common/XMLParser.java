@@ -1,4 +1,4 @@
-package com.dzr.controller.wechat.common;
+package com.dzr.weixin.common;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

@@ -1,5 +1,6 @@
-package com.dzr.controller.wechat.common;
+package com.dzr.weixin.common;
 
+import com.dzr.framework.config.WechatConstant;
 import com.dzr.framework.config.WechatParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
@@ -68,7 +69,7 @@ public class Signature {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
-        result += "key=" + wechatParams.getKey();
+        result += "key=" + WechatConstant.WECHAT_PAY_KEY;
         //Util.log("Sign Before MD5:" + result);
         result = MD5.MD5Encode(result).toUpperCase();
         //Util.log("Sign Result:" + result);
