@@ -5,12 +5,11 @@ import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
+import com.dzr.service.LoginService;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,8 +40,8 @@ public class LoginController extends BaseController {
     BaseInfoService baseInfoService;
     @Autowired
     WechatService wechatService;
-
-    private Logger logger = LoggerFactory.getLogger(LoginController.class);
+    @Autowired
+    LoginService loginService;
 
     //进入完善资料页面
     @RequestMapping("/perfectInfo")
@@ -129,24 +128,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/gotoVip")
     public String gotoVip(Model model, HttpServletRequest request) {
-        String userId = (String) request.getSession().getAttribute("userId");
-        String[] arr = new String[]{"member_id" + userId};
-        String mystr = "member_id=" + userId;
-        JSONObject user = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
-        if (user.getInt("error_code") == 0) {
-            model.addAttribute("member", JSONObject.fromObject(user.getString("member")));
-        }
-
-        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.MEMBER_RECHARGES, mystr, arr));
-        if (res.getInt("error_code") == 0) {
-            model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
-        } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
-        }
-        //微信分享调用
-//        wechatService.getWechatShare(model, request);
-
-        return "vip";
+        return loginService.gotoVip(model, request);
     }
 
     /**
@@ -255,11 +237,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/gotoDiscountCard")
     public String gotoDiscountCard(Model model, HttpServletRequest request) {
-        String status = request.getParameter("status");
-        String perPage = request.getParameter("perPage");
-        String page = request.getParameter("page");
-        model.addAttribute("cards", baseInfoService.gotoDiscountCard(perPage, page, status, request));
-        return "sendcard";
+        return loginService.gotoDiscountCard(model, request);
     }
 
     /**
@@ -309,8 +287,7 @@ public class LoginController extends BaseController {
 
     @RequestMapping("/gotoCode")
     public String gotoCode(Model model, HttpServletRequest request) {
-        String codeId = request.getParameter("id");
-        return "code";
+        return loginService.gotoCode(model, request);
     }
 
     @RequestMapping("/receiveCard")

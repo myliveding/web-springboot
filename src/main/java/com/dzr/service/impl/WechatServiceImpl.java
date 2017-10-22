@@ -356,6 +356,7 @@ public class WechatServiceImpl implements WechatService {
             url = url + "?" + (request.getQueryString()); //url后面的参数
         }
         logger.info("JS调用时的确切路径，需要在加密时使用：" + url); // 当前网页的URL，不包含#及其后面部分
+        model.addAttribute("url", url);
         try {
             String jsTicket = getJsTicket(wechatParams.getAppId());
             logger.info("jsapi_ticket:" + jsTicket);
@@ -387,10 +388,13 @@ public class WechatServiceImpl implements WechatService {
             //判断订单金额
             String productName = "臻品珠宝支付订单";
             String totalFee;
+            //商品价格
             double orderAmt = Double.valueOf(req.getParameter("price"));
             String payAmt = new java.text.DecimalFormat("#0.00").format(orderAmt);
             logger.info("ordermoney（元）:" + payAmt);
             model.addAttribute("orderMoney", payAmt);
+
+            //支付来源，1代表充值，2扫码付款
             String type = req.getParameter("type");
             if (StringUtils.isEmpty(type)) {
                 req.setAttribute("error", "支付来源不能为空");

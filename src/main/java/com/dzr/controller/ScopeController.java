@@ -33,8 +33,9 @@ public class ScopeController {
         String code = request.getParameter("code");
         String next = request.getParameter("next");
         logger.info("ScopeController：" + code + ",cn：" + next);
+        // /scope/openid.do?next=rest/receiveCard.do appid cardId=111
         if (!"".equals(code) && code != null && !"".equals(next) && next != null) {
-            String nextPage = next.substring(0, next.indexOf(".do")) + ".do";
+            String nextPage = next.substring(0, next.indexOf(".do"));
             String appid = next.substring(next.indexOf(".do") + 3, next.length());
             String pram = "";
             if (appid.length() > 18) {

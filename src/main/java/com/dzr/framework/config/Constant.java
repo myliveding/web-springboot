@@ -65,6 +65,9 @@ public final class Constant {
     public static final String SYSTEM_SETTING = "/api/get_system_setting";
     //领取打折卡接口
     public static final String RECEIVE_DISCOUNT_CARD = "/api/receive_discount_card";
+    //扫码付款信息接口
+    public static final String SCAN_PAY_INFO = "/api/receive_discount_card";
+
 
     /**
      * @param urlPath 接口地址

@@ -5,8 +5,10 @@ import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
+import com.dzr.service.LoginService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +31,8 @@ public class LoginRestController extends BaseController {
     UrlConfig urlConfig;
     @Autowired
     BaseInfoService baseInfoService;
+    @Autowired
+    LoginService loginService;
 
     /**
      * 页面加载更多数据
@@ -84,6 +88,11 @@ public class LoginRestController extends BaseController {
         String page = request.getParameter("page");
         String status = request.getParameter("status");
         return successResult(baseInfoService.gotoDiscountCard(perPage, page, status, request));
+    }
+
+    @RequestMapping("/receiveCard")
+    public void receiveCard(Model model, HttpServletRequest request) {
+        loginService.receiveCard(model, request);
     }
 
     /**

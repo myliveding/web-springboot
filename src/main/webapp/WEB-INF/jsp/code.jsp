@@ -51,5 +51,36 @@
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
+<script>
+    var payAmt = 0;
+
+    function isWeixnOpen() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //保存按钮的事件
+    $$('.self-btn .pwd-btn').on('click', function () {
+        if (payAmt > 0) {
+            if (!isWeixnOpen()) {
+                alert('<div><div><img src="${pageContext.request.contextPath}/images/10.png"></div><div style="color:#2cca6f;">微信不支持在浏览器端的支付！</div><div style="color:#333;">可通过以下方式完成支付</div><div style="color:#999; text-align:left;">方式一：打开微信，关注“盛世欢唱”公众号，进入“我的>我的订单”中完成交易</div><div style="color:#999; text-align:left;">方式二：选择其他支付方式完成交易</div></div>');
+                return false;
+            } else {
+                setTimeout(function () {
+                    window.location.href = "${pageContext.request.contextPath}/wechatPay/index?productId=0"
+                        + "&price=" + payAmt + "&type=2";
+                }, 1000);
+            }
+        } else {
+            //用户不需要付款
+
+        }
+    });
+
+</script>
 </body>
 </html>

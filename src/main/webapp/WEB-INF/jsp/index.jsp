@@ -57,7 +57,7 @@
     </c:if>
 </div>
 <div class="flex-box index-pay">
-    <div class="flex-box pay-item">
+    <div class="flex-box pay-item" onclick="scan()">
         <img src="${pageContext.request.contextPath}/images/icon_scancode.png">
         <span>扫码付款</span>
     </div>
@@ -119,7 +119,7 @@
     });
 
     //保存按钮的事件
-    $$('.flex-box .pay-item').on('click', function () {
+    function scan() {
         // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，
         // config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，
         // 则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，
@@ -131,7 +131,7 @@
                 var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
             }
         });
-    });
+    };
 
     wx.ready();
 </script>
