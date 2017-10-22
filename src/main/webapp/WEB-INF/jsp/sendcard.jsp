@@ -109,9 +109,9 @@
     wx.ready(function () {
         var wxData = {
             title: '卡券赠送',
-            desc: '卡券赠送',
+            desc: '卡券赠送复反反复复反反复复反反复复反反复复反反复复吩咐',
             link: shareUrl,
-            imgUrl: '', // 分享图标
+            imgUrl: '${pageContext.request.contextPath}/images/sendcard_green.png', // 分享图标
         };
         //监听分享给朋友
         wx.onMenuShareAppMessage(wxData);
