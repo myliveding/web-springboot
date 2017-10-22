@@ -33,6 +33,12 @@
 <script>
     var page = 2;
     $(document).ready(function () {
+        //开启分享功能
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.call('showToolbar'); //隐藏下菜单
+            WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
+        });
+
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
                 alert("滚动条已经到达顶部");
