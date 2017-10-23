@@ -100,27 +100,36 @@
         WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
     });
     wx.showAllNonBaseMenuItem();
-    ;
 
     //需要动态重组分享得地址
-    var shareUrl = "${shareUrl}";
     var id = $('.sendcard-container div:eq(0)').find('.room_type_id').val();
+
     function send(cardId) {
-        id = cardId;
-        alert(id);
-        //shareUrl = shareUrl.replace("ID", cardId);
+        bindListen({link: shareUrl.replace("ID", cardId.toString())});
     }
-    wx.ready(function () {
-        var wxData = {
-            title: '臻品vip折扣卡',
-            desc: '臻品vip折扣卡等你来拿',
-            link: shareUrl.replace("ID", id),
-            imgUrl: "${domain}" + '/images/logo.png', // 分享图标
-        };
+
+
+    var shareUrl = "${shareUrl}";
+    var wxData = {
+        title: '臻品vip折扣卡',
+        desc: '臻品vip折扣卡等你来拿',
+        link: shareUrl.replace("ID", id.toString()),
+        imgUrl: "${domain}" + '/images/logo.png', // 分享图标
+    };
+
+    /**
+     * 绑定事件
+     * @type {string}
+     */
+    function bindListen(obj) {
         //监听分享给朋友
-        wx.onMenuShareAppMessage(wxData);
+        wx.onMenuShareAppMessage(obj ? Object.assign(wxData, obj) : wxData);
         //监听分享到朋友圈”
-        wx.onMenuShareTimeline(wxData);
+        wx.onMenuShareTimeline(obj ? Object.assign(wxData, obj) : wxData);
+    }
+
+    wx.ready(function () {
+        bindListen();
     });
 </script>
 </body>
