@@ -17,14 +17,14 @@
 <div class="code-con">
     <div class="flex-box code-item code-item-balance">
         <img src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
-        <div class="code-item-txt">余额：<span>￥1888.00</span></div>
+        <div class="code-item-txt">余额：<span>￥${info.balance}</span></div>
         <div class="code-item-opreate"><input type="radio" name="pay" id="balance">
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
         <img src="${pageContext.request.contextPath}/images/icon_nav3.png" alt="">
         <div class="code-item-txt">
-            积分：<span>18888</span>
+            积分：<span>${info.integral}</span>
         </div>
         <div class="code-item-opreate">
             <input type="radio" name="pay" id="">
@@ -52,8 +52,12 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
-    var payAmt = 0;
+    $(document).ready(function () {
 
+    });
+
+
+    var payAmt = 0;
     function isWeixnOpen() {
         var ua = navigator.userAgent.toLowerCase();
         if (ua.match(/MicroMessenger/i) == "micromessenger") {

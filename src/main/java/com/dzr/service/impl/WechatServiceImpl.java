@@ -2,7 +2,7 @@ package com.dzr.service.impl;
 
 
 import com.dzr.framework.config.*;
-import com.dzr.mapper.primary.WechatTokenMapper;
+import com.dzr.mapper.WechatTokenMapper;
 import com.dzr.po.WechatToken;
 import com.dzr.po.wx.*;
 import com.dzr.service.WechatService;

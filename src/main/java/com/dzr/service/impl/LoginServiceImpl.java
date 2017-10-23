@@ -75,9 +75,9 @@ public class LoginServiceImpl implements LoginService {
         String mystr = "member_id=" + userId;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_INFO, mystr, arr));
         if (res.getInt("error_code") == 0) {
-            model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
+            model.addAttribute("info", JSONObject.fromObject(res.getString("result")));
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
         return "code";
     }

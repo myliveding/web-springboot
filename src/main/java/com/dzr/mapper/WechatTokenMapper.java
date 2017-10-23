@@ -1,4 +1,4 @@
-package com.dzr.mapper.primary;
+package com.dzr.mapper;
 
 import com.dzr.po.WechatToken;
 import org.springframework.stereotype.Component;
