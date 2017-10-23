@@ -42,7 +42,7 @@ public class CoreServiceImpl {
             String msgType = requestMap.get("MsgType");
             //消息内容
             String countent = requestMap.get("Content");
-            List<Article> articles = new ArrayList<Article>();
+            List<Article> articles = new ArrayList<>();
             Image image = new Image();
 
             //对收到的消息进行解析

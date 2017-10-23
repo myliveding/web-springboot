@@ -90,11 +90,6 @@ public class LoginRestController extends BaseController {
         return successResult(baseInfoService.gotoDiscountCard(perPage, page, status, request));
     }
 
-    @RequestMapping("/receiveCard")
-    public void receiveCard(Model model, HttpServletRequest request) {
-        loginService.receiveCard(model, request);
-    }
-
     /**
      * 优惠
      *
@@ -107,6 +102,12 @@ public class LoginRestController extends BaseController {
         String page = request.getParameter("page");
         String status = request.getParameter("status");
         return successResult(baseInfoService.gotoCouponsCard(perPage, page, status, request));
+    }
+
+    @RequestMapping("/receiveCard")
+    public Map<String, Object> receiveCard(Model model, HttpServletRequest request) {
+        loginService.receiveCard(model, request);
+        return successResult("receiveCard");
     }
 
 }

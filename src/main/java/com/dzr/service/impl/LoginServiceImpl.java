@@ -87,11 +87,25 @@ public class LoginServiceImpl implements LoginService {
         String perPage = request.getParameter("perPage");
         String page = request.getParameter("page");
         model.addAttribute("cards", baseInfoService.gotoDiscountCard(perPage, page, status, request));
+
+        //获取当前用户得手机号码
+        String telphone = "";
+        String userId = (String) request.getSession().getAttribute("userId");
+        String[] arr = new String[]{"member_id" + userId};
+        String mystr = "member_id=" + userId;
+        JSONObject user = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.USER_INFO, mystr, arr));
+        if (user.getInt("error_code") == 0) {
+            JSONObject data = JSONObject.fromObject(user.getString("member"));
+            telphone = data.getString("mobile");
+        }
+
         wechatService.getWechatShare(model, request);
-        model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
-                + "/scope/openid.do?next=rest/receiveCard.do" + wechatParams.getAppId());
-//                + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+        //使用openid自动登陆得时候需要去使用中间分享页面
+        //model.addAttribute("shareUrl", wechatParams.getDomain() + "/login/gotoSharePage?name=");
+        model.addAttribute("shareUrl", wechatParams.getDomain()
+                + "/login/receiveCardPage?telphone=" + telphone + "&cardId=ID");
+        model.addAttribute("domain", wechatParams.getDomain());
+
         return "sendcard";
     }
 
@@ -101,6 +115,10 @@ public class LoginServiceImpl implements LoginService {
         String[] arr = new String[]{"member_id" + userId, "discount_card_id" + cardId};
         String mystr = "member_id=" + userId + "&discount_card_id=" + cardId;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECEIVE_DISCOUNT_CARD, mystr, arr));
+        if (res.getInt("error_code") == 0) {
+        } else {
+            throw new ApiException(10008, res.getString("error_msg"));
+        }
     }
 
 }

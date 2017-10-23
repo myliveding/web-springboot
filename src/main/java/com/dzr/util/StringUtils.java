@@ -90,4 +90,9 @@ public final class StringUtils {
         }
     }
 
+    public static void main(String[] args) {
+        String a = "/login/receiveCardPage?telphone=31111111112&cardId=99";
+        System.err.println(a.substring(32, 43));
+    }
+
 }

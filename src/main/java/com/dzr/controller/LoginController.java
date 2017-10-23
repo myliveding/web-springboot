@@ -3,11 +3,13 @@ package com.dzr.controller;
 import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.config.WechatParams;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.LoginService;
 import com.dzr.service.WechatService;
 import com.dzr.util.DateUtils;
+import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +31,14 @@ import java.util.Map;
  * @CreateTime 2017/8/20 16:16 八月
  */
 
-//@RestController
 @Controller
 @RequestMapping("/login")
 public class LoginController extends BaseController {
 
     @Autowired
     UrlConfig urlConfig;
+    @Autowired
+    WechatParams wechatParams;
     @Autowired
     BaseInfoService baseInfoService;
     @Autowired
@@ -45,7 +48,11 @@ public class LoginController extends BaseController {
 
     //进入完善资料页面
     @RequestMapping("/perfectInfo")
-    public String perfectInfo() {
+    public String perfectInfo(HttpServletRequest request, Model model) {
+        String backUrl = request.getParameter("backUrl");
+        if (StringUtils.isNotEmpty(backUrl)) {
+            model.addAttribute("backUrl", backUrl);
+        }
         return "fillself";
     }
 
@@ -240,6 +247,26 @@ public class LoginController extends BaseController {
         return loginService.gotoDiscountCard(model, request);
     }
 
+    @RequestMapping("/gotoSharePage")
+    public String gotoSharePage(Model model, String name, String cardId) {
+        model.addAttribute("name", name);
+        model.addAttribute("cardId", cardId);
+        model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
+                + "/scope/openid.do?next=rest/receiveCard.do" + wechatParams.getAppId());
+//        + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+        return "share";
+    }
+
+    @RequestMapping("/receiveCardPage")
+    public String receiveCardPage(Model model, HttpServletRequest request) {
+        String telphone = request.getParameter("telphone");
+        String cardId = request.getParameter("cardId");
+        model.addAttribute("telphone", telphone);
+        model.addAttribute("cardId", cardId);
+        return "tempCard";
+    }
+
     /**
      * 进入活动页面
      *
@@ -289,12 +316,6 @@ public class LoginController extends BaseController {
     public String gotoCode(Model model, HttpServletRequest request) {
         return loginService.gotoCode(model, request);
     }
-
-    @RequestMapping("/receiveCard")
-    public String receiveDiscountCard() {
-        return "";
-    }
-
 
     @RequestMapping("/systemInfo")
     public String getSystemInfo(Model model, String type) {

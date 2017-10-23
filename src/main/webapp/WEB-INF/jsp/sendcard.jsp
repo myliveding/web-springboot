@@ -20,7 +20,9 @@
                 <p>全场消费满${card.user_price}元<span>即可使用</span></p>
                 <div class="sendcard-number sendcard-txt-green">${card.discount}<span>折</span></div>
             </div>
-            <a class="sendcard-status-green" onclick="send(${card.id})">赠送</a>
+            <c:if test="${card.status eq '1'}">
+                <a class="sendcard-status-green" onclick="send(${card.id})">赠送</a>
+            </c:if>
         </div>
     </c:forEach>
 </div>
@@ -33,12 +35,6 @@
 <script>
     var page = 2;
     $(document).ready(function () {
-        //开启分享功能
-        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-            WeixinJSBridge.call('showToolbar'); //隐藏下菜单
-            WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
-        });
-
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
                 alert("滚动条已经到达顶部");
@@ -57,7 +53,7 @@
                             if (d.data.length > 0) {
                                 page++;
                                 var html = ''
-                                for (var i = 0; i < d.data.length; i++) {
+                                for (var i = 0; i < d.data.length - 1; i++) {
                                     html += '<div class="sendcard-item">'
                                     html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
                                     html += '<div class="flex-box sendcard-txt">'
@@ -65,7 +61,9 @@
                                     html += '<p>全场消费满' + d.data[i] + '元<span>即可使用</span></p>'
                                     html += '<div class="sendcard-number sendcard-txt-green">' + d.data[i].discount + '<span>折</span>'
                                     html += '</div>'
-                                    html += '<a class="sendcard-status-green" onclick="send(d.data[i].id)">赠送</a>'
+                                    if (d.data[i].status = 1) {
+                                        html += '<a class="sendcard-status-green" onclick="send(d.data[i].id)">赠送</a>'
+                                    }
                                     html += '</div>'
                                 }
                                 $(".sendcard-container").append(html);
@@ -96,22 +94,28 @@
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
 
-    //需要
-    var id = $('.sendcard-container div:eq(0)').find('.room_type_id').val();
-    alert(id);
+    //开启分享功能
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        WeixinJSBridge.call('showToolbar'); //隐藏下菜单
+        WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
+    });
+    wx.showAllNonBaseMenuItem();
+    ;
 
+    //需要动态重组分享得地址
+    var shareUrl = "${shareUrl}";
+    var id = $('.sendcard-container div:eq(0)').find('.room_type_id').val();
     function send(cardId) {
         id = cardId;
+        alert(id);
+        //shareUrl = shareUrl.replace("ID", cardId);
     }
-
-    shareUrl = "${shareUrl}" + "cardId=" + id + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-    alert(shareUrl);
     wx.ready(function () {
         var wxData = {
-            title: '卡券赠送',
-            desc: '卡券赠送复反反复复反反复复反反复复反反复复反反复复吩咐',
-            link: shareUrl,
-            imgUrl: '${pageContext.request.contextPath}/images/sendcard_green.png', // 分享图标
+            title: '臻品vip折扣卡',
+            desc: '臻品vip折扣卡等你来拿',
+            link: shareUrl.replace("ID", id),
+            imgUrl: "${domain}" + '/images/logo.png', // 分享图标
         };
         //监听分享给朋友
         wx.onMenuShareAppMessage(wxData);

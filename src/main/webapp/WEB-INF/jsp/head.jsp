@@ -23,6 +23,17 @@
     font();
 
     //隐藏微信菜单
+    //    wx.hideMenuItems({
+    //        menuList: [
+    //            "menuItem:share:appMessage",
+    //            "menuItem:share:timeline",
+    //            "menuItem:share:qq",
+    //            "menuItem:share:weiboApp",
+    //            "menuItem:favorite",
+    //            "menuItem:share:facebook",
+    //            "menuItem:share:QZone"
+    //        ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+    //    });
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         WeixinJSBridge.call('hideToolbar'); //隐藏下菜单
         WeixinJSBridge.call('hideOptionMenu'); //隐藏右上角菜单

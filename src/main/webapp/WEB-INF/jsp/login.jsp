@@ -28,7 +28,7 @@
             </div>
             <div class="flex-box login-item">
                 <img src="${pageContext.request.contextPath}/images/icon_login_pwd.png" alt="">
-                <input class="r_pdw" type="text" placeholder="请输入6-20位密码">
+                <input class="r_pdw" type="password" placeholder="请输入6-20位密码">
             </div>
             <div class="flex-box login-item">
                 <img src="${pageContext.request.contextPath}/images/icon_login_name.png" alt="">
@@ -49,7 +49,7 @@
                 <input class="tel" type="text" placeholder="请输入手机号码"></div>
             <div class="flex-box login-item regist-item-pwd regist-item-active">
                 <img src="${pageContext.request.contextPath}/images/icon_login_pwd.png" alt="">
-                <input class="pwd" type="text" placeholder="请输入6-20位密码">
+                <input class="pwd" type="password" placeholder="请输入6-20位密码">
             </div>
             <div class="flex-box login-item regist-item-yzm">
                 <img src="${pageContext.request.contextPath}/images/icon_login_four.png" alt="">
@@ -95,8 +95,18 @@
         });
     }
 
+    var tel = "${tel}";
+    if (tel != null && "" != tel) {
+        $('.r_name').val(tel);
+        $('.r_name').attr("readOnly", true);
+    }
+
+    var backUrl = "${backUrl}";
     //注册
     function register() {
+        //推广人
+        var name = $('.r_name').val();
+
         var mobile = $('.r_tel').val();
         var password = $('.r_pdw').val();
         if (password.length < 6 || password.length > 20) {
@@ -104,8 +114,8 @@
             return false;
         }
         var code = $('.r_code').val();
-        //推广人
-        var name = $('.r_name').val();
+
+
         if ($('#service').is(':checked')) {
         } else {
             alert("请勾选服务协议");
@@ -124,7 +134,7 @@
             },
             success: function success(d) {
                 if (d.errcode == 0) {
-                    window.location.href = "${pageContext.request.contextPath}/login/perfectInfo";
+                    window.location.href = "${pageContext.request.contextPath}/login/perfectInfo?backUrl=" + backUrl;
                 } else {
                     alert(d.errmsg);
                 }
@@ -149,6 +159,9 @@
             success: function success(d) {
                 if (d.status == 0) {
                     //进入下一步
+                    if (backUrl) {
+                        window.location.href = "${pageContext.request.contextPath}" + backUrl;
+                    }
                     window.location.href = "${pageContext.request.contextPath}/login/index";
                 } else {
                     alert(d.errmsg);

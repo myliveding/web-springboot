@@ -64,7 +64,7 @@
             sex = $("#sex2").val();
         });
     });
-
+    var backUrl = "${backUrl}";
     function save() {
         var name = $('.name').val();
         var birth = $('.birth').val();
@@ -83,6 +83,9 @@
             },
             success: function success(d) {
                 if (d.status == 0) {
+                    if (backUrl) {
+                        window.location.href = "${pageContext.request.contextPath}" + backUrl;
+                    }
                     window.location.href = "${pageContext.request.contextPath}/login/index";
                 } else {
                     alert(d.errmsg);
