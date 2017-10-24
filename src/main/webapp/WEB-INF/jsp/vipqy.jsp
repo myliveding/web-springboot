@@ -4,7 +4,7 @@
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
 <div class="nav-top">
-    <a href="${backUrl}">
+    <a href="${pageContext.request.contextPath}/${backUrl}">
         <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
         <br>
     </a>
@@ -14,5 +14,7 @@
 <div class="vipqy-box">
     ${info.service_agreement}
 </div>
+<script>
+</script>
 </body>
 </html>

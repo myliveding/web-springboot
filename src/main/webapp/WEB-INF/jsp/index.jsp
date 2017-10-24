@@ -48,7 +48,7 @@
             </div>
             <div class="flex-box myinfo-b">
                 <div class="myinfo-btxt">ID:6618</div>
-                <div class="myinfo-btxt">微信:${user.wechat_num}</div>
+                <div class="myinfo-btxt">微信：${user.wechat_num}</div>
             </div>
         </div>
     </div>
@@ -133,7 +133,10 @@
         });
     };
 
-    wx.ready();
+    $(document).ready(function () {
+        $('.home img').attr("src", "${pageContext.request.contextPath}/images/icon_homed.png");
+        $('.home p').attr("class", "tabar-hover");
+    });
 </script>
 </body>
 </html>

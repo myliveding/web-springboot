@@ -81,5 +81,11 @@
     </div>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
+<script>
+    $(document).ready(function () {
+        $('.mine img').attr("src", "${pageContext.request.contextPath}/images/icon_mined.png");
+        $('.mine p').attr("class", "tabar-hover");
+    });
+</script>
 </body>
 </html>

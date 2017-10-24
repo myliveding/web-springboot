@@ -95,11 +95,11 @@
     });
 
     //开启分享功能
-    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-        WeixinJSBridge.call('showToolbar'); //隐藏下菜单
-        WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
-    });
-    wx.showAllNonBaseMenuItem();
+    //    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    //        WeixinJSBridge.call('showToolbar'); //隐藏下菜单
+    //        WeixinJSBridge.call('showOptionMenu'); //隐藏右上角菜单
+    //    });
+    //    wx.showAllNonBaseMenuItem();
 
     //需要动态重组分享得地址
     var id = $('.sendcard-container div:eq(0)').find('.room_type_id').val();

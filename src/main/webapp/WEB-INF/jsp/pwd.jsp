@@ -6,7 +6,7 @@
 <body class="active-body">
 <div class="nav-top">
     <a href="${pageContext.request.contextPath}/login/userCenter">
-        <img src="images/icon_left.png" alt="" class="nav-toback">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
     </a>
     修改密码
 </div>

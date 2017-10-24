@@ -1,19 +1,19 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <nav class="navbar-fixed-bottom">
     <div class="container-fluid index-tabar">
-        <div class="col-xs-4">
+        <div class="col-xs-4 home">
             <a href="${pageContext.request.contextPath}/login/index">
-                <img src="${pageContext.request.contextPath}/images/icon_homed.png" height="20">
+                <img src="${pageContext.request.contextPath}/images/icon_home.png" height="20">
             </a>
-            <p class="tabar-hover">首页</p>
+            <p>首页</p>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 active">
             <a href="${pageContext.request.contextPath}/login/activitys">
                 <img src="${pageContext.request.contextPath}/images/icon_active.png" height="20">
             </a>
             <p>活动</p>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 mine">
             <a href="${pageContext.request.contextPath}/login/userCenter">
                 <img src="${pageContext.request.contextPath}/images/icon_mine.png" height="20">
             </a>

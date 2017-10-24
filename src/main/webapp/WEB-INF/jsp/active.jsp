@@ -62,6 +62,10 @@
         });
     });
 
+    $(document).ready(function () {
+        $('.active img').attr("src", "${pageContext.request.contextPath}/images/icon_actived.png");
+        $('.active p').attr("class", "tabar-hover");
+    });
 </script>
 </body>
 </html>

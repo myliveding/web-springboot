@@ -30,13 +30,6 @@
             <input type="radio" name="pay" id="">
         </div>
     </div>
-    <div class="flex-box code-item code-item-discount">
-        <img src="${pageContext.request.contextPath}/images/icon_code_discount.png" alt="">
-        <div class="code-item-txt">打折卡</div>
-        <div class="code-item-opreate">
-            <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
-        </div>
-    </div>
     <div class="flex-box code-item code-item-ticket">
         <img src="${pageContext.request.contextPath}/images/icon_mine_ticket.png" alt="">
         <div class="code-item-txt">优惠券<span></span></div>

@@ -34,8 +34,8 @@
     //            "menuItem:share:QZone"
     //        ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
     //    });
-    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-        WeixinJSBridge.call('hideToolbar'); //隐藏下菜单
-        WeixinJSBridge.call('hideOptionMenu'); //隐藏右上角菜单
-    });
+    //    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    //        WeixinJSBridge.call('hideToolbar'); //隐藏下菜单
+    //        WeixinJSBridge.call('hideOptionMenu'); //隐藏右上角菜单
+    //    });
 </script>
