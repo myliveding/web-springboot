@@ -19,7 +19,7 @@
     <div class="flex-box flex1 info-txt">
         <c:choose>
             <c:when test="${user.head_url eq 'null' || user.head_url eq ''}">
-                <img src="${pageContext.request.contextPath}/images/my_cover.jpg" alt="" class="my-cover">
+                <img src="${pageContext.request.contextPath}/images/default.jpg" alt="" class="my-cover">
             </c:when>
             <c:otherwise>
                 <img src="${user.head_url}" alt="" class="my-cover">
@@ -45,8 +45,10 @@
                 </c:choose>
             </div>
             <div class="flex-box myinfo-b">
-                <div class="myinfo-btxt">ID:6618</div>
-                <div class="myinfo-btxt">微信：${user.wechat_num}</div>
+                <div class="myinfo-btxt">ID：${user.mobile}</div>
+                <c:if test="${user.wechat_num ne ''}">
+                    <div class="myinfo-btxt">微信：${user.wechat_num}</div>
+                </c:if>
             </div>
         </div>
     </div>
@@ -91,7 +93,36 @@
     </div>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+    //微信菜单功能
+    wx.config({
+        debug: false,// 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: "${appid}",// 必填，公众号的唯一标识
+        timestamp: "${timestamp}", // 必填，生成签名的时间戳
+        nonceStr: "${noncestr}", // 必填，生成签名的随机串
+        signature: "${signature}",// 必填，签名
+        jsApiList: [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+
+    wx.ready(function () {
+        var wxData = {
+            title: '臻品vip折扣卡',
+            desc: '臻品vip折扣卡等你来拿',
+            link: shareUrl,
+            imgUrl: "${domain}" + '/images/logo.png', // 分享图标
+        };
+
+        //监听分享给朋友
+        wx.onMenuShareAppMessage(wxData);
+        //监听分享到朋友圈”
+        wx.onMenuShareTimeline(wxData);
+    });
+
     //保存按钮的事件
     function scan() {
         window.location.href = "${pageContext.request.contextPath}/login/gotoCode";

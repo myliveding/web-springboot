@@ -31,24 +31,24 @@ $(function () {
 	$(".bshow-box-shadow").click(function () {
 		$(".bshow-box").hide();
 	});
-	$("#resigt_yzm").click(function () {
-		setTime($(this), 60);
-	});
-	$("#login_yzm").click(function () {
-		setTime($(this), 60);
-	})
+    // $("#resigt_yzm").click(function () {
+    // 	setTime($(this), 60);
+    // });
+    // $("#login_yzm").click(function () {
+    // 	setTime($(this), 60);
+    // })
 
-	function setTime(obj, time) {
-		setTimeout(function () {
-			if (time > 0) {
-				time = time - 1;
-				obj.text(time + 's后重新发送');
-				setTime(obj, time);
-			} else {
-				obj.text('重新发送');
-			}
-		}, 1000)
-	}
+    // function setTime(obj, time) {
+    // 	setTimeout(function () {
+    // 		if (time > 0) {
+    // 			time = time - 1;
+    // 			obj.text(time + 's后重新发送');
+    // 			setTime(obj, time);
+    // 		} else {
+    // 			obj.text('重新发送');
+    // 		}
+    // 	}, 1000)
+    // }
 
 	$("#lg-agree").click(function () {
 		if ($(this).is(':checked')) {

@@ -48,9 +48,10 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         String mystr = "mobile=" + mobile;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SMS_CODE, mystr, arr));
         if (res.getInt("error_code") == 0) {
+        } else {
             throw new ApiException(10008, res.getString("error_msg"));
         }
-        throw new ApiException(10008, res.getString("error_msg"));
+        //throw new ApiException(10008, res.getString("error_msg"));
     }
 
     /**

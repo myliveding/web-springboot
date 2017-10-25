@@ -75,7 +75,8 @@ public class LoginController extends BaseController {
         String userId = (String) request.getSession().getAttribute("userId");
         model.addAttribute("user", baseInfoService.getUserInfo(userId));
         //微信分享相关
-        //wechatService.getWechatShare(model, request);
+        wechatService.getWechatShare(model, request);
+        model.addAttribute("shareUrl", wechatParams.getDomain());
         return "index";
     }
 

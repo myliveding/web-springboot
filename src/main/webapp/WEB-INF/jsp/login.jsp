@@ -24,7 +24,7 @@
             <div class="flex-box login-item">
                 <img src="${pageContext.request.contextPath}/images/icon_login_four.png" alt="">
                 <input class="r_code" type="text" placeholder="请输入四位验证码">
-                <button class="login-yzm" onclick="rSendSms()">发送验证码</button>
+                <button class="resigt_yzm">发送验证码</button>
             </div>
             <div class="flex-box login-item">
                 <img src="${pageContext.request.contextPath}/images/icon_login_pwd.png" alt="">
@@ -54,7 +54,7 @@
             <div class="flex-box login-item regist-item-yzm">
                 <img src="${pageContext.request.contextPath}/images/icon_login_four.png" alt="">
                 <input class="code" type="text" placeholder="请输入四位验证码">
-                <button class="login-yzm" onclick="sendSms()">发送验证码</button>
+                <button class="login-yzm">发送验证码</button>
             </div>
             <div class="self-btn pwd-btn login-btn">
                 <img src="${pageContext.request.contextPath}/images/icon_login_pwd.png" class="login-btn-img" alt="">
@@ -72,16 +72,33 @@
 
 <script>
     //发送验证码
-    function rSendSms() {
+    //    function rSendSms() {
+    //        setTime($(this), 60);
+    //        var tel = $('.r_tel').val();
+    //        sms(tel);
+    //    }
+    //onclick="rSendSms()"
+    $(".resigt_yzm").click(function () {
         var tel = $('.r_tel').val();
         sms(tel);
-    }
+    });
     //发送验证码
-    function sendSms() {
+    //    function sendSms() {
+    //        setTime($(this), 60);
+    //        var tel = $('.tel').val();
+    //        sms(tel);
+    //    }
+    //onclick="sendSms()"
+    $(".login-yzm").click(function () {
         var tel = $('.tel').val();
         sms(tel);
-    }
-    function sms(tel) {
+    });
+
+    function sms(tel, obj) {
+        if (null == tel || '' == tel) {
+            alert("请填写手机号码");
+            return false;
+        }
         $.ajax({
             'url': "${pageContext.request.contextPath}/free/sendSms",
             'type': 'post',
@@ -90,9 +107,27 @@
                 mobile: tel,
             },
             success: function success(d) {
-                alert(d.errmsg);
+                if (d.status == 0) {
+                    setTime(obj, 60);
+                    alert("验证码发送成功");
+                } else {
+                    alert(d.errmsg);
+                    return false;
+                }
             }
         });
+    }
+
+    function setTime(obj, time) {
+        setTimeout(function () {
+            if (time > 0) {
+                time = time - 1;
+                obj.text(time + 's后重新发送');
+                setTime(obj, time);
+            } else {
+                obj.text('重新发送');
+            }
+        }, 1000)
     }
 
     var tel = "${tel}";
