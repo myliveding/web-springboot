@@ -30,7 +30,7 @@
             if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
                 $(".show-loading").show();
                 $.ajax({
-                    'url': "${pageContext.request.contextPath}/rest/activitysPaging",
+                    'url': "${pageContext.request.contextPath}/free/activitysPaging",
                     'type': 'post',
                     'dataType': 'json',
                     'data': {

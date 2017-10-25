@@ -1,7 +1,11 @@
 package com.dzr.controller;
 
 import com.dzr.framework.base.BaseController;
+import com.dzr.framework.config.Constant;
+import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +24,8 @@ import java.util.Map;
 @RequestMapping("/free")
 public class FreeController extends BaseController {
 
+    @Autowired
+    UrlConfig urlConfig;
     @Autowired
     BaseInfoService baseInfoService;
 
@@ -41,6 +47,35 @@ public class FreeController extends BaseController {
     public Map<String, Object> login(String mobile, String password, String code, HttpServletRequest request) {
         baseInfoService.login(mobile, password, code, request);
         return successResult("login");
+    }
+
+    /**
+     * 页面加载更多数据
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("/activitysPaging")
+    public Map<String, Object> getActivitysPaging(HttpServletRequest request) {
+        String perPage = request.getParameter("perPage");
+        String page = request.getParameter("page");
+        return successResult(baseInfoService.getActivitysPaging(page, perPage));
+    }
+
+    @RequestMapping("/products")
+    public Map<String, Object> getProducts(HttpServletRequest request) {
+        String cateId = request.getParameter("cateId");
+        String perPage = request.getParameter("prePage");
+        String page = request.getParameter("page");
+        //获取产品列表
+        String[] arr = new String[]{"cate_id" + cateId, "per_page" + perPage, "page" + page};
+        String mystr = "cate_id=" + cateId + "&per_page=" + perPage + "&page=" + page;
+        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCTS, mystr, arr));
+        if (info.getInt("error_code") == 0) {
+        } else {
+            throw new ApiException(10008, info.getString("error_msg"));
+        }
+        return successResult(info.getJSONArray("result"));
     }
 
 }

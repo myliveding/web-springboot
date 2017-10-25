@@ -183,7 +183,7 @@ public class LoginController extends BaseController {
      * @return
      */
     @RequestMapping("/productCates")
-    public String getproductCates(Model model) {
+    public String getProductCates(Model model) {
         //获取产品分类
         String[] arr = new String[]{};
         String mystr = "";

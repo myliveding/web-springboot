@@ -58,7 +58,7 @@
     function getProductList(cateId) {
         $(".show-loading").show();
         $.ajax({
-            'url': "${pageContext.request.contextPath}/rest/products",
+            'url': "${pageContext.request.contextPath}/free/products",
             'type': 'post',
             'dataType': 'json',
             'data': {

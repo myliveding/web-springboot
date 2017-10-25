@@ -49,35 +49,6 @@ public class LoginRestController extends BaseController {
     }
 
     /**
-     * 页面加载更多数据
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping("/activitysPaging")
-    public Map<String, Object> getActivitysPaging(HttpServletRequest request) {
-        String perPage = request.getParameter("perPage");
-        String page = request.getParameter("page");
-        return successResult(baseInfoService.getActivitysPaging(page, perPage));
-    }
-
-    @RequestMapping("/products")
-    public Map<String, Object> getProducts(HttpServletRequest request) {
-        String cateId = request.getParameter("cateId");
-        String perPage = request.getParameter("prePage");
-        String page = request.getParameter("page");
-        //获取产品列表
-        String[] arr = new String[]{"cate_id" + cateId, "per_page" + perPage, "page" + page};
-        String mystr = "cate_id=" + cateId + "&per_page=" + perPage + "&page=" + page;
-        JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCTS, mystr, arr));
-        if (info.getInt("error_code") == 0) {
-        } else {
-            throw new ApiException(10008, info.getString("error_msg"));
-        }
-        return successResult(info.getJSONArray("result"));
-    }
-
-    /**
      * 团队
      *
      * @param request
