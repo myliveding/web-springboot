@@ -25,4 +25,5 @@ nbdist/
 .idea/
 .mvn/
 
+#配置文件不提交
 application*.yml

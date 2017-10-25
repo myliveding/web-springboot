@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
         if (res.getInt("error_code") == 0) {
             model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
         return "vip";
     }

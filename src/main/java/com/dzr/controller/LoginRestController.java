@@ -58,7 +58,7 @@ public class LoginRestController extends BaseController {
         JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PRODUCTS, mystr, arr));
         if (info.getInt("error_code") == 0) {
         } else {
-            throw new ApiException(info.getInt("error_code"), info.getString("error_msg"));
+            throw new ApiException(10008, info.getString("error_msg"));
         }
         return successResult(info.getJSONArray("result"));
     }

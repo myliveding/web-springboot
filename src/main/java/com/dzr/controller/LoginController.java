@@ -153,7 +153,7 @@ public class LoginController extends BaseController {
             model.addAttribute("balance", res.getDouble("balance"));
             model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
         return "consumption";
     }
@@ -173,7 +173,7 @@ public class LoginController extends BaseController {
             model.addAttribute("integral", res.getDouble("integral"));
             model.addAttribute("list", JSONArray.fromObject(res.getString("result")));
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
         return "recharge";
     }

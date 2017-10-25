@@ -50,7 +50,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (res.getInt("error_code") == 0) {
             throw new ApiException(10008, res.getString("error_msg"));
         }
-        throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        throw new ApiException(10008, res.getString("error_msg"));
     }
 
     /**
@@ -102,7 +102,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             session.setAttribute("mobile", data.getString("mobile"));
 
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
     }
 
@@ -153,7 +153,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             session.setAttribute("userId", memberId);
             session.setAttribute("mobile", data.getString("mobile"));
         }
-        throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+        throw new ApiException(10008, res.getString("error_msg"));
     }
 
     /**
@@ -252,8 +252,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (0 == bannersR.getInt("error_code")) {
             banners = bannersR.getJSONArray("result");
         } else {
-            logger.info("获取的轮播图返回值：" + bannersR.getInt("error_code"));
-            throw new ApiException(bannersR.getInt("error_code"), bannersR.getString("error_msg"));
+            logger.info("获取的轮播图返回值：" + bannersR.getInt("error_code") + "--" + bannersR.getString("error_msg"));
         }
         return banners;
     }
@@ -271,7 +270,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (res.getInt("error_code") == 0) {
             res = JSONObject.fromObject(res.getString("member"));
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
         return res;
     }
@@ -298,7 +297,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             //清空session
             session.setAttribute("userId", "");
         } else {
-            throw new ApiException(res.getInt("error_code"), res.getString("error_msg"));
+            throw new ApiException(10008, res.getString("error_msg"));
         }
     }
 
@@ -440,7 +439,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         if (info.getInt("error_code") == 0) {
             info = JSONObject.fromObject(info.getString("result"));
         } else {
-            throw new ApiException(info.getInt("error_code"), info.getString("error_msg"));
+            throw new ApiException(10008, info.getString("error_msg"));
         }
         return info;
     }
