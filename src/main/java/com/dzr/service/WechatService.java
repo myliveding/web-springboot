@@ -43,4 +43,14 @@ public interface WechatService {
 
     void wechatNotify(HttpServletRequest request, HttpServletResponse response);
 
+    /**
+     * 发送模板消息
+     *
+     * @param type 待发送的消息
+     * @return
+     */
+    JSONObject sendTemplateMessageByType(String type, String firstStr, String keyword1Str, String keyword2Str,
+                                         String keyword3Str, String keyword4Str, String keyword5Str, String openId, String remarkStr, String url);
+
+
 }
