@@ -6,10 +6,10 @@
 <jsp:include page="head.jsp" flush="true"/>
 <body class="active-body">
 <div class="nav-top">
-    <a href="${pageContext.request.contextPath}/login/index">
+    <a href="${pageContext.request.contextPath}/login/userCenter">
         <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
     </a>
-    我的卡券
+    我的优惠券
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">

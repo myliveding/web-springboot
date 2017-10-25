@@ -133,7 +133,7 @@
                 code: code
             },
             success: function success(d) {
-                if (d.errcode == 0) {
+                if (d.status == 0) {
                     window.location.href = "${pageContext.request.contextPath}/login/perfectInfo?backUrl=" + backUrl;
                 } else {
                     alert(d.errmsg);

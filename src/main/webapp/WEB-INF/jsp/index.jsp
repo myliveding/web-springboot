@@ -61,10 +61,6 @@
         <img src="${pageContext.request.contextPath}/images/icon_scancode.png">
         <span>扫码付款</span>
     </div>
-    <div class="flex-box pay-item">
-        <img src="${pageContext.request.contextPath}/images/icon_pay.png" alt="">
-        <span>臻品支付</span>
-    </div>
 </div>
 <div class="index-nav">
     <div class="flex-box index-nav-box">

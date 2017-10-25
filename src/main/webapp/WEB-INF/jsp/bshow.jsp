@@ -22,8 +22,8 @@
 </div>
 <div class="bshow-header">
     ${info.title}
-    <h3>臻品珠宝 产品</h3>
-    <h4>臻品珠宝 产品广告语 说明</h4>
+    <%--<h3>臻品珠宝 产品</h3>--%>
+    <%--<h4>臻品珠宝 产品广告语 说明</h4>--%>
 </div>
 <div class="bshow-con">
     <img src="${pageContext.request.contextPath}/images/bshow_img1.jpg" alt="" class="bshow-btn">

@@ -146,14 +146,16 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         mystr = buffer.toString();
         arr = list.toArray(new String[list.size()]);
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.REGISTER, mystr, arr));
+        //JSONObject res = JSONObject.fromObject("{'error_code':0,'error_msg':'\u6ce8\u518c\u6210\u529f','data':{'member_id':9,'mobile':'18858276308'}}");
         if (res.getInt("error_code") == 0) {
             JSONObject data = JSONObject.fromObject(res.getString("data"));
 
             String memberId = data.getString("member_id");
             session.setAttribute("userId", memberId);
             session.setAttribute("mobile", data.getString("mobile"));
+        } else {
+            throw new ApiException(10008, res.getString("error_msg"));
         }
-        throw new ApiException(10008, res.getString("error_msg"));
     }
 
     /**
