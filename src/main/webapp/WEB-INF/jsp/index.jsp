@@ -109,12 +109,13 @@
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
 
+    var shareUrl = "${shareUrl}";
     wx.ready(function () {
         var wxData = {
             title: '臻品vip折扣卡',
             desc: '臻品vip折扣卡等你来拿',
             link: shareUrl,
-            imgUrl: "${domain}" + '/images/logo.png', // 分享图标
+            imgUrl: shareUrl + '/images/logo.png', // 分享图标
         };
 
         //监听分享给朋友

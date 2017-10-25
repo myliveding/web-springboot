@@ -72,26 +72,13 @@
 
 <script>
     //发送验证码
-    //    function rSendSms() {
-    //        setTime($(this), 60);
-    //        var tel = $('.r_tel').val();
-    //        sms(tel);
-    //    }
-    //onclick="rSendSms()"
     $(".resigt_yzm").click(function () {
         var tel = $('.r_tel').val();
-        sms(tel);
+        sms(tel, $(this));
     });
-    //发送验证码
-    //    function sendSms() {
-    //        setTime($(this), 60);
-    //        var tel = $('.tel').val();
-    //        sms(tel);
-    //    }
-    //onclick="sendSms()"
     $(".login-yzm").click(function () {
         var tel = $('.tel').val();
-        sms(tel);
+        sms(tel, $(this));
     });
 
     function sms(tel, obj) {
