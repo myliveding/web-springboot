@@ -297,7 +297,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.CHANGE_PWD, mystr, arr));
         if (res.getInt("error_code") == 0) {
             //清空session
-            session.setAttribute("userId", "");
+            //session.setAttribute("userId", "");
         } else {
             throw new ApiException(10008, res.getString("error_msg"));
         }

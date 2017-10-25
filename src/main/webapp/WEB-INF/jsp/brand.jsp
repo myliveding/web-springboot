@@ -89,7 +89,7 @@
                             $(".nextPanel").append(str);
                         }
                     } else {
-                        alert("该类型没有更多了");
+                        //alert("没有更多了");
                     }
                 } else {
                     alert(d.errmsg);

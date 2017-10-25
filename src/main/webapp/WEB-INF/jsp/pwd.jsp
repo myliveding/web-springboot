@@ -42,7 +42,9 @@
             },
             success: function success(d) {
                 if (d.status == 0) {
-                    window.location.reload();
+                    alert("密码修改成功");
+                    window.location.href = "${pageContext.request.contextPath}/login/userCenter";
+                    //window.location.reload();
                 } else {
                     alert(d.errmsg);
                 }

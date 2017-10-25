@@ -68,7 +68,7 @@
                                 }
                                 $(".sendcard-container").append(html);
                             } else {
-                                alert("没有更多了");
+                                //alert("没有更多了");
                             }
                         } else {
                             alert(d.errmsg);
