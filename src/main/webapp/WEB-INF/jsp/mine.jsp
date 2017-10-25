@@ -58,7 +58,7 @@
                     <div class="fl">
                         <img src="${pageContext.request.contextPath}/images/icon_mine_pwd.png" alt=""
                              class="mine-item-subimg">
-                        <span>修改登陆密码</span>
+                        <span>修改登录密码</span>
                     </div>
                     <div class="fr mine-item-operate">
                         <img src="${pageContext.request.contextPath}/images/mine_right.png" alt="">

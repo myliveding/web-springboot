@@ -30,7 +30,8 @@ public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
-    private static final String excludedUrls = "login/systemInfo";
+    private static final String excludedUrls = "login/systemInfo,login/productCates," +
+            "login/activitys,login/productDetail,login/activityDetail";
 
     /**
      * 封装，不需要过滤的list列表

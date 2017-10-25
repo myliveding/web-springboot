@@ -23,8 +23,6 @@ public class ScopeController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
-    private WechatService wechatService;
     @Autowired
     WechatParams wechatParams;
 

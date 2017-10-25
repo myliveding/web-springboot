@@ -22,7 +22,6 @@
         <c:forEach var="team" items="${teams}">
             <div class="team-item">
                 <img src="${team.head_url}" alt="">
-                <p>用户名</p>
                 <p>${team.name}</p>
                 <span>微信号</span><span>${team.wechat_num}</span>
             </div>
@@ -58,7 +57,7 @@
                                 for (var i = 0; i < d.data.length; i++) {
                                     html += '<div class="team-item">'
                                     html += '<img src="' + d.datap[i].head_url + '" alt="">'
-                                    html += 'p>用户名</p>' + d.data[i].name
+                                    html += d.data[i].name
                                     html += '<span>微信号</span>'
                                     html += '<span>' + d.data[i].wechat_num + '</span>'
                                     html += '</div>'

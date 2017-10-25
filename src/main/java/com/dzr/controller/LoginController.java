@@ -75,7 +75,7 @@ public class LoginController extends BaseController {
         String userId = (String) request.getSession().getAttribute("userId");
         model.addAttribute("user", baseInfoService.getUserInfo(userId));
         //微信分享相关
-        wechatService.getWechatShare(model, request);
+        //wechatService.getWechatShare(model, request);
         return "index";
     }
 
@@ -112,20 +112,6 @@ public class LoginController extends BaseController {
     @RequestMapping("/gotoPwd")
     public String gotoPwd() {
         return "pwd";
-    }
-
-    /**
-     * 重置密码
-     *
-     * @param first
-     * @param secondary
-     * @param request
-     * @return
-     */
-    @RequestMapping("/resetPassword")
-    public Map<String, Object> resetPassword(String first, String secondary, HttpServletRequest request) {
-        baseInfoService.resetPassword(first, secondary, request);
-        return successResult("resetPassword");
     }
 
     /**

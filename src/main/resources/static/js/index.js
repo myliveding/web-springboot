@@ -18,12 +18,12 @@ $(function () {
 		$(".regist-item-pwd").addClass("regist-item-active");
 		$(".regist-item-yzm").removeClass("regist-item-active");
 	});
-	$(".info-vip").click(function () {
-		$(".index-vip").show();
-	});
-	$(".index-vip-top").click(function (e) {
-		$(".index-vip").hide();
-	})
+    // $(".info-vip").click(function () {
+    // $(".index-vip").show();
+    // });
+    // $(".index-vip-top").click(function (e) {
+    // 	$(".index-vip").hide();
+    // })
 
 	$(".bshow-btn").click(function () {
 		$(".bshow-box").show();

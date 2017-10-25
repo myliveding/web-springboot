@@ -35,6 +35,20 @@ public class LoginRestController extends BaseController {
     LoginService loginService;
 
     /**
+     * 重置密码
+     *
+     * @param first
+     * @param secondary
+     * @param request
+     * @return
+     */
+    @RequestMapping("/resetPassword")
+    public Map<String, Object> resetPassword(String first, String secondary, HttpServletRequest request) {
+        baseInfoService.resetPassword(first, secondary, request);
+        return successResult("resetPassword");
+    }
+
+    /**
      * 页面加载更多数据
      *
      * @param request

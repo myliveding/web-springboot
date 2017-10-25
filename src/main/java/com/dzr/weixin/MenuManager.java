@@ -23,7 +23,7 @@ public class MenuManager {
         ViewButton btn21 = new ViewButton();
         btn21.setName("活动");
         btn21.setType("view");
-        btn21.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + url + "/scope/openid.do?next=/login/activitys.do" + appid + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+        btn21.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + url + "/scope/openid.do?next=login/activitys.do" + appid + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 
 //        ViewButton btn22 = new ViewButton();
 //        btn22.setName("在线超市");
