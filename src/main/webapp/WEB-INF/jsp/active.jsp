@@ -25,7 +25,7 @@
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
-                alert("滚动条已经到达顶部");
+                //alert("滚动条已经到达顶部");
             }
             if ($(document).scrollTop() >= $(document).height() - $(window).height()) {
                 $(".show-loading").show();
