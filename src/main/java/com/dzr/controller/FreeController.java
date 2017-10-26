@@ -9,6 +9,8 @@ import com.dzr.service.WechatService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,28 +86,21 @@ public class FreeController extends BaseController {
     /**
      * 发送微信模版消息
      *
-     * @param request
      * @return object
      */
-    @RequestMapping("/sendTemplateMessage")
-    public Object sendTemplateMessage(HttpServletRequest request) {
-        String type = request.getParameter("type");  //0 业务服务提醒 ；  1 认证通知；2 消息提醒 ；3 获得代金券通知；4注册通知；
-        //5 参保成功通知；6参保失败通知；7停保成功通知；8停保失败通知；9退款成功通知；10服务到期提醒；11业务办理取消通知；12订单未支付通知;13订单支付成功;14业务动态提醒;15手机号绑定
-        String firstStr = request.getParameter("first") == null ? "" : request.getParameter("first");
-        String keyword1Str = request.getParameter("keyword1") == null ? "" : request.getParameter("keyword1");
-        String keyword2Str = request.getParameter("keyword2") == null ? "" : request.getParameter("keyword2");
-        String keyword3Str = request.getParameter("keyword3") == null ? "" : request.getParameter("keyword3");
-        String keyword4Str = request.getParameter("keyword4") == null ? "" : request.getParameter("keyword4");
-        String keyword5Str = request.getParameter("keyword5") == null ? "" : request.getParameter("keyword5");
-        String remarkStr = request.getParameter("remark") == null ? "" : request.getParameter("remark");
-        String url = request.getParameter("url") == null ? "" : request.getParameter("url");
-        String openId = request.getParameter("openId") == null ? "" : request.getParameter("openId");
-        //      openId="on7Tqvg7aZC7syuOTTYG60aPD3Ig";
-        JSONObject resultStr = new JSONObject();
-        if (null != type) {
-            resultStr = wechatService.sendTemplateMessageByType(type, firstStr, keyword1Str, keyword2Str, keyword3Str, keyword4Str, keyword5Str, openId, remarkStr, url);
-        }
-        return resultStr;
+    @RequestMapping(value = "sendTemplateMessage", method = RequestMethod.POST)
+    public Object sendTemplateMessage(@RequestParam(value = "type") String type,
+                                      @RequestParam(value = "openId") String openId,
+                                      @RequestParam(value = "first") String first,
+                                      @RequestParam(value = "keyword1") String keyword1,
+                                      @RequestParam(value = "keyword2") String keyword2,
+                                      @RequestParam(value = "keyword3", required = false) String keyword3,
+                                      @RequestParam(value = "keyword4", required = false) String keyword4,
+                                      @RequestParam(value = "keyword5", required = false) String keyword5,
+                                      @RequestParam(value = "remark", required = false) String remark,
+                                      @RequestParam(value = "url", required = false) String url) {
+
+        return wechatService.sendTemplateMessageByType(type, first, keyword1, keyword2, keyword3, keyword4, keyword5, openId, remark, url);
     }
 
 }

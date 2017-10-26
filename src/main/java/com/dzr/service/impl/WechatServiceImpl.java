@@ -280,11 +280,6 @@ public class WechatServiceImpl implements WechatService {
         String url = wechatParams.getDomain()
                 + request.getContextPath() // 项目名称
                 + request.getServletPath(); // 请求页面或其他地址
-//        String url = request.getScheme()
-//                + "://" + request.getServerName() // 服务器地址
-//                + ":" + request.getServerPort()
-//                + request.getContextPath() // 项目名称
-//                + request.getServletPath(); // 请求页面或其他地址
         if (StringUtils.isNotEmpty(request.getQueryString())) {
             url = url + "?" + (request.getQueryString()); //url后面的参数
         }
@@ -396,10 +391,10 @@ public class WechatServiceImpl implements WechatService {
         return "pay";
     }
 
-    public String getSign(Map<String, String> map) {
+    private String getSign(Map<String, String> map) {
         ArrayList<String> list = new ArrayList<>();
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (entry.getValue() != "") {
+            if (!Objects.equals(entry.getValue(), "")) {
                 list.add(entry.getKey() + "=" + entry.getValue() + "&");
             }
         }
@@ -422,7 +417,7 @@ public class WechatServiceImpl implements WechatService {
      * @param request
      * @return
      */
-    public static String getIp(HttpServletRequest request) {
+    private static String getIp(HttpServletRequest request) {
         if (request == null)
             return "";
         String ip = request.getHeader("X-Requested-For");
@@ -534,233 +529,74 @@ public class WechatServiceImpl implements WechatService {
     /**
      * 发送模板消息
      *
-     * @param openId
-     * @param remarkStr
-     * @param url        跳转的路径
-     * @param firstStr   第一个字段
-     * @param keywordStr 发送的关键字
-     * @return
+     * @param type 待发送的消息 0账户余额通知 1会员积分消费提醒 2返利到帐提醒 3生日提醒
+     * @param firstStr  第一个属性
+     * @param keyword1Str   1
+     * @param keyword2Str   2
+     * @param keyword3Str   3
+     * @param keyword4Str   4
+     * @param keyword5Str   4
+     * @param openId    openid
+     * @param remarkStr 备注
+     * @param url   非必填
+     * @return json
      */
-    @Override
-    public JSONObject sendTemplateMessage(String openId, String remarkStr, String url,
-                                          String firstStr, String... keywordStr) {
-        Template template = new Template();
+    public JSONObject sendTemplateMessageByType(String type, String firstStr, String keyword1Str,
+                                                String keyword2Str, String keyword3Str, String keyword4Str,
+                                                String keyword5Str, String openId, String remarkStr, String url) {
 
-        if (StringUtils.isNotEmpty(url)) {
-            template.setUrl(url);
-        }
-        template.setTouser(openId);
-        template.setColor("#0000FF");
-        template.setTemplate_id(templateConfig.getBuySuss());
+        logger.info("发送用户openid：" + openId + "的类型type：" + type + "的微信提醒");
 
-        Map<String, TemplateData> mData = new HashMap<>();
-        TemplateData first = new TemplateData();
-        first.setColor("#6397A9");
-        first.setValue(firstStr + "\n");
-        mData.put("first", first);
-
-        if (StringUtils.isNotEmpty(keywordStr[0])) {
-            TemplateData keynote1 = new TemplateData();
-            keynote1.setColor("#6397A9");
-            keynote1.setValue(keywordStr[0]);
-            mData.put("keynote1", keynote1);
-        }
-
-        if (StringUtils.isNotEmpty(keywordStr[1])) {
-            TemplateData keynote2 = new TemplateData();
-            keynote2.setColor("#6397A9");
-            keynote2.setValue(keywordStr[1]);
-            mData.put("keynote2", keynote2);
-        }
-
-        if (StringUtils.isNotEmpty(remarkStr)) {
-            TemplateData remark = new TemplateData();
-            remark.setColor("#6397A9");
-            remark.setValue(remarkStr);
-            mData.put("remark", remark);
-        }
-        template.setData(mData);
-
-        String content = JSONObject.fromObject(template).toString();
-        logger.info("发送消息" + content);
-        String accessToken = getAccessToken(wechatParams.getAppId());
-        JSONObject jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));
-        if ((jsonObject != null) && (jsonObject.getInt("errcode") != 0)) {
-            if (jsonObject.getInt("errcode") == 40001) {
-                accessToken = getAccessToken(wechatParams.getAppId());
-                jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));
-            }
-        }
-        if (null != jsonObject) {
-            logger.info("发送消息结果  " + jsonObject.toString());
-        } else {
-            logger.info("发送消息结果 null");
-        }
-        return jsonObject;
-    }
-
-    /**
-     * 发送模板消息
-     *
-     * @param type 待发送的消息
-     * @return
-     */
-    public JSONObject sendTemplateMessageByType(String type, String firstStr, String keyword1Str, String keyword2Str, String keyword3Str, String keyword4Str, String keyword5Str, String openId, String remarkStr, String url) {
-
-        //     String type=request.getParameter("type"); //0 业务服务提醒 ；  1 认证通知；2 消息提醒 ；3 获得代金券通知；4注册通知；
-//5 参保成功通知；6参保失败通知；7停保成功通知；8停保失败通知；9退款成功通知；10服务到期提醒；11业务办理取消通知；12订单未支付通知;13订单支付成功；14业务动态提醒；15手机号绑定提醒
         Template t = new Template();
-        if (StringUtils.isEmpty(remarkStr)) {
-            if (type.equals("2")) {
-                remarkStr = "感谢您对我们工作的支持！如有疑问，请拨打咨询热线400-111-8900。";
-            } else if (type.equals("3")) {
-                firstStr = "恭喜您获得了一张代金券！";
-                remarkStr = "在参保或续费时，代金券可用于抵扣服务费，如有疑问，请拨打咨询热线400-111-8900。";
-                url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wechatParams.getAppId()
-                        + "&redirect_uri=" + wechatParams.getDomain() + "/scope/openid.do?next=personsocial/gotovoucher.do"
-                        + wechatParams.getAppId() + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-            } else if (type.equals("0")) {
-                remarkStr = "请在截止日前及时办理。";
-            } else if (type.equals("4")) {
-                firstStr = "恭喜您已成功注册为无忧保用户！";
-                remarkStr = "感谢您对我们工作的支持！如有疑问，请拨打咨询热线400-111-8900。";
-            }
-
-        }
-        t.setUrl(url);
+        t.setUrl(url);//模板跳转链接，非必填
         t.setTouser(openId);
-        //   t.setTopcolor("#0000FF");
+
         Map<String, TemplateData> m = new HashMap<>();
         TemplateData first = new TemplateData();
-//         first.setColor("#0000FF");
         first.setValue(firstStr + "\n");
         m.put("first", first);
         TemplateData keyword1 = new TemplateData();
-//         keyword1.setColor("#0000FF");
         keyword1.setValue(keyword1Str);
         TemplateData keyword2 = new TemplateData();
-//         keyword2.setColor("#0000FF");
         keyword2.setValue(keyword2Str);
         TemplateData keyword3 = new TemplateData();
-//         keyword3.setColor("#0000FF");
         keyword3.setValue(keyword3Str);
         TemplateData keyword4 = new TemplateData();
         keyword4.setValue(keyword4Str);
         TemplateData keyword5 = new TemplateData();
         keyword5.setValue(keyword5Str);
+
         TemplateData remark = new TemplateData();
-//         remark.setColor("#0000FF");
-        if (type.equals("10")) {
-            remark.setColor("#FF0000");
-        }
         remark.setValue(remarkStr);
-        if (type.equals("0")) {//业务服务提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("1")) {//认证通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("2")) {//消息提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("3")) {//获得代金券通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("coupon", keyword1);
-            m.put("expDate", keyword2);
-        }
-        if (type.equals("4")) {//注册通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("5")) {//参保成功通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("6")) {//参保失败通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("7")) {//停保成功通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("8")) {//停保失败通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("9")) {//退款成功通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("10")) {//续保提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("11")) {//业务办理取消通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-        }
-        if (type.equals("12")) {//订单未支付通知v2
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("type", keyword1);
-            m.put("e_title", keyword2);
-            m.put("o_id", keyword3);
-            m.put("order_date", keyword4);
-            m.put("o_money", keyword5);
-        }
-        if (type.equals("13")) {//订单支付成功
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("orderMoneySum", keyword1);
-            m.put("orderProductName", keyword2);
-            m.put("Remark", remark);
-        }
-        if (type.equals("14")) {//业务动态提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("15")) {//手机号绑定提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-        }
-        if (type.equals("16")) {//参保材料通知
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
-            m.put("keyword4", keyword4);
-        }
-        if (type.equals("17")) {//月参保账单提醒
-            t.setTemplate_id(templateConfig.getBuySuss());
-            m.put("keyword1", keyword1);
-            m.put("keyword2", keyword2);
-            m.put("keyword3", keyword3);
+
+        switch (type) {
+            //账户余额通知
+            case "0":
+                t.setTemplate_id(templateConfig.getAccountBalance());
+                m.put("keyword1", keyword1);//变动金额
+                m.put("keyword2", keyword2);//账户余额
+                break;
+            case "1":
+                //会员积分消费提醒
+                t.setTemplate_id(templateConfig.getIntegralConsumption());
+                m.put("XM", keyword1);//姓名
+                m.put("KH", keyword2);//会员卡号
+                m.put("CONTENTS", keyword2);//内容
+                break;
+            case "2":
+                //返利到帐提醒
+                t.setTemplate_id(templateConfig.getAccountRebate());
+                m.put("keyword1", keyword1);//金额
+                m.put("keyword2", keyword2);//时间
+                break;
+            case "3":
+                //生日提醒
+                t.setTemplate_id(templateConfig.getBirthdayReminder());
+                m.put("keyword1", keyword1);
+                m.put("keyword2", keyword2);
+                break;
+            default:
+                break;
         }
         m.put("remark", remark);
         t.setData(m);
@@ -768,8 +604,6 @@ public class WechatServiceImpl implements WechatService {
         logger.info("发送消息" + content);
         String accessToken = getAccessToken(wechatParams.getAppId());
         JSONObject jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));
-        if ((jsonObject != null) && (jsonObject.getInt("errcode") != 0)) {
-        }
         if (null != jsonObject) {
             logger.info("发送消息结果  " + jsonObject.toString());
         } else {

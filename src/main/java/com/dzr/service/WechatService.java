@@ -24,14 +24,6 @@ public interface WechatService {
     WechatUser getUserInfo(String openid);
 
     /**
-     * 发送模板消息
-     *
-     * @return
-     */
-    JSONObject sendTemplateMessage(String openId, String remarkStr, String url,
-                                   String firstStr, String... keywordStr);
-
-    /**
      * 获取页面分享信息
      *
      * @param request
