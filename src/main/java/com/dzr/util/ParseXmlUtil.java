@@ -78,7 +78,7 @@ public class ParseXmlUtil {
      */
     public static Map<String, String> parseXmlDocument(Document document) {
         // 将解析结果存储在HashMap中
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         // 得到xml根元素
         Element root = document.getRootElement();
         // 得到根元素的所有子节点

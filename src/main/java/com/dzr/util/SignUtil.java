@@ -1,26 +1,27 @@
 package com.dzr.util;
 
 import com.dzr.framework.config.WechatParams;
+import com.dzr.weixin.common.MD5;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class SignUtil {
 
-    //	private static String token = "wechat";
     private static Logger logger = LoggerFactory.getLogger(SignUtil.class);
-
-    @Autowired
-    static WechatParams wechatParams;
 
     /**
      * 验证签名
@@ -115,7 +116,7 @@ public class SignUtil {
         return s;
     }
 
-    public static final String HmacSHA1 = "HmacSHA1";
+    private static final String HmacSHA1 = "HmacSHA1";
 
     /**
      * 生成签名数据
@@ -147,6 +148,64 @@ public class SignUtil {
             sb.append(byteToHexStr(b));
         }
         return sb.toString();
+    }
+
+
+    /**
+     * 微信支付时调用
+     *
+     * @param map
+     * @return String
+     */
+    public static String getSign(Map<String, String> map, String key) {
+        ArrayList<String> list = new ArrayList<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (!Objects.equals(entry.getValue(), "")) {
+                list.add(entry.getKey() + "=" + entry.getValue() + "&");
+            }
+        }
+        int size = list.size();
+        String[] arrayToSort = list.toArray(new String[size]);
+        Arrays.sort(arrayToSort, String.CASE_INSENSITIVE_ORDER);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            sb.append(arrayToSort[i]);
+        }
+        String result = sb.toString();
+        result += "key=" + key;
+        result = MD5.MD5Encode(result).toUpperCase();
+        return result;
+    }
+
+    /**
+     * 获取ip
+     *
+     * @param request
+     * @return
+     */
+    public static String getIp(HttpServletRequest request) {
+        if (request == null)
+            return "";
+        String ip = request.getHeader("X-Requested-For");
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
 }

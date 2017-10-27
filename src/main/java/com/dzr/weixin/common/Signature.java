@@ -30,7 +30,7 @@ public class Signature {
      */
     @SuppressWarnings("rawtypes")
     public static String getSign(Object o) throws IllegalAccessException {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         Class cls = o.getClass();
         Field[] fields = cls.getDeclaredFields();
         for (Field f : fields) {
@@ -55,7 +55,7 @@ public class Signature {
     }
 
     public static String getSign(Map<String, Object> map) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() != "") {
                 list.add(entry.getKey() + "=" + entry.getValue() + "&");

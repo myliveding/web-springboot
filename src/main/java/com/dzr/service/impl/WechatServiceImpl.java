@@ -2,6 +2,7 @@ package com.dzr.service.impl;
 
 
 import com.dzr.framework.config.*;
+import com.dzr.framework.exception.ApiException;
 import com.dzr.mapper.WechatTokenMapper;
 import com.dzr.po.WechatToken;
 import com.dzr.po.wx.*;
@@ -40,6 +41,7 @@ public class WechatServiceImpl implements WechatService {
     private final WechatTokenMapper wechatTokenMapper;
     private final WechatParams wechatParams;
     private final TemplateConfig templateConfig;
+
     @Autowired
     UrlConfig urlConfig;
 
@@ -302,6 +304,13 @@ public class WechatServiceImpl implements WechatService {
         model.addAttribute("appid", wechatParams.getAppId());
     }
 
+    /**
+     * 微信支付与支付调用方法
+     *
+     * @param req
+     * @param model
+     * @return
+     */
     public String wechatPay(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
         Object openidObj = session.getAttribute("openid");
@@ -341,7 +350,7 @@ public class WechatServiceImpl implements WechatService {
             } else {
                 int index = payAmt.indexOf(".");
                 int length = payAmt.length();
-                Long amLong = 0l;
+                Long amLong;
                 if (index == -1) {
                     amLong = Long.valueOf(payAmt + "00");
                 } else if (length - index >= 3) {
@@ -360,7 +369,7 @@ public class WechatServiceImpl implements WechatService {
                 String nonceStr = RandomStringUtils.random(30, "123456789qwertyuioplkjhgfdsazxcvbnm"); // 8位随机数
                 String orderNo = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
 
-                ReportReqData reportReqData = new ReportReqData(productId, productName, openid, orderNo, getIp(req), totalFee, nonceStr);
+                ReportReqData reportReqData = new ReportReqData(productId, productName, openid, orderNo, SignUtil.getIp(req), totalFee, nonceStr);
                 XStream xStreamForRequestPostData = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
                 Annotations.configureAliases(xStreamForRequestPostData, ReportReqData.class);
                 String postDataXML = xStreamForRequestPostData.toXML(reportReqData);
@@ -377,7 +386,7 @@ public class WechatServiceImpl implements WechatService {
                 paymap.put("nonceStr", paynonceStr);
                 paymap.put("package", "prepay_id=" + prepayId);
                 paymap.put("signType", "MD5");
-                String pay2sign = getSign(paymap);
+                String pay2sign = SignUtil.getSign(paymap, wechatParams.getKey());
                 model.addAttribute("appid", wechatParams.getAppId());
                 model.addAttribute("timeStamp", paytimeStamp);
                 model.addAttribute("nonceStr", paynonceStr);
@@ -391,58 +400,11 @@ public class WechatServiceImpl implements WechatService {
         return "pay";
     }
 
-    private String getSign(Map<String, String> map) {
-        ArrayList<String> list = new ArrayList<>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (!Objects.equals(entry.getValue(), "")) {
-                list.add(entry.getKey() + "=" + entry.getValue() + "&");
-            }
-        }
-        int size = list.size();
-        String[] arrayToSort = list.toArray(new String[size]);
-        Arrays.sort(arrayToSort, String.CASE_INSENSITIVE_ORDER);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < size; i++) {
-            sb.append(arrayToSort[i]);
-        }
-        String result = sb.toString();
-        result += "key=" + wechatParams.getKey();
-        result = MD5.MD5Encode(result).toUpperCase();
-        return result;
-    }
-
     /**
-     * 获取ip
-     *
-     * @param request
-     * @return
+     * 微信支付的异步通知
+     * @param request request
+     * @param response response
      */
-    private static String getIp(HttpServletRequest request) {
-        if (request == null)
-            return "";
-        String ip = request.getHeader("X-Requested-For");
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Forwarded-For");
-        }
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
-
-
     public void wechatNotify(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.setContentType("text/xml");
@@ -470,7 +432,7 @@ public class WechatServiceImpl implements WechatService {
                     } else if ("total_fee".equals(key)) {
                         thirdPayAmt = requestMap.get(key);
                         try {
-                            StringBuffer result = new StringBuffer();
+                            StringBuilder result = new StringBuilder();
                             if (thirdPayAmt.length() == 1) {
                                 result.append("0.0").append(thirdPayAmt);
                             } else if (thirdPayAmt.length() == 2) {
@@ -545,24 +507,56 @@ public class WechatServiceImpl implements WechatService {
                                                 String keyword2Str, String keyword3Str, String keyword4Str,
                                                 String keyword5Str, String openId, String remarkStr, String url) {
 
-        logger.info("发送用户openid：" + openId + "的类型type：" + type + "的微信提醒");
+        if (StringUtils.isEmpty(type)) {
+            throw new ApiException(10007, "传入参数消息类型");
+        } else {
+            if (type.equals("1")) {
+                if (StringUtils.isEmpty(keyword3Str)) {
+                    throw new ApiException(10007, "传入参数keyword3");
+                }
+            }
+        }
+        if (StringUtils.isEmpty(openId)) {
+            throw new ApiException(10007, "传入参数openId");
+        }
+        if (StringUtils.isEmpty(firstStr)) {
+            throw new ApiException(10007, "传入参数first");
+        }
+        if (StringUtils.isEmpty(keyword1Str)) {
+            throw new ApiException(10007, "传入参数keyword1");
+        }
+        if (StringUtils.isEmpty(keyword2Str)) {
+            throw new ApiException(10007, "传入参数keyword2");
+        }
 
-        Template t = new Template();
-        t.setUrl(url);//模板跳转链接，非必填
-        t.setTouser(openId);
+        logger.info("发送用户openid：" + openId + "的类型(0账户余额通知 1会员积分消费提醒 2返利到帐提醒 3生日提醒)type："
+                + type + "的微信提醒，相关参数如下："
+                + "first-" + firstStr + "，keyword1-" + keyword1Str + "，keyword2-" + keyword2Str
+                + "，keyword3-" + keyword3Str + "，keyword4-" + keyword4Str + "，keyword5-" + keyword5Str
+                + "，remark-" + remarkStr + "，url-" + url);
 
-        Map<String, TemplateData> m = new HashMap<>();
+        //发送的信息对象
+        Template template = new Template();
+        template.setUrl(url);  //模板跳转链接，非必填
+        template.setTouser(openId);
+
+        Map<String, TemplateData> map = new HashMap<>();
         TemplateData first = new TemplateData();
         first.setValue(firstStr + "\n");
-        m.put("first", first);
+        map.put("first", first);
+
         TemplateData keyword1 = new TemplateData();
         keyword1.setValue(keyword1Str);
+
         TemplateData keyword2 = new TemplateData();
         keyword2.setValue(keyword2Str);
+
         TemplateData keyword3 = new TemplateData();
         keyword3.setValue(keyword3Str);
+
         TemplateData keyword4 = new TemplateData();
         keyword4.setValue(keyword4Str);
+
         TemplateData keyword5 = new TemplateData();
         keyword5.setValue(keyword5Str);
 
@@ -572,35 +566,36 @@ public class WechatServiceImpl implements WechatService {
         switch (type) {
             //账户余额通知
             case "0":
-                t.setTemplate_id(templateConfig.getAccountBalance());
-                m.put("keyword1", keyword1);//变动金额
-                m.put("keyword2", keyword2);//账户余额
+                template.setTemplate_id(templateConfig.getAccountBalance());
+                map.put("keyword1", keyword1);//变动金额
+                map.put("keyword2", keyword2);//账户余额
                 break;
             case "1":
                 //会员积分消费提醒
-                t.setTemplate_id(templateConfig.getIntegralConsumption());
-                m.put("XM", keyword1);//姓名
-                m.put("KH", keyword2);//会员卡号
-                m.put("CONTENTS", keyword2);//内容
+                template.setTemplate_id(templateConfig.getIntegralConsumption());
+                map.put("XM", keyword1);//姓名
+                map.put("KH", keyword2);//会员卡号
+                map.put("CONTENTS", keyword3);//内容
                 break;
             case "2":
                 //返利到帐提醒
-                t.setTemplate_id(templateConfig.getAccountRebate());
-                m.put("keyword1", keyword1);//金额
-                m.put("keyword2", keyword2);//时间
+                template.setTemplate_id(templateConfig.getAccountRebate());
+                map.put("keyword1", keyword1);//金额
+                map.put("keyword2", keyword2);//时间
                 break;
             case "3":
                 //生日提醒
-                t.setTemplate_id(templateConfig.getBirthdayReminder());
-                m.put("keyword1", keyword1);
-                m.put("keyword2", keyword2);
+                template.setTemplate_id(templateConfig.getBirthdayReminder());
+                map.put("keyword1", keyword1);
+                map.put("keyword2", keyword2);
                 break;
             default:
                 break;
         }
-        m.put("remark", remark);
-        t.setData(m);
-        String content = JSONObject.fromObject(t).toString();
+        map.put("remark", remark);
+        template.setData(map);
+
+        String content = JSONObject.fromObject(template).toString();
         logger.info("发送消息" + content);
         String accessToken = getAccessToken(wechatParams.getAppId());
         JSONObject jsonObject = JSONObject.fromObject(WechatUtil.sendTemplateMessage(accessToken, content));

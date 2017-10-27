@@ -19,9 +19,6 @@ import java.util.Map;
 @Data
 public class ReportReqData {
 
-    @Autowired
-    WechatParams wechatParams;
-
     //每个字段具体的意思请查看API文档
     private String appid = WechatConstant.APP_ID;
     private String attach; //附加信息可作为自定义参数使用
@@ -50,7 +47,7 @@ public class ReportReqData {
     }
 
 
-    public Map<String, Object> toMap() {
+    private Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         Field[] fields = this.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -60,9 +57,7 @@ public class ReportReqData {
                 if (obj != null) {
                     map.put(field.getName(), obj);
                 }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
