@@ -100,6 +100,7 @@ public class FreeController extends BaseController {
                                       @RequestParam(value = "remark", required = false) String remark,
                                       @RequestParam(value = "url", required = false) String url) {
 
+
         return wechatService.sendTemplateMessageByType(type, first, keyword1, keyword2, keyword3, keyword4, keyword5, openId, remark, url);
     }
 
