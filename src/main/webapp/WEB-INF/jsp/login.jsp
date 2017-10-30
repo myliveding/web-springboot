@@ -71,17 +71,27 @@
 <jsp:include page="foot.jsp" flush="true"/>
 
 <script>
+    var rsended = false
+    var sended = false
     //发送验证码
     $(".resigt_yzm").click(function () {
         var tel = $('.r_tel').val();
-        sms(tel, $(this));
+        if (rsended) {
+            return;
+        } else {
+            sms(tel, $(this), 1);
+        }
     });
     $(".login-yzm").click(function () {
         var tel = $('.tel').val();
-        sms(tel, $(this));
+        if (sended) {
+            return;
+        } else {
+            sms(tel, $(this), 2);
+        }
     });
 
-    function sms(tel, obj) {
+    function sms(tel, obj, theindex) {
         if (null == tel || '' == tel) {
             alert("请填写手机号码");
             return false;
@@ -95,8 +105,13 @@
             },
             success: function success(d) {
                 if (d.status == 0) {
-                    setTime(obj, 60);
+                    setTime(obj, 60, theindex);
                     alert("验证码发送成功");
+                    if (theindex == 1) {
+                        rsended = true
+                    } else {
+                        sended = true
+                    }
                 } else {
                     alert(d.errmsg);
                     return false;
@@ -105,7 +120,7 @@
         });
     }
 
-    function setTime(obj, time) {
+    function setTime(obj, time, theindex) {
         setTimeout(function () {
             if (time > 0) {
                 time = time - 1;
@@ -113,6 +128,11 @@
                 setTime(obj, time);
             } else {
                 obj.text('重新发送');
+                if (theindex == 1) {
+                    rsended = false
+                } else {
+                    sended = false
+                }
             }
         }, 1000)
     }

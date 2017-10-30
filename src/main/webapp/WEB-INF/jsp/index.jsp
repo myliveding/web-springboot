@@ -8,7 +8,7 @@
     <div class="swiper-wrapper">
         <c:forEach var="banner" items="${banners}">
             <div class="swiper-slide">
-                <a><img src="${banner.image_url}" alt=""></a>
+                <a><img src="${banner.image_url}" alt="" width=100% height=150></a>
             </div>
         </c:forEach>
     </div>
@@ -78,7 +78,7 @@
         <div class="flex-box nav-item"><a href="${pageContext.request.contextPath}/login/gotoTeam"><img
                 src="${pageContext.request.contextPath}/images/icon_nav4.png" alt="">
             <p>团队</p></a></div>
-        <div class="flex-box nav-item"><a href="${pageContext.request.contextPath}/login/productCates"><img
+        <div class="flex-box nav-item"><a href="javascript:;" onclick="showmask()"><img
                 src="${pageContext.request.contextPath}/images/icon_nav5.png" alt="">
             <p>臻品推广</p><span>(兼职赚钱)</span></a></div>
         <div class="flex-box nav-item">
@@ -92,7 +92,19 @@
         </div>
     </div>
 </div>
+<div style="text-align:center">
+    <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="flex1 self-bg">
+</div>
 <jsp:include page="foot.jsp" flush="true"/>
+<div class="mask"
+     style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:99999;display:none">
+    <img src="${pageContext.request.contextPath}/images/pointer.png" alt="" style="position:absolute;top:0;right:0">
+    <p style="color:#f4f4f4;font-size:14px;padding-top:120px;width:80%;margin:0 auto">
+        请点击右上角的“...”进行分享<br>
+        请点击右上角的“...”进行分享
+    </p>
+
+</div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     //微信菜单功能
@@ -128,6 +140,13 @@
     function scan() {
         window.location.href = "${pageContext.request.contextPath}/login/gotoCode";
     };
+    //遮罩
+    showmask = function () {
+        $('.mask').show()
+    };
+    $('.mask').click(function () {
+        $(this).hide()
+    })
 
     $(document).ready(function () {
         $('.home img').attr("src", "${pageContext.request.contextPath}/images/icon_homed.png");

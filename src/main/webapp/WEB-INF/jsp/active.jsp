@@ -9,7 +9,7 @@
     <c:forEach var="activity" items="${activitys}">
         <div class="active-item">
             <a href="${pageContext.request.contextPath}/login/activityDetail?id=${activity.id}">
-                <img src="${activity.image_url}" alt="">
+                <img src="${activity.image_url}" alt="" width=100% height=100>
                 <p>${activity.title}</p>
             </a>
         </div>
@@ -44,7 +44,7 @@
                                 for (var i = 0; i < d.data.length; i++) {
                                     html += '<div class="active-item">'
                                     html += '<a href="${pageContext.request.contextPath}/login/activityDetail?id=' + d.data[i].id + '">'
-                                    html += '<img src="' + d.data[i].image_url + '" alt="">'
+                                    html += '<img src="' + d.data[i].image_url + '" alt="" width=100% height=100>'
                                     html += '<p>' + d.data[i].title + '</p>'
                                     html += '</a></div>'
                                 }

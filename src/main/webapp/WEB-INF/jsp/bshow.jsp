@@ -12,7 +12,7 @@
 </div>
 <div class="swiper-container banner">
     <a href="">
-        <img src="${info.image_url}" alt="">
+        <img src="${info.image_url}" alt="" width=100% height=310>
     </a>
 </div>
 <div class="bshow-header">

@@ -27,8 +27,7 @@
         </div>
         <div class="flex-box self-item">
             <h4>生日</h4>
-            <input type="text" class="birth" name="" id="" onclick="new Calendar().show(this);"
-                   readonly="readonly" placeholder="生日格式1990-01-05"
+            <input class="birth" name="" id="" type="date" placeholder="生日格式:1990-01-05"
                    value="${user.birthday}" class="start-time-day">
         </div>
         <div class="flex-box self-item">

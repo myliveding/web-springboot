@@ -22,11 +22,18 @@
     </div>
 </nav>
 <script src="${pageContext.request.contextPath}/js/jquery-1.12.3.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/calendar.js"></script>
+<!-- <script src="${pageContext.request.contextPath}/js/calendar.js"></script> -->
 <script src="${pageContext.request.contextPath}/js/index.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/swiper.min.js"></script>
 <script>
+    //input 获取焦点隐藏导航栏
+    $('input').focus(function () {
+        $('.navbar-fixed-bottom').hide()
+    })
+    $('input').blur(function () {
+        $('.navbar-fixed-bottom').show()
+    })
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true,
