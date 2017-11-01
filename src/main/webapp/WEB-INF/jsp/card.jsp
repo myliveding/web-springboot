@@ -13,7 +13,8 @@
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item card-item">
+        <div class="sendcard-item card-item" onclick="selectindex(${card.price})">
+            <span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:red;position:absolute;top:4px;right:4px"></span>
             <fmt:parseDate value="${card.expiration_date}" pattern="yyyy-MM-dd" var="expireDate"/>
             <fmt:formatDate value="${expireDate}" pattern="yyyyMMdd" var="expire"/>
             <c:if test="${now gt expire}" var="rs">
@@ -62,6 +63,12 @@
 <script>
     var page = 2;
     $(document).ready(function () {
+        function selectindex(info) {
+            var moneyinfo = localStorage.moneyinfo
+            moneyinfo.benifitinfo = info
+            localStorage.moneyinfo = moneyinfo
+            window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
+        }
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
                 //alert("滚动条已经到达顶部");
