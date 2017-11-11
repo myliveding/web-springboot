@@ -26,7 +26,7 @@
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item card-item">
+        <div class="sendcard-item card-item" data-id="102" data-name="满200减100" data-method="100" data-headline="200">
             <span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:red;position:absolute;top:4px;right:4px"></span>
             <fmt:parseDate value="${card.expiration_date}" pattern="yyyy-MM-dd" var="expireDate"/>
             <fmt:formatDate value="${expireDate}" pattern="yyyyMMdd" var="expire"/>
@@ -79,6 +79,7 @@
         json.card_id = $(this).attr('data-id');
         json.card_name = $(this).attr('data-name');
         json.card_method = $(this).attr('data-method');
+        json.card_headline = $(this).attr('data-headline');
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         selectedinfo.integral = false
         selectedinfo.sendinfo = {}
@@ -87,7 +88,7 @@
         selectedinfo.sendinfo.card_name = ''
         selectedinfo.cardinfo = json
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
-        window.location.href = "code.html"
+        window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
     })
 
     var page = 2;

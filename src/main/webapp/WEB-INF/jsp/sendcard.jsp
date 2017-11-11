@@ -93,9 +93,10 @@
         selectedinfo.cardinfo.card_method = 1
         selectedinfo.cardinfo.card_id = ''
         selectedinfo.cardinfo.card_name = ''
+        selectedinfo.cardinfo.card_headline = ''
         selectedinfo.sendinfo = json
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
-        window.location.href = "code.html"
+        window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
     })
 
     //微信菜单功能

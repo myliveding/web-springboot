@@ -15,13 +15,11 @@
     <input type="text" id="allmoney">
 </div>
 <div class="code-con">
-    <div class="flex-box code-item code-item-balance">
-        <img src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
-        <div class="code-item-txt">
-            余额：￥<span id="balancenum">${info.balance}</span>
-        </div>
+    <div class="flex-box code-item code-item-balance"><img
+            src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
+        <div class="code-item-txt">余额：￥<span id="balancenum">${info.balance}</span></div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="balance" value="1">
+            <input type="checkbox" name="balance" id="" value="1">
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
@@ -29,7 +27,7 @@
         <div class="code-item-txt">积分：<span id="intergralnum">${info.integral}</span>
         </div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="grade" value="2">
+            <input type="checkbox" name="grade" id="" value="2">
         </div>
     </div>
     <div class="flex-box code-item code-item-discount" id="discount">
@@ -50,12 +48,12 @@
         </div>
     </div>
     <div class="code-info">
-        <p>总金额￥<span id="showallmoney">1000</span></p>
-        <p>-余额￥<span id="minusbalance">100</span></p>
-        <p>-积分￥<span id="minusintegral">100</span></p>
-        <p>-优惠￥<span id="minusdiscount">100</span></p>
+        <p>总金额￥1000</p>
+        <p>-余额￥100</p>
+        <p>-积分100</p>
+        <p>-优惠￥100</p>
     </div>
-    <div class="code-number">共支付：<p><span>￥</span><span id="needpay">0.00</span></p></div>
+    <div class="code-number">共支付：<p><span>￥</span>299.00</p></div>
 </div>
 <div class="self-btn pwd-btn">
     <button>确认支付</button>
@@ -79,6 +77,12 @@
     };
 </script>
 <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        // mousewheelControl : true,
+    });
+
     setvalue()
     setselectValue()
     $("input[type='checkbox']").click(function (e) {
@@ -114,10 +118,10 @@
             setselectValue()
         })
     $('#discount').click(function () {
-        window.location.href = "sendcard.html"
+        window.location.href = "${pageContext.request.contextPath}/login/sendcard"
     })
     $('#ticket').click(function () {
-        window.location.href = "card.html"
+        window.location.href = "${pageContext.request.contextPath}/login/card"
     })
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
@@ -137,11 +141,21 @@
         var method = 1
         if (selectedinfo.cardinfo) {
             method = selectedinfo.cardinfo.card_method < selectedinfo.sendinfo.card_method ? selectedinfo.cardinfo.card_method : selectedinfo.sendinfo.card_method
+            headline = selectedinfo.cardinfo.card_headline
         }
         var balanceselect = $("input[name='balance']").prop('checked')
-        alert(balanceselect);
         var integralselect = $("input[name='grade']").prop('checked')
-        var discount = (allmoney * (1 - method)).toFixed(2)
+        var discount
+        if (headline) {
+            method = selectedinfo.cardinfo.card_method
+            if ((allmoney * 1) >= (headline * 1)) {
+                discount = method
+            } else {
+                discount = 0
+            }
+        } else {
+            discount = (allmoney * (1 - method)).toFixed(2)
+        }
         $('#minusdiscount').text(discount)
         allmoney -= discount
         if (integralselect) {
@@ -167,7 +181,10 @@
         } else {
             $('#minusbalance').text('0')
         }
+
         $('#needpay').text(allmoney)
+
+
     }
 
     function setvalue() {
