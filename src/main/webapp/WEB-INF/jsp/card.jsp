@@ -4,6 +4,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
+<style>
+    .selectedred {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: red;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: none;
+    }
+</style>
 <body class="active-body">
 <div class="nav-top">
     <a href="${pageContext.request.contextPath}/login/userCenter">
@@ -13,7 +26,7 @@
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item card-item" onclick="selectindex(${card.price})">
+        <div class="sendcard-item card-item">
             <span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:red;position:absolute;top:4px;right:4px"></span>
             <fmt:parseDate value="${card.expiration_date}" pattern="yyyy-MM-dd" var="expireDate"/>
             <fmt:formatDate value="${expireDate}" pattern="yyyyMMdd" var="expire"/>
@@ -61,14 +74,24 @@
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    $('.card-item').click(function () {
+        var json = {}
+        json.card_id = $(this).attr('data-id');
+        json.card_name = $(this).attr('data-name');
+        json.card_method = $(this).attr('data-method');
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.integral = false
+        selectedinfo.sendinfo = {}
+        selectedinfo.sendinfo.card_method = 1
+        selectedinfo.sendinfo.card_id = ''
+        selectedinfo.sendinfo.card_name = ''
+        selectedinfo.cardinfo = json
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        window.location.href = "code.html"
+    })
+
     var page = 2;
     $(document).ready(function () {
-        function selectindex(info) {
-            var moneyinfo = localStorage.moneyinfo
-            moneyinfo.benifitinfo = info
-            localStorage.moneyinfo = moneyinfo
-            window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
-        }
         $(window).scroll(function () {
             if ($(document).scrollTop() <= 0) {
                 //alert("滚动条已经到达顶部");

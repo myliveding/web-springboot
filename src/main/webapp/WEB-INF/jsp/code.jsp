@@ -15,26 +15,35 @@
     <input type="text" id="allmoney">
 </div>
 <div class="code-con">
-    <div class="flex-box code-item code-item-balance">
-        <img src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
-        <div class="code-item-txt">余额：<span>￥${info.balance}</span></div>
-        <div class="code-item-opreate"><input type="radio" name="pay" id="balance" value="1">
+    <div class="flex-box code-item code-item-balance"><img
+            src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
+        <div class="code-item-txt">余额：￥<span id="balancenum">${info.balance}</span></div>
+        <div class="code-item-opreate">
+            <input type="checkbox" name="balance" id="" value="1">
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
         <img src="${pageContext.request.contextPath}/images/icon_nav3.png" alt="">
-        <div class="code-item-txt">
-            积分：<span>${info.integral}</span>
+        <div class="code-item-txt">积分：<span id="intergralnum">${info.integral}</span>
         </div>
         <div class="code-item-opreate">
-            <input type="radio" name="pay" id="integral" value="2">
+            <input type="checkbox" name="grade" id="" value="2">
+        </div>
+    </div>
+    <div class="flex-box code-item code-item-discount" id="discount">
+        <img src="${pageContext.request.contextPath}/images/icon_code_discount.png" alt="">
+        <div class="code-item-txt">打折卡<span style="float:right;display:inline-block;padding-right:15px"></span></div>
+        <div class="code-item-opreate">
+            <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
         </div>
     </div>
     <div class="flex-box code-item code-item-ticket">
         <img src="${pageContext.request.contextPath}/images/icon_mine_ticket.png" alt="">
-        <div class="code-item-txt">优惠券<span style="float:right;display:inline-block;padding-right:15px"
-                                            id="showinfo"></span></div>
-        <div class="code-item-opreate" id="benifit" onclick="tocard()">
+        <div class="code-item-txt">
+            优惠券
+            <span style="float:right;display:inline-block;padding-right:15px" id="showinfo"></span>
+        </div>
+        <div class="code-item-opreate">
             <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
         </div>
     </div>
@@ -45,7 +54,6 @@
         <p>-优惠￥100</p>
     </div>
     <div class="code-number">共支付：<p><span>￥</span>299.00</p></div>
-    <div class="code-number">共支付：<p><span>￥</span>299.00</p></div>
 </div>
 <div class="self-btn pwd-btn">
     <button>确认支付</button>
@@ -53,37 +61,164 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
-    function tocard() {
-        var checkindex = $("input[name='pay']:checked").val()
-        var allmoney = $('#allmoney').val()
-        var moneyinfo
-        if (localStorage.moneyinfo) {
-            moneyinfo = localStorage.moneyinfo
+    $.fn.toggle = function (fn, fn2) {
+        var args = arguments, guid = fn.guid || $.guid++, i = 0,
+            toggle = function (event) {
+                var lastToggle = ( $._data(this, "lastToggle" + fn.guid) || 0 ) % i;
+                $._data(this, "lastToggle" + fn.guid, lastToggle + 1);
+                event.preventDefault();
+                return args[lastToggle].apply(this, arguments) || false;
+            };
+        toggle.guid = guid;
+        while (i < args.length) {
+            args[i++].guid = guid;
+        }
+        return this.click(toggle);
+    };
+</script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        // mousewheelControl : true,
+    });
+
+    setvalue()
+    setselectValue()
+    $("input[type='checkbox']").click(function (e) {
+        e.stopPropagation();
+    });
+    $('.code-item-balance').toggle(function () {
+            $(this).find("input[type='checkbox']").prop("checked", "checked");
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.balance = true
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        },
+        function () {
+            $(this).find("input[type='checkbox']").prop("checked", false);
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.balance = false
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        })
+    $('.code-item-integral').toggle(function () {
+            $(this).find("input[type='checkbox']").prop("checked", "checked");
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.integral = true
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            clearcard()
+            setselectValue()
+        },
+        function () {
+            $(this).find("input[type='checkbox']").prop("checked", false);
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.integral = false
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        })
+    $('#discount').click(function () {
+        window.location.href = "sendcard.html"
+    })
+    $('#ticket').click(function () {
+        window.location.href = "card.html"
+    })
+    $('#moneyinput').bind('input propertychange', function () {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.inputmoney = $(this).val()
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        if ($(this).val()) {
+            $('#showallmoney').text($(this).val())
         } else {
-            moneyinfo = {}
+            $('#showallmoney').text('0.00')
         }
-        moneyinfo.checkindex = checkindex
-        moneyinfo.allmoney = allmoney
-        localStorage.moneyinfo = moneyinfo
-        window.location.href = "${pageContext.request.contextPath}/login/gotoCouponsCard"
-    }
+        setselectValue()
+    });
 
-    function getStorage() {
-        if (localStorage.moneyinfo) {
-            var moneyinfo = localStorage.moneyinfo
-            $('#allmoney').val(moneyinfo.allmoney)
-            if (checkindex == 1) {
-                $('#balance').checked
+    function setselectValue() {
+        var allmoney = $('#moneyinput').val()
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        var method = 1
+        if (selectedinfo.cardinfo) {
+            method = selectedinfo.cardinfo.card_method < selectedinfo.sendinfo.card_method ? selectedinfo.cardinfo.card_method : selectedinfo.sendinfo.card_method
+        }
+        var balanceselect = $("input[name='balance']").prop('checked')
+        var integralselect = $("input[name='grade']").prop('checked')
+        var discount = (allmoney * (1 - method)).toFixed(2)
+        $('#minusdiscount').text(discount)
+        allmoney -= discount
+        if (integralselect) {
+            if ($('#intergralnum').text() > allmoney) {
+                $('#minusintegral').text(allmoney)
+                allmoney = 0
             } else {
-                $('#integral').checked
+                $('#minusintegral').text($('#intergralnum').text())
+                allmoney -= ($('#intergralnum').text() * 1)
             }
-            $('#showinfo').text(moneyinfo.benifitinfo)
+        } else {
+            $('#minusintegral').text('0')
+        }
+
+        if (balanceselect) {
+            if ($('#balancenum').text() > allmoney) {
+                $('#minusbalance').text(allmoney)
+                allmoney = 0
+            } else {
+                $('#minusbalance').text($('#balancenum').text())
+                allmoney -= ($('#balancenum').text() * 1)
+            }
+        } else {
+            $('#minusbalance').text('0')
+        }
+
+        $('#needpay').text(allmoney)
+
+
+    }
+
+    function setvalue() {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        if (selectedinfo.cardinfo) {
+            $('#moneyinput').val(selectedinfo.inputmoney)
+            $('#ticket span').text(selectedinfo.cardinfo.card_name)
+            $('#discount span').text(selectedinfo.sendinfo.card_name)
+            if (selectedinfo.inputmoney) {
+                $('#showallmoney').text(selectedinfo.inputmoney)
+            } else {
+                $('#showallmoney').text('0.00')
+            }
+        }
+        if (selectedinfo.integral) {
+            $('.code-item-integral').find("input[type='checkbox']").prop("checked", "checked");
+        } else {
+            $('.code-item-integral').find("input[type='checkbox']").prop("checked", false);
+        }
+        if (selectedinfo.balance) {
+            $('.code-item-balance').find("input[type='checkbox']").prop("checked", "checked");
+        } else {
+            $('.code-item-balance').find("input[type='checkbox']").prop("checked", false);
         }
     }
 
-    getStorage();
+    function clearcard() {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.cardinfo = {}
+        selectedinfo.cardinfo.card_method = 1
+        selectedinfo.cardinfo.card_id = ''
+        selectedinfo.cardinfo.card_name = ''
+        selectedinfo.sendinfo = {}
+        selectedinfo.sendinfo.card_method = 1
+        selectedinfo.sendinfo.card_id = ''
+        selectedinfo.sendinfo.card_name = ''
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        setvalue()
+    }
+</script>
 
+
+<script>
     var payAmt = 0;
+
     function isWeixnOpen() {
         var ua = navigator.userAgent.toLowerCase();
         if (ua.match(/MicroMessenger/i) == "micromessenger") {

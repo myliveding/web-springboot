@@ -12,7 +12,8 @@
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item">
+        <div class="sendcard-item" data-id="${card.id}" data-name="${card.discount}折"
+             data-method="${card.discount}/100">
             <input type="hidden" class="room_type_id" value="${card.id}"/>
             <img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">
             <div class="flex-box sendcard-txt">
@@ -54,11 +55,12 @@
                                 page++;
                                 var html = ''
                                 for (var i = 0; i < d.data.length - 1; i++) {
-                                    html += '<div class="sendcard-item">'
+                                    html += '<div class="sendcard-item" data-id="' + d.data[i].id + '" data-name="' +
+                                        d.data[i].discount + '折" data-method="' + d.data[i].discount / 100 + '">'
                                     html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
                                     html += '<div class="flex-box sendcard-txt">'
                                     html += '<img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">'
-                                    html += '<p>全场消费满' + d.data[i] + '元<span>即可使用</span></p>'
+                                    html += '<p>全场消费满' + d.data[i].id + '元<span>即可使用</span></p>'
                                     html += '<div class="sendcard-number sendcard-txt-green">' + d.data[i].discount + '<span>折</span>'
                                     html += '</div>'
                                     if (d.data[i].status = 1) {
@@ -79,6 +81,22 @@
             }
         });
     });
+
+    $('.sendcard-item').click(function () {
+        var json = {}
+        json.card_id = $(this).attr('data-id');
+        json.card_name = $(this).attr('data-name');
+        json.card_method = $(this).attr('data-method');
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.integral = false
+        selectedinfo.cardinfo = {}
+        selectedinfo.cardinfo.card_method = 1
+        selectedinfo.cardinfo.card_id = ''
+        selectedinfo.cardinfo.card_name = ''
+        selectedinfo.sendinfo = json
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        window.location.href = "code.html"
+    })
 
     //微信菜单功能
     wx.config({
