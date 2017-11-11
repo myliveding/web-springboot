@@ -45,4 +45,16 @@ public interface WechatService {
                                          String keyword3Str, String keyword4Str, String keyword5Str, String openId, String remarkStr, String url);
 
 
+    /**
+     * 不需要用户支付其他金钱的购买
+     *
+     * @param money
+     * @param balance
+     * @param integral
+     * @param discountCardId
+     * @param couponId
+     * @return
+     */
+    void balancePay(String money, String balance, String integral, String discountCardId, String couponId, HttpServletRequest request);
+
 }

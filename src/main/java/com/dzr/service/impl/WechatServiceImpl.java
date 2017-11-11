@@ -11,7 +11,6 @@ import com.dzr.util.DateUtils;
 import com.dzr.util.ParseXmlUtil;
 import com.dzr.util.SignUtil;
 import com.dzr.util.StringUtils;
-import com.dzr.weixin.common.MD5;
 import com.dzr.weixin.common.ReportReqData;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.Annotations;
@@ -305,6 +304,63 @@ public class WechatServiceImpl implements WechatService {
     }
 
     /**
+     * 不需要用户支付其他金钱的购买
+     *
+     * @param money
+     * @param balance
+     * @param integral
+     * @param discountCardId
+     * @param couponId
+     * @return
+     */
+    public void balancePay(String money, String balance, String integral, String discountCardId, String couponId, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Object openidObj = session.getAttribute("openid");
+        String openid = openidObj.toString();
+        logger.info("支付调用时获取的openid为：" + openid);
+        if (null == openid || "".equals(openid)) {
+            throw new ApiException(10008, "请在微信环境下支付");
+        }
+        if (StringUtils.isEmpty(money)) {
+            throw new ApiException(10007, "购买金额");
+        }
+
+        String[] arr;
+        String mystr;
+        StringBuffer buffer = new StringBuffer();
+        List<String> list = new ArrayList<>();
+        list.add("open_id" + openid);
+        buffer.append("open_id=").append(openid);
+        list.add("money" + money);
+        buffer.append("money=").append(money);
+        if (StringUtils.isNotEmpty(balance)) {
+            list.add("birthday" + balance);
+            buffer.append("&birthday=").append(balance);
+        }
+        if (StringUtils.isNotEmpty(integral)) {
+            list.add("gender" + integral);
+            buffer.append("&gender=").append(integral);
+        }
+        if (StringUtils.isNotEmpty(discountCardId)) {
+            list.add("discount_card_id" + discountCardId);
+            buffer.append("&discount_card_id=").append(discountCardId);
+        }
+        if (StringUtils.isNotEmpty(couponId)) {
+            list.add("coupon_id" + couponId);
+            buffer.append("&coupon_id=").append(couponId);
+        }
+        mystr = buffer.toString();
+        arr = list.toArray(new String[list.size()]);
+
+        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_SUC, mystr, arr));
+        if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
+        } else {
+            throw new ApiException(10008, resultStr.getString("error_msg"));
+        }
+    }
+
+    /**
      * 微信支付与支付调用方法
      *
      * @param req
@@ -328,8 +384,7 @@ public class WechatServiceImpl implements WechatService {
             //商品价格
             double orderAmt = Double.valueOf(req.getParameter("price"));
             String payAmt = new java.text.DecimalFormat("#0.00").format(orderAmt);
-            logger.info("ordermoney（元）:" + payAmt);
-            model.addAttribute("orderMoney", payAmt);
+            logger.info("sumAmt（元）:" + payAmt);
 
             //支付来源，1代表充值，2扫码付款
             String type = req.getParameter("type");
@@ -337,12 +392,39 @@ public class WechatServiceImpl implements WechatService {
                 req.setAttribute("error", "支付来源不能为空");
                 return "error";
             }
+
             model.addAttribute("type", type);
             model.addAttribute("sumAmt", payAmt);
             if (!type.equals("1")) {
-                model.addAttribute("balanceAmt", payAmt);
-                model.addAttribute("integral", payAmt);
-                model.addAttribute("discount", payAmt);
+                String money = req.getParameter("money");
+                String balance = req.getParameter("balance");
+                String integral = req.getParameter("integral");
+                String discountCardId = req.getParameter("discountCardId");
+                String couponId = req.getParameter("couponId");
+                String couponDesc = req.getParameter("couponDesc");
+
+                model.addAttribute("balanceAmt", balance);
+                model.addAttribute("integral", integral);
+                model.addAttribute("discount", couponDesc);
+
+                StringBuffer tempAttch = new StringBuffer();
+                if (StringUtils.isNotEmpty(money)) {
+                    tempAttch.append("&money=").append(money);
+                }
+                if (StringUtils.isNotEmpty(balance)) {
+                    tempAttch.append("&balance=").append(balance);
+                }
+                if (StringUtils.isNotEmpty(integral)) {
+                    tempAttch.append("&integral=").append(integral);
+                }
+                if (StringUtils.isNotEmpty(discountCardId)) {
+                    tempAttch.append("&discount_card_id=").append(discountCardId);
+                }
+                if (StringUtils.isNotEmpty(couponId)) {
+                    tempAttch.append("&coupon_id=").append(couponId);
+                }
+                //拼接自定义参数
+                productId = tempAttch.toString();
             }
 
             if (StringUtils.isEmpty(payAmt)) {
@@ -460,14 +542,23 @@ public class WechatServiceImpl implements WechatService {
                 logger.info("订单金额payAmt:" + thirdPayAmt);
                 logger.info("支付回调用时获取的openid为：" + openid);
 
-
                 //订单业务
                 if (StringUtils.isNotEmpty(orderNo)) {
+                    StringBuffer mystr = new StringBuffer();
                     if (!"".equals(openid)) {
-                        String[] arr = new String[]{"open_id" + openid, "member_recharge_id" + productId, "serial_no" + serialNo};
-                        String mystr = "open_id=" + openid + "&member_recharge_id=" + productId + "&serial_no=" + serialNo;
-
-                        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECHARGE_SUC, mystr, arr));
+                        mystr.append("open_id=").append(openid);
+                        if (StringUtils.isNotEmpty(serialNo)) {
+                            mystr.append("&serial_no=" + serialNo);
+                        }
+                        //商品ID 或者是一系列参数
+                        if (StringUtils.isNotEmpty(productId)) {
+                            if (productId.contains("&")) {
+                                mystr.append(productId);
+                            } else {
+                                mystr.append("&member_recharge_id=" + productId);
+                            }
+                        }
+                        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECHARGE_SUC, mystr.toString(), null));
                         if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
                             logger.info("微信支付确认订单完成:" + orderNo);
                             String resXml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml> ";

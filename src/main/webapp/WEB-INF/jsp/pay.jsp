@@ -13,7 +13,7 @@
             <p>-优惠￥${discount}</p>
         </c:if>
     </div>
-    <div class="code-number">共支付：<p><span>￥</span>${orderMoney}</p></div>
+    <div class="code-number">共支付：<p><span>￥</span>${sumAmt}</p></div>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.7.2.js"></script>
 <script type="text/javascript">

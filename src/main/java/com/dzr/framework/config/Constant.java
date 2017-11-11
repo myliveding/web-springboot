@@ -67,6 +67,8 @@ public final class Constant {
     public static final String RECEIVE_DISCOUNT_CARD = "/api/receive_discount_card";
     //扫码付款信息接口
     public static final String SCAN_PAY_INFO = "/api/get_pay_info";
+    //扫码回调
+    public static final String SCAN_PAY_SUC = "/api/pay_suc";
 
 
     /**

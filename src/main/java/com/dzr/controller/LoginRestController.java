@@ -1,15 +1,14 @@
 package com.dzr.controller;
 
 import com.dzr.framework.base.BaseController;
-import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
-import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.LoginService;
-import net.sf.json.JSONObject;
+import com.dzr.service.WechatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +32,8 @@ public class LoginRestController extends BaseController {
     BaseInfoService baseInfoService;
     @Autowired
     LoginService loginService;
+    @Autowired
+    WechatService wechatService;
 
     /**
      * 重置密码
@@ -93,6 +94,19 @@ public class LoginRestController extends BaseController {
     public Map<String, Object> receiveCard(Model model, HttpServletRequest request) {
         loginService.receiveCard(model, request);
         return successResult("receiveCard");
+    }
+
+
+    @RequestMapping("/balancePay")
+    public Map<String, Object> balancePay(@RequestParam(value = "money") String money,
+                                          @RequestParam(value = "balance", required = false) String balance,
+                                          @RequestParam(value = "integral", required = false) String integral,
+                                          @RequestParam(value = "discountCardId", required = false) String discountCardId,
+                                          @RequestParam(value = "couponId", required = false) String couponId,
+                                          HttpServletRequest request) {
+
+        wechatService.balancePay(money, balance, integral, discountCardId, couponId, request);
+        return successResult("balancePay");
     }
 
 }
