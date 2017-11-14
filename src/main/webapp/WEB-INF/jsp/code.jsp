@@ -4,6 +4,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/framework7.ios.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/framework7.js">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/code.js">
 <body class="active-body">
 <div class="nav-top">
     <a href="${pageContext.request.contextPath}/login/index">
@@ -60,6 +63,26 @@
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
+
+<script type="text/template7" id="refundmonth">
+    {{#each this}}
+    <li>
+        <label class="label-checkbox item-content">
+            <div class="item-inner">
+                <div class="item-title label">{{month}}</div>
+                <div class="item-after">
+                    <input type="radio" class="refundmonth-radio" name="radio" value="{{insuranceMonth}}" {{#if
+                           checked}}checked{{/if}}>
+                    <div class="item-media">
+                        <i class="icon icon-form-checkbox"></i>
+                    </div>
+                </div>
+            </div>
+
+        </label>
+    </li>
+    {{/each}}
+</script>
 
 <script>
     function isWeixnOpen() {
