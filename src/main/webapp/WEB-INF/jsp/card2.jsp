@@ -1,20 +1,34 @@
 <%@ page language="java" pageEncoding="utf-8" %>
+<%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
-
+<style>
+    .selectedred {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: red;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: none;
+    }
+</style>
 <body class="active-body">
 <div class="nav-top">
-    <a href="${pageContext.request.contextPath}/login/userCenter">
+    <a href="javascript:history.back(-1)">
         <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
     </a>
     我的优惠券
 </div>
 <div class="sendcard-container">
     <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item card-item">
+        <div class="sendcard-item card-item" data-id="102" data-name="满200减100" data-method="100" data-headline="200">
+            <!-- method:减多少元   headline：满多少 -->
             <span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:red;position:absolute;top:4px;right:4px"></span>
             <fmt:parseDate value="${card.expiration_date}" pattern="yyyy-MM-dd" var="expireDate"/>
             <fmt:formatDate value="${expireDate}" pattern="yyyyMMdd" var="expire"/>
@@ -76,7 +90,7 @@
         selectedinfo.sendinfo.card_name = ''
         selectedinfo.cardinfo = json
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
-        window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
+        window.history.go(-1);
     })
 
     var page = 2;

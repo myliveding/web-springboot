@@ -12,14 +12,14 @@
 </div>
 <div class="flex-box code-payment">
     <span>金额</span>
-    <input type="text" id="allmoney">
+    <input type="text" id="moneyinput">
 </div>
 <div class="code-con">
     <div class="flex-box code-item code-item-balance"><img
             src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
         <div class="code-item-txt">余额：￥<span id="balancenum">${info.balance}</span></div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="balance" id="" value="1">
+            <input type="checkbox" name="balance" id="" value="1" disabled>
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
@@ -27,7 +27,7 @@
         <div class="code-item-txt">积分：<span id="intergralnum">${info.integral}</span>
         </div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="grade" id="" value="2">
+            <input type="checkbox" name="grade" id="" value="2" disabled>
         </div>
     </div>
     <div class="flex-box code-item code-item-discount" id="discount">
@@ -53,13 +53,34 @@
         <p>-积分100</p>
         <p>-优惠￥100</p>
     </div>
-    <div class="code-number">共支付：<p><span>￥</span>299.00</p></div>
+    <div class="code-number">共支付：<p><span>￥</span>0.00</p></div>
 </div>
 <div class="self-btn pwd-btn">
     <button>确认支付</button>
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
+<script type="text/template7" id="card">
+    {{#each this}}
+    <li>
+        <label class="label-checkbox item-content">
+            <div class="item-inner">
+                <div class="item-title label">{{month}}</div>
+                <div class="item-after">
+                    <input type="radio" class="refundmonth-radio" name="radio" value="{{insuranceMonth}}" {{#if
+                           checked}}checked{{/if}}>
+                    <div class="item-media">
+                        <i class="icon icon-form-checkbox"></i>
+                    </div>
+                </div>
+            </div>
+
+        </label>
+    </li>
+    {{/each}}
+</script>
+
+
 <script>
     $.fn.toggle = function (fn, fn2) {
         var args = arguments, guid = fn.guid || $.guid++, i = 0,
@@ -77,6 +98,7 @@
     };
 </script>
 <script>
+
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true,
@@ -85,9 +107,9 @@
 
     setvalue()
     setselectValue()
-    $("input[type='checkbox']").click(function (e) {
-        e.stopPropagation();
-    });
+    //     $("input[type='checkbox']").click(function(e){
+    //     e.stopPropagation();
+    // });
     $('.code-item-balance').toggle(function () {
             $(this).find("input[type='checkbox']").prop("checked", "checked");
             var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
@@ -117,12 +139,14 @@
             localStorage.selectedinfo = JSON.stringify(selectedinfo)
             setselectValue()
         })
+
     $('#discount').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/login/sendcard"
+        window.location.href = "${pageContext.request.contextPath}/jsp/sendCard2.jsp"
     })
     $('#ticket').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/login/card"
+        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
     })
+
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         selectedinfo.inputmoney = $(this).val()
@@ -224,6 +248,8 @@
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
         setvalue()
     }
+
+
 </script>
 
 
