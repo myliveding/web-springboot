@@ -144,7 +144,7 @@
         window.location.href = "${pageContext.request.contextPath}/jsp/sendCard2.jsp"
     })
     $('#ticket').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
+        window.location.href = "card2.jsp"
     })
 
     $('#moneyinput').bind('input propertychange', function () {

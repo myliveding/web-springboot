@@ -1,0 +1,43 @@
+spring:
+    application:
+        name: springboot
+    profiles:
+        active: pro
+    #session store type使用来存放session的存储方式，目前Spring boot中只支持redis方式
+    #由于本应用暂无需将session放入redis的需求，故这里就可以将session store type设置为none
+    session:
+        store-type: none
+
+    # HTTP ENCODING
+    http:
+        encoding.charset: UTF-8
+        encoding.enable: true
+        encoding.force: true
+
+    #jsp 页面支持配置
+    mvc:
+      view:
+        prefix: /jsp/
+        suffix: .jsp
+
+    #h5页面 templates
+#    thymeleaf:
+#      cache: false
+#      encoding: UTF-8
+#      mode: HTML5
+#      check-template-location: true
+#      prefix: classpath:/templates/
+#      suffix: .html
+#      content-type: text/html
+
+server:
+    port: 9090
+    #for error page
+    error:
+      whitelabel:
+        enabled: false
+
+logging:
+    level:
+        com.dzr: DEBUG
+    file: /home/wwwlogs/${spring.application.name}.log

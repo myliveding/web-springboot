@@ -9,7 +9,7 @@ target/
 .springBeans
 
 ### IntelliJ IDEA ###
-*.iws
+*.iwss
 *.iml
 *.ipr
 mvnw
@@ -26,4 +26,4 @@ nbdist/
 .mvn/
 
 #配置文件不提交
-application*.yml
+application-*.yml
