@@ -10,9 +10,9 @@
     </a>
 </div>
 <body class="active-body">
-<div class="nav-top">${info.title}</div>
+<div class="nav-top">${title}</div>
 <div class="vipqy-box">
-    ${info.service_agreement}
+    ${info}
 </div>
 <script>
 </script>

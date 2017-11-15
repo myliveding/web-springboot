@@ -60,8 +60,22 @@
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
-
-
+<script>
+    $.fn.toggle = function (fn, fn2) {
+        var args = arguments, guid = fn.guid || $.guid++, i = 0,
+            toggle = function (event) {
+                var lastToggle = ( $._data(this, "lastToggle" + fn.guid) || 0 ) % i;
+                $._data(this, "lastToggle" + fn.guid, lastToggle + 1);
+                event.preventDefault();
+                return args[lastToggle].apply(this, arguments) || false;
+            };
+        toggle.guid = guid;
+        while (i < args.length) {
+            args[i++].guid = guid;
+        }
+        return this.click(toggle);
+    };
+</script>
 <script>
     $.fn.toggle = function (fn, fn2) {
         var args = arguments, guid = fn.guid || $.guid++, i = 0,
@@ -88,7 +102,9 @@
 
     setvalue()
     setselectValue()
-
+    //     $("input[type='checkbox']").click(function(e){
+    //     e.stopPropagation();
+    // });
     $('.code-item-balance').toggle(function () {
             $(this).find("input[type='checkbox']").prop("checked", "checked");
             var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
@@ -118,14 +134,12 @@
             localStorage.selectedinfo = JSON.stringify(selectedinfo)
             setselectValue()
         })
-
     $('#discount').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/jsp/sendCard2.jsp"
+        window.location.href = "${pageContext.request.contextPath}/login/sendCard2"
     })
     $('#ticket').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
+        window.location.href = "${pageContext.request.contextPath}/login/card2"
     })
-
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         selectedinfo.inputmoney = $(this).val()
@@ -142,6 +156,7 @@
         var allmoney = $('#moneyinput').val()
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         var method = 1
+        var headline
         if (selectedinfo.cardinfo) {
             method = selectedinfo.cardinfo.card_method < selectedinfo.sendinfo.card_method ? selectedinfo.cardinfo.card_method : selectedinfo.sendinfo.card_method
             headline = selectedinfo.cardinfo.card_headline

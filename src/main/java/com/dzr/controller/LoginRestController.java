@@ -109,4 +109,12 @@ public class LoginRestController extends BaseController {
         return successResult("balancePay");
     }
 
+    //进入完善资料页面
+    @RequestMapping("/savePerfectInfo")
+    public Map<String, Object> savePerfectInfo(String name, String sex, String birth, String wechat, String adress, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        baseInfoService.savePerfectInfo(userId, name, sex, birth, wechat, adress);
+        return successResult("savePerfectInfo");
+    }
+
 }

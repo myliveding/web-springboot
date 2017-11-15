@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 /**
  * @Description 需要校验登录信息的接口
@@ -54,14 +53,6 @@ public class LoginController extends BaseController {
             model.addAttribute("backUrl", backUrl);
         }
         return "fillself";
-    }
-
-    //进入完善资料页面
-    @RequestMapping("/savePerfectInfo")
-    public Map<String, Object> savePerfectInfo(String name, String sex, String birth, String wechat, String adress, HttpServletRequest request) {
-        String userId = (String) request.getSession().getAttribute("userId");
-        baseInfoService.savePerfectInfo(userId, name, sex, birth, wechat, adress);
-        return successResult("savePerfectInfo");
     }
 
     /**
@@ -309,11 +300,16 @@ public class LoginController extends BaseController {
 
         model.addAttribute("info", baseInfoService.getSystemInfo(type));
         if (!"".equals(type)) {
-            if ("2".equals(type)) {
+            if ("1".equals(type)) {
+                model.addAttribute("title", "会员卡封面");
+            } else if ("2".equals(type)) {
+                model.addAttribute("title", "服务协议");
                 model.addAttribute("backUrl", "");
             } else if ("3".equals(type)) {
+                model.addAttribute("title", "会员权益");
                 model.addAttribute("backUrl", "login/userCenter");
             } else if ("4".equals(type)) {
+                model.addAttribute("title", "积分规则");
                 model.addAttribute("backUrl", "login/userCenter");
             }
         }

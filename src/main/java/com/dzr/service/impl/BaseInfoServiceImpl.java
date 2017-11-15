@@ -431,7 +431,7 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      * @param type 默认为全部 1会员卡封面 2服务协议 3会员权益 4积分规则
      * @return
      */
-    public JSONObject getSystemInfo(String type) {
+    public String getSystemInfo(String type) {
         if ("".equals(type)) {
             throw new ApiException(10007, "类型");
         }
@@ -439,12 +439,25 @@ public class BaseInfoServiceImpl implements BaseInfoService {
         String[] arr = new String[]{"type" + type};
         String mystr = "type=" + type;
         JSONObject info = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SYSTEM_SETTING, mystr, arr));
+        String res = "";
         if (info.getInt("error_code") == 0) {
             info = JSONObject.fromObject(info.getString("result"));
+            if (type.equals("1")) {
+                res = info.getString("card_image");
+            }
+            if (type.equals("2")) {
+                res = info.getString("service_agreement");
+            }
+            if (type.equals("3")) {
+                res = info.getString("member_rights");
+            }
+            if (type.equals("4")) {
+                res = info.getString("integral_rule");
+            }
         } else {
             throw new ApiException(10008, info.getString("error_msg"));
         }
-        return info;
+        return res;
     }
 
     /**

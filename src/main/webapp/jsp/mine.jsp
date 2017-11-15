@@ -11,7 +11,7 @@
         <div class="mine-vip-bottom">
             <%--<div class="fl mine-vip-number">NO.6868668</div>--%>
             <div class="fr mine-vip-level">
-                <img src="${info.card_image}" alt="">
+                <img src="${info}" alt="">
                 <span></span>
             </div>
         </div>

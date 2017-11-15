@@ -65,9 +65,8 @@
         var wechat = $('.wechat').val();
         var birth = $('.birth').val();
         var address = $('.address').val();
-        return false;
         $.ajax({
-            'url': "${pageContext.request.contextPath}/login/savePerfectInfo",
+            'url': "${pageContext.request.contextPath}/rest/savePerfectInfo",
             'type': 'post',
             'dataType': 'json',
             'data': {
