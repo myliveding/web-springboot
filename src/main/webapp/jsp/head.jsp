@@ -9,17 +9,18 @@
 <script type="text/javascript">
     function font(w) {
         var w = w || 640,
-                docEl = document.documentElement,
-                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
-                recalc = function () {
-                    var clientWidth = docEl.clientWidth;
-                    if (!clientWidth) return;
-                    docEl.style.fontSize = 100 * (clientWidth / w) + 'px';
-                };
+            docEl = document.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = 100 * (clientWidth / w) + 'px';
+            };
         if (!document.addEventListener) return;
         window.addEventListener(resizeEvt, recalc, false);
         document.addEventListener('DOMContentLoaded', recalc, false);
     }
+
     font();
 
     //隐藏微信菜单

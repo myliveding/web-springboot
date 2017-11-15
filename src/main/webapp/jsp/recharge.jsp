@@ -27,7 +27,7 @@
         <div class="consumption-top-txt">
             <span>减少</span>${it.reduce}
             <span>增加</span>${it.increase}
-    </div>
+        </div>
     </div>
     <c:forEach var="t" items="${it.record}">
     <div class="flex-box consumption-item recharge-item">
@@ -46,7 +46,7 @@
     </div>
     </c:forEach>
     </c:forEach>
-<div class="cb20"></div>
-<jsp:include page="foot.jsp" flush="true"/>
+    <div class="cb20"></div>
+    <jsp:include page="foot.jsp" flush="true"/>
 </body>
 </html>

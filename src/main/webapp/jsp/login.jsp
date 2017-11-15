@@ -144,6 +144,7 @@
     }
 
     var backUrl = "${backUrl}";
+
     //注册
     function register() {
         //推广人

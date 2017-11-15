@@ -65,6 +65,7 @@
         });
     });
     var backUrl = "${backUrl}";
+
     function save() {
         var name = $('.name').val();
         var birth = $('.birth').val();

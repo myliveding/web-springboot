@@ -44,7 +44,7 @@
     </div>
     </c:forEach>
     </c:forEach>
-<div class="cb20"></div>
-<jsp:include page="foot.jsp" flush="true"/>
+    <div class="cb20"></div>
+    <jsp:include page="foot.jsp" flush="true"/>
 </body>
 </html>
