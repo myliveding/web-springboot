@@ -54,10 +54,10 @@ public class ErrorPageController implements ErrorController {
     }
 
 
-//    @RequestMapping("/error")
-//    public String handleError() {
-//        return "error";
-//    }
+    @RequestMapping("/error")
+    public String handleError() {
+        return "error";
+    }
 
     @Override
     public String getErrorPath() {
