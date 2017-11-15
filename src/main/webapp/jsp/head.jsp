@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/swiper.min.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css?20171028">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css?20171115">
 <title>臻品珠宝</title>
 
 <script type="text/javascript">

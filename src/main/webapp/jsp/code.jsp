@@ -48,10 +48,10 @@
         </div>
     </div>
     <div class="code-info">
-        <p>总金额￥1000</p>
-        <p>-余额￥100</p>
-        <p>-积分100</p>
-        <p>-优惠￥100</p>
+        <p>总金额￥<span id="showallmoney">0</span></p>
+        <p>-余额￥<span id="minusbalance">0</span></p>
+        <p>-积分￥<span id="minusintegral">0</span></p>
+        <p>-优惠￥<span id="minusdiscount">0</span></p>
     </div>
     <div class="code-number">共支付：<p><span>￥</span>0.00</p></div>
 </div>
@@ -93,6 +93,10 @@
     };
 </script>
 <script>
+    //优惠券数组
+    var coupons = "${info.coupons}";
+    //卡券数组
+    var cards = "${info.discount_cards}";
 
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
@@ -135,10 +139,10 @@
             setselectValue()
         })
     $('#discount').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/login/sendCard2"
+        window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp"
     })
     $('#ticket').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/login/card2"
+        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
     })
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
