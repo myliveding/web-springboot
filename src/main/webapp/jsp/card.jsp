@@ -62,23 +62,6 @@
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
-    $('.card-item').click(function () {
-        var json = {}
-        json.card_id = $(this).attr('data-id');
-        json.card_name = $(this).attr('data-name');
-        json.card_method = $(this).attr('data-method');
-        json.card_headline = $(this).attr('data-headline');
-        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
-        selectedinfo.integral = false
-        selectedinfo.sendinfo = {}
-        selectedinfo.sendinfo.card_method = 1
-        selectedinfo.sendinfo.card_id = ''
-        selectedinfo.sendinfo.card_name = ''
-        selectedinfo.cardinfo = json
-        localStorage.selectedinfo = JSON.stringify(selectedinfo)
-        window.location.href = "${pageContext.request.contextPath}/login/gotoCode"
-    })
-
     var page = 2;
     $(document).ready(function () {
         $(window).scroll(function () {

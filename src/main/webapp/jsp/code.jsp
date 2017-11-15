@@ -60,25 +60,6 @@
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
-<script type="text/template7" id="card">
-    {{#each this}}
-    <li>
-        <label class="label-checkbox item-content">
-            <div class="item-inner">
-                <div class="item-title label">{{month}}</div>
-                <div class="item-after">
-                    <input type="radio" class="refundmonth-radio" name="radio" value="{{insuranceMonth}}" {{#if
-                           checked}}checked{{/if}}>
-                    <div class="item-media">
-                        <i class="icon icon-form-checkbox"></i>
-                    </div>
-                </div>
-            </div>
-
-        </label>
-    </li>
-    {{/each}}
-</script>
 
 
 <script>
@@ -107,9 +88,7 @@
 
     setvalue()
     setselectValue()
-    //     $("input[type='checkbox']").click(function(e){
-    //     e.stopPropagation();
-    // });
+
     $('.code-item-balance').toggle(function () {
             $(this).find("input[type='checkbox']").prop("checked", "checked");
             var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
@@ -144,7 +123,7 @@
         window.location.href = "${pageContext.request.contextPath}/jsp/sendCard2.jsp"
     })
     $('#ticket').click(function () {
-        window.location.href = "card2.jsp"
+        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
     })
 
     $('#moneyinput').bind('input propertychange', function () {

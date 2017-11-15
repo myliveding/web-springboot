@@ -77,7 +77,7 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 
-<script type="text/template7" id="refundreason">
+<script type="text/template7" id="select">
     {{#each this}}
     <li>
         <label class="label-checkbox item-content">
