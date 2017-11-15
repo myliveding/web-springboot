@@ -50,6 +50,19 @@
             <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
         </div>
     </div>
+    <div class="flex-box code-item code-item-ticket">
+        <a href="${pageContext.request.contextPath}/jsp/select.jsp" class="item-link">
+            <div class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">退款原因 <span class="prompt-red">*</span></div>
+                    <div class="item-after refund-reason-select">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
     <div class="code-info">
         <p>总金额￥1000</p>
         <p>-余额￥100</p>
@@ -64,15 +77,14 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 
-<script type="text/template7" id="refundmonth">
+<script type="text/template7" id="refundreason">
     {{#each this}}
     <li>
         <label class="label-checkbox item-content">
             <div class="item-inner">
-                <div class="item-title label">{{month}}</div>
+                <div class="item-title label">{{paramValue}}</div>
                 <div class="item-after">
-                    <input type="radio" class="refundmonth-radio" name="radio" value="{{insuranceMonth}}" {{#if
-                           checked}}checked{{/if}}>
+                    <input type="radio" class="select-reason-radio" name="radio" value="{{id}}">
                     <div class="item-media">
                         <i class="icon icon-form-checkbox"></i>
                     </div>

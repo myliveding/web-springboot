@@ -42,8 +42,8 @@ public class ErrorPageController implements ErrorController {
         logger.info("backUrl--" + backUrl);
         if (null != backUrl && StringUtils.isNotEmpty(backUrl)) {
             model.addAttribute("backUrl", backUrl);
-            // /login/receiveCardPage?telphone=11111&cardId=99
-            //substring 从0开始计数 左闭右开
+//             /login/receiveCardPage?telphone=11111&cardId=99
+//            substring 从0开始计数 左闭右开
             model.addAttribute("tel", backUrl.substring(32, 43));
         }
         if (null == userId || "".equals(userId)) {
@@ -54,10 +54,10 @@ public class ErrorPageController implements ErrorController {
     }
 
 
-    @RequestMapping("/error")
-    public String handleError() {
-        return "error";
-    }
+//    @RequestMapping("/error")
+//    public String handleError() {
+//        return "error";
+//    }
 
     @Override
     public String getErrorPath() {
