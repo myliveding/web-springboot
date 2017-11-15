@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-选择退款原因
+
 <div class="navbar">
     <div class="navbar-inner">
         <div class="left sliding">
@@ -21,7 +21,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    alert(11);
-</script>
