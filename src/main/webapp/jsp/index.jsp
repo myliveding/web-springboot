@@ -121,7 +121,7 @@
             'onMenuShareAppMessage'
         ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });
-
+    //https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5OTEwODM2Ng==&scene=110#wechat_redirect
     var shareUrl = "${shareUrl}";
     wx.ready(function () {
         var wxData = {
