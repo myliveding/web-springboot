@@ -4,9 +4,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/framework7.ios.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/js/framework7.js">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/js/code.js">
 <body class="active-body">
 <div class="nav-top">
     <a href="${pageContext.request.contextPath}/login/index">
@@ -50,19 +47,6 @@
             <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
         </div>
     </div>
-    <div class="flex-box code-item code-item-ticket">
-        <a href="${pageContext.request.contextPath}/jsp/select.jsp" class="item-link">
-            <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">退款原因 <span class="prompt-red">*</span></div>
-                    <div class="item-after refund-reason-select">
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-
     <div class="code-info">
         <p>总金额￥1000</p>
         <p>-余额￥100</p>
@@ -76,15 +60,15 @@
 </div>
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
-
-<script type="text/template7" id="refundreason">
+<script type="text/template7" id="card">
     {{#each this}}
     <li>
         <label class="label-checkbox item-content">
             <div class="item-inner">
-                <div class="item-title label">{{paramValue}}</div>
+                <div class="item-title label">{{month}}</div>
                 <div class="item-after">
-                    <input type="radio" class="select-reason-radio" name="radio" value="{{id}}">
+                    <input type="radio" class="refundmonth-radio" name="radio" value="{{insuranceMonth}}" {{#if
+                           checked}}checked{{/if}}>
                     <div class="item-media">
                         <i class="icon icon-form-checkbox"></i>
                     </div>
@@ -95,6 +79,179 @@
     </li>
     {{/each}}
 </script>
+
+
+<script>
+    $.fn.toggle = function (fn, fn2) {
+        var args = arguments, guid = fn.guid || $.guid++, i = 0,
+            toggle = function (event) {
+                var lastToggle = ( $._data(this, "lastToggle" + fn.guid) || 0 ) % i;
+                $._data(this, "lastToggle" + fn.guid, lastToggle + 1);
+                event.preventDefault();
+                return args[lastToggle].apply(this, arguments) || false;
+            };
+        toggle.guid = guid;
+        while (i < args.length) {
+            args[i++].guid = guid;
+        }
+        return this.click(toggle);
+    };
+</script>
+<script>
+
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        // mousewheelControl : true,
+    });
+
+    setvalue()
+    setselectValue()
+    //     $("input[type='checkbox']").click(function(e){
+    //     e.stopPropagation();
+    // });
+    $('.code-item-balance').toggle(function () {
+            $(this).find("input[type='checkbox']").prop("checked", "checked");
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.balance = true
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        },
+        function () {
+            $(this).find("input[type='checkbox']").prop("checked", false);
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.balance = false
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        })
+    $('.code-item-integral').toggle(function () {
+            $(this).find("input[type='checkbox']").prop("checked", "checked");
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.integral = true
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            clearcard()
+            setselectValue()
+        },
+        function () {
+            $(this).find("input[type='checkbox']").prop("checked", false);
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.integral = false
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        })
+
+    $('#discount').click(function () {
+        window.location.href = "${pageContext.request.contextPath}/jsp/sendCard2.jsp"
+    })
+    $('#ticket').click(function () {
+        window.location.href = "card2.jsp"
+    })
+
+    $('#moneyinput').bind('input propertychange', function () {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.inputmoney = $(this).val()
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        if ($(this).val()) {
+            $('#showallmoney').text($(this).val())
+        } else {
+            $('#showallmoney').text('0.00')
+        }
+        setselectValue()
+    });
+
+    function setselectValue() {
+        var allmoney = $('#moneyinput').val()
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        var method = 1
+        if (selectedinfo.cardinfo) {
+            method = selectedinfo.cardinfo.card_method < selectedinfo.sendinfo.card_method ? selectedinfo.cardinfo.card_method : selectedinfo.sendinfo.card_method
+            headline = selectedinfo.cardinfo.card_headline
+        }
+        var balanceselect = $("input[name='balance']").prop('checked')
+        var integralselect = $("input[name='grade']").prop('checked')
+        var discount
+        if (headline) {
+            method = selectedinfo.cardinfo.card_method
+            if ((allmoney * 1) >= (headline * 1)) {
+                discount = method
+            } else {
+                discount = 0
+            }
+        } else {
+            discount = (allmoney * (1 - method)).toFixed(2)
+        }
+        $('#minusdiscount').text(discount)
+        allmoney -= discount
+        if (integralselect) {
+            if ($('#intergralnum').text() > allmoney) {
+                $('#minusintegral').text(allmoney)
+                allmoney = 0
+            } else {
+                $('#minusintegral').text($('#intergralnum').text())
+                allmoney -= ($('#intergralnum').text() * 1)
+            }
+        } else {
+            $('#minusintegral').text('0')
+        }
+
+        if (balanceselect) {
+            if ($('#balancenum').text() > allmoney) {
+                $('#minusbalance').text(allmoney)
+                allmoney = 0
+            } else {
+                $('#minusbalance').text($('#balancenum').text())
+                allmoney -= ($('#balancenum').text() * 1)
+            }
+        } else {
+            $('#minusbalance').text('0')
+        }
+
+        $('#needpay').text(allmoney)
+
+
+    }
+
+    function setvalue() {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        if (selectedinfo.cardinfo) {
+            $('#moneyinput').val(selectedinfo.inputmoney)
+            $('#ticket span').text(selectedinfo.cardinfo.card_name)
+            $('#discount span').text(selectedinfo.sendinfo.card_name)
+            if (selectedinfo.inputmoney) {
+                $('#showallmoney').text(selectedinfo.inputmoney)
+            } else {
+                $('#showallmoney').text('0.00')
+            }
+        }
+        if (selectedinfo.integral) {
+            $('.code-item-integral').find("input[type='checkbox']").prop("checked", "checked");
+        } else {
+            $('.code-item-integral').find("input[type='checkbox']").prop("checked", false);
+        }
+        if (selectedinfo.balance) {
+            $('.code-item-balance').find("input[type='checkbox']").prop("checked", "checked");
+        } else {
+            $('.code-item-balance').find("input[type='checkbox']").prop("checked", false);
+        }
+    }
+
+    function clearcard() {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        selectedinfo.cardinfo = {}
+        selectedinfo.cardinfo.card_method = 1
+        selectedinfo.cardinfo.card_id = ''
+        selectedinfo.cardinfo.card_name = ''
+        selectedinfo.sendinfo = {}
+        selectedinfo.sendinfo.card_method = 1
+        selectedinfo.sendinfo.card_id = ''
+        selectedinfo.sendinfo.card_name = ''
+        localStorage.selectedinfo = JSON.stringify(selectedinfo)
+        setvalue()
+    }
+
+
+</script>
+
 
 <script>
     function isWeixnOpen() {

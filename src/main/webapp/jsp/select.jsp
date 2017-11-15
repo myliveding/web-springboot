@@ -1,6 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<div class="nav-top">
+    <a href="${pageContext.request.contextPath}/login/index">
+        <img src="${pageContext.request.contextPath}/images/icon_left.png" alt="" class="nav-toback">
+    </a>扫码付款
+</div>
 <div class="navbar">
     <div class="navbar-inner">
         <div class="left sliding">
