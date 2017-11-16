@@ -34,7 +34,6 @@
 <jsp:include page="foot.jsp" flush="true"/>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
-    alert('${cards}');
     $('.sendcard-item').click(function () {
         var json = {}
         json.card_id = $(this).attr('data-id');
