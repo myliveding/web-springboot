@@ -17,19 +17,16 @@
 <div class="sendcard-container">
 </div>
 </div>
-<div class="flex-box show-loading">
-    <img src="${pageContext.request.contextPath}/images/loading.gif" alt="">
-    <p>加载更多</p>
-</div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
     var coupons = JSON.parse('<%=session.getAttribute("coupons") %>');
     if (coupons.length > 0) {
         var html = ''
         for (var i = 0; i < coupons.length; i++) {
-            html += '<div class="sendcard-item card-item" data-id="'
-                + coupons.id + '" data-name="满200减100" data-method="'
-                + coupons.price + '"data-headline="' + coupons.user_price + '">'
+            html += '<div class="sendcard-item card-item" data-id="' + coupons.id
+                + '"data-name="满' + coupons.user_price + '减' + coupons.price
+                + '"data-method="' + coupons.price
+                + '"data-headline="' + coupons.user_price + '">'
             var expire = coupons[i].expiration_date;
             var oldTime = new Date(expire);
             var curTime = oldTime.getFullYear() * 10000 + (oldTime.getMonth() + 1) * 100 + oldTime.getDate();

@@ -18,12 +18,16 @@
     if (cards.length > 0) {
         var html = ''
         for (var i = 0; i < cards.length - 1; i++) {
-            html += '<div class="sendcard-item">'
+            html += '<div class="sendcard-item card-item" data-id="'
+                + cards[i].id + '" data-name="全场消费满'
+                + cards[i].user_price + '元即可使用" data-method="'
+                + cards[i].discount + '">'
             html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
             html += '<div class="flex-box sendcard-txt">'
             html += '<img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">'
-            html += '<p>全场消费满' + cards[i].id + '元<span>即可使用</span></p>'
+            html += '<p>全场消费满' + cards[i].user_price + '元<span>即可使用</span></p>'
             html += '<div class="sendcard-number sendcard-txt-green">' + cards[i].discount + '<span>折</span>'
+            html += '</div>'
             html += '</div>'
             html += '</div>'
         }
