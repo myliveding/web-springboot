@@ -21,7 +21,8 @@
             html += '<div class="sendcard-item card-item" data-id="'
                 + cards[i].id + '" data-name="全场消费满'
                 + cards[i].user_price + '元即可使用' + cards[i].discount + '折" data-method="'
-                + cards[i].discount + '">'
+                + (cards[i].discount / 10)
+                + '"data-headline="' + cards[i].user_price + '">'
             html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
             html += '<div class="flex-box sendcard-txt">'
             html += '<img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">'
@@ -39,6 +40,7 @@
         json.card_id = $(this).attr('data-id');
         json.card_name = $(this).attr('data-name');
         json.card_method = $(this).attr('data-method');
+        json.card_headline = $(this).attr('data-headline');
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         selectedinfo.integral = false
         selectedinfo.cardinfo = {}

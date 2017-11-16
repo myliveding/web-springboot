@@ -53,7 +53,7 @@
         <p>-积分￥<span id="minusintegral">0</span></p>
         <p>-优惠￥<span id="minusdiscount">0</span></p>
     </div>
-    <div class="code-number">共支付：<p><span>￥</span>0.00</p></div>
+    <div class="code-number">共支付：<p>￥<span id="needpay">0.00</span></p></div>
 </div>
 <div class="self-btn pwd-btn">
     <button>确认支付</button>
@@ -93,11 +93,6 @@
     };
 </script>
 <script>
-    //优惠券数组
-    var coupons = JSON.stringify('${info.coupons}');
-    //卡券数组
-    var cards = JSON.stringify('${info.discount_cards}');
-
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true,
@@ -161,9 +156,11 @@
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         var method = 1
         var headline
+        var headline2
         if (selectedinfo.cardinfo) {
             method = selectedinfo.cardinfo.card_method < selectedinfo.sendinfo.card_method ? selectedinfo.cardinfo.card_method : selectedinfo.sendinfo.card_method
             headline = selectedinfo.cardinfo.card_headline
+            headline2 = selectedinfo.sendinfo.card_headline
         }
         var balanceselect = $("input[name='balance']").prop('checked')
         var integralselect = $("input[name='grade']").prop('checked')
@@ -176,7 +173,12 @@
                 discount = 0
             }
         } else {
-            discount = (allmoney * (1 - method)).toFixed(2)
+            if ((allmoney * 1) >= (headline2 * 1)) {
+                discount = (allmoney * (1 - method)).toFixed(2)
+            }
+            else {
+                discount = 0
+            }
         }
         $('#minusdiscount').text(discount)
         allmoney -= discount
@@ -262,16 +264,21 @@
     }
 
     //保存按钮的事件
-    $('.self-btn .pwd-btn').on('click', function () {
+    $('.self-btn button').on('click', function () {
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        var discountCardId = ''; //todo 打折卡ID
+        var couponId = ''; //todo 优惠券ID
+
+        if (selectedinfo.cardinfo) {
+            discountCardId = selectedinfo.sendinfo.card_id
+            couponId = selectedinfo.cardinfo.card_id
+        }
 
         var payAmt = $('#needpay').text();
         var money = $('#showallmoney').text();
         var balance = $('#minusbalance').text();
         var integral = $('#minusintegral').text();
-        var discountCardId = ''; //todo 打折卡ID
-        var couponId = ''; //todo 优惠券ID
         var couponDesc = $('#minusdiscount').text();
-        ;
 
         if (payAmt > 0) {
             //表示需要用户进行支付操作，需要调用微信的预支付接口

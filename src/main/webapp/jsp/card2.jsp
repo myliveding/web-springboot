@@ -78,6 +78,7 @@
         selectedinfo.sendinfo.card_method = 1
         selectedinfo.sendinfo.card_id = ''
         selectedinfo.sendinfo.card_name = ''
+        selectedinfo.sendinfo.card_headline = ''
         selectedinfo.cardinfo = json
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
         window.history.go(-1);
