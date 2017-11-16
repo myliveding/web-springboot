@@ -140,6 +140,7 @@
         })
     $('#discount').click(function () {
         //window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp";
+
         window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp?cards=" + cards;
     })
     $('#ticket').click(function () {
