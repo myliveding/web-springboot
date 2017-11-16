@@ -37,7 +37,7 @@
             <img src="${pageContext.request.contextPath}/images/icon_code_right.png" alt="">
         </div>
     </div>
-    <div class="flex-box code-item code-item-ticket">
+    <div class="flex-box code-item code-item-ticket" id="ticket">
         <img src="${pageContext.request.contextPath}/images/icon_mine_ticket.png" alt="">
         <div class="code-item-txt">
             优惠券
@@ -94,9 +94,9 @@
 </script>
 <script>
     //优惠券数组
-    var coupons = "${info.coupons}";
+    var coupons = JSON.parse('${info.coupons}');
     //卡券数组
-    var cards = "${info.discount_cards}";
+    var cards = JSON.parse('${info.discount_cards}');
 
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
@@ -139,10 +139,12 @@
             setselectValue()
         })
     $('#discount').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp"
+        //window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp";
+        window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp?cards=" + cards;
     })
     $('#ticket').click(function () {
-        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp"
+        //window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp";
+        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp?coupons=" + coupons;
     })
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
