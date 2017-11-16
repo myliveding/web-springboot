@@ -1,9 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%
-    String coupons = request.getParameter("coupons");
-%>
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
@@ -23,10 +20,10 @@
     if (coupons.length > 0) {
         var html = ''
         for (var i = 0; i < coupons.length; i++) {
-            html += '<div class="sendcard-item card-item" data-id="' + coupons.id
-                + '"data-name="满' + coupons.user_price + '减' + coupons.price
-                + '"data-method="' + coupons.price
-                + '"data-headline="' + coupons.user_price + '">'
+            html += '<div class="sendcard-item card-item" data-id="' + coupons[i].id
+                + '"data-name="满' + coupons[i].user_price + '减' + coupons[i].price
+                + '"data-method="' + coupons[i].price
+                + '"data-headline="' + coupons[i].user_price + '">'
             var expire = coupons[i].expiration_date;
             var oldTime = new Date(expire);
             var curTime = oldTime.getFullYear() * 10000 + (oldTime.getMonth() + 1) * 100 + oldTime.getDate();

@@ -20,7 +20,7 @@
         for (var i = 0; i < cards.length - 1; i++) {
             html += '<div class="sendcard-item card-item" data-id="'
                 + cards[i].id + '" data-name="全场消费满'
-                + cards[i].user_price + '元即可使用" data-method="'
+                + cards[i].user_price + '元即可使用' + cards[i].discount + '折" data-method="'
                 + cards[i].discount + '">'
             html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
             html += '<div class="flex-box sendcard-txt">'

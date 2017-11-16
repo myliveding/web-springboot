@@ -30,7 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Component
 @Service("wechatService")
@@ -315,45 +318,35 @@ public class WechatServiceImpl implements WechatService {
      */
     public void balancePay(String money, String balance, String integral, String discountCardId, String couponId, HttpServletRequest request) {
 
-        HttpSession session = request.getSession();
-        Object openidObj = session.getAttribute("openid");
-        String openid = openidObj.toString();
-        logger.info("支付调用时获取的openid为：" + openid);
-        if (null == openid || "".equals(openid)) {
-            throw new ApiException(10008, "请在微信环境下支付");
+        String userId = (String) request.getSession().getAttribute("userId");
+        logger.info("支付调用时获取的userId为：" + userId);
+        if (null == userId || "".equals(userId)) {
+            throw new ApiException(10008, "请先登录系统");
         }
         if (StringUtils.isEmpty(money)) {
             throw new ApiException(10007, "购买金额");
         }
 
-        String[] arr;
         String mystr;
         StringBuffer buffer = new StringBuffer();
-        List<String> list = new ArrayList<>();
-        list.add("open_id" + openid);
-        buffer.append("open_id=").append(openid);
-        list.add("money" + money);
+        buffer.append("type=1");
+        buffer.append("member_id=").append(userId);
         buffer.append("money=").append(money);
         if (StringUtils.isNotEmpty(balance)) {
-            list.add("birthday" + balance);
-            buffer.append("&birthday=").append(balance);
+            buffer.append("&balance=").append(balance);
         }
         if (StringUtils.isNotEmpty(integral)) {
-            list.add("gender" + integral);
-            buffer.append("&gender=").append(integral);
+            buffer.append("&integral=").append(integral);
         }
         if (StringUtils.isNotEmpty(discountCardId)) {
-            list.add("discount_card_id" + discountCardId);
             buffer.append("&discount_card_id=").append(discountCardId);
         }
         if (StringUtils.isNotEmpty(couponId)) {
-            list.add("coupon_id" + couponId);
             buffer.append("&coupon_id=").append(couponId);
         }
         mystr = buffer.toString();
-        arr = list.toArray(new String[list.size()]);
 
-        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_SUC, mystr, arr));
+        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_SUC, mystr, null));
         if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
         } else {
             throw new ApiException(10008, resultStr.getString("error_msg"));
@@ -408,6 +401,7 @@ public class WechatServiceImpl implements WechatService {
                 model.addAttribute("discount", couponDesc);
 
                 StringBuffer tempAttch = new StringBuffer();
+                tempAttch.append("&type=2");
                 if (StringUtils.isNotEmpty(money)) {
                     tempAttch.append("&money=").append(money);
                 }
