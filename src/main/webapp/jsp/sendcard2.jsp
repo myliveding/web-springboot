@@ -11,29 +11,25 @@
     卡券赠送
 </div>
 <div class="sendcard-container">
-    <c:forEach var="card" items="${cards}">
-        <div class="sendcard-item" data-id="${card.id}" data-name="${card.discount}折"
-             data-method="${card.discount}/100">
-            <input type="hidden" class="room_type_id" value="${card.id}"/>
-            <img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">
-            <div class="flex-box sendcard-txt">
-                <img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">
-                <p>全场消费满${card.user_price}元<span>即可使用</span></p>
-                <div class="sendcard-number sendcard-txt-green">${card.discount}<span>折</span></div>
-            </div>
-            <c:if test="${card.status eq '1'}">
-                <a class="sendcard-status-green" onclick="send(${card.id})">赠送</a>
-            </c:if>
-        </div>
-    </c:forEach>
-</div>
-<div class="flex-box show-loading">
-    <img src="${pageContext.request.contextPath}/images/loading.gif" alt="">
-    <p>加载更多</p>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
+    var cards = JSON.parse('<%=session.getAttribute("cards") %>');
+    if (cards.length > 0) {
+        var html = ''
+        for (var i = 0; i < cards.length - 1; i++) {
+            html += '<div class="sendcard-item">'
+            html += '<img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">'
+            html += '<div class="flex-box sendcard-txt">'
+            html += '<img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">'
+            html += '<p>全场消费满' + cards[i].id + '元<span>即可使用</span></p>'
+            html += '<div class="sendcard-number sendcard-txt-green">' + cards[i].discount + '<span>折</span>'
+            html += '</div>'
+            html += '</div>'
+        }
+        $(".sendcard-container").append(html);
+    }
+
     $('.sendcard-item').click(function () {
         var json = {}
         json.card_id = $(this).attr('data-id');

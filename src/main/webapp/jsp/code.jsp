@@ -94,9 +94,9 @@
 </script>
 <script>
     //优惠券数组
-    var coupons = JSON.parse('${info.coupons}');
+    var coupons = JSON.stringify('${info.coupons}');
     //卡券数组
-    var cards = JSON.parse('${info.discount_cards}');
+    var cards = JSON.stringify('${info.discount_cards}');
 
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
@@ -139,13 +139,10 @@
             setselectValue()
         })
     $('#discount').click(function () {
-        //window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp";
-
-        window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp?cards=" + cards;
+        window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp";
     })
     $('#ticket').click(function () {
-        //window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp";
-        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp?coupons=" + coupons;
+        window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp";
     })
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @Description
@@ -75,7 +76,16 @@ public class LoginServiceImpl implements LoginService {
         String mystr = "member_id=" + userId;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_INFO, mystr, arr));
         if (res.getInt("error_code") == 0) {
-            model.addAttribute("info", JSONObject.fromObject(res.getString("result")));
+            JSONObject data = JSONObject.fromObject(res.getString("result"));
+            model.addAttribute("info", data);
+
+            HttpSession session = request.getSession();
+            if (data.containsKey("coupons")) {
+                session.setAttribute("coupons", data.getJSONArray("coupons"));
+            }
+            if (data.containsKey("discount_cards")) {
+                session.setAttribute("cards", data.getJSONArray("discount_cards"));
+            }
         } else {
             throw new ApiException(10008, res.getString("error_msg"));
         }

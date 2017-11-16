@@ -1,22 +1,12 @@
 <%@ page language="java" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    String coupons = request.getParameter("coupons");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <jsp:include page="head.jsp" flush="true"/>
-<style>
-    .selectedred {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background: red;
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        display: none;
-    }
-</style>
 <body class="active-body">
 <div class="nav-top">
     <a href="javascript:history.back(-1)">
@@ -25,49 +15,6 @@
     我的优惠券
 </div>
 <div class="sendcard-container">
-    <c:forEach var="card" items="${coupons}">
-        <div class="sendcard-item card-item" data-id="${card.id}" data-name="满200减100" data-method="${card.price}"
-             data-headline="${card.user_price}">
-            <!-- method:减多少元   headline：满多少 -->
-            <span style="display:inline-block;width:15px;height:15px;border-radius:50%;background:red;position:absolute;top:4px;right:4px"></span>
-            <fmt:parseDate value="${card.expiration_date}" pattern="yyyy-MM-dd" var="expireDate"/>
-            <fmt:formatDate value="${expireDate}" pattern="yyyyMMdd" var="expire"/>
-            <c:if test="${now gt expire}" var="rs">
-                <img src="${pageContext.request.contextPath}/images/card_yellow.png" alt="">
-            </c:if>
-            <c:if test="${!rs}">
-                <c:if test="${card.status eq '1'}">
-                    <img src="${pageContext.request.contextPath}/images/card_green.png" alt="">
-                </c:if>
-                <c:if test="${card.status eq '2'}">
-                    <img src="${pageContext.request.contextPath}/images/card_purple.png" alt="">
-                </c:if>
-            </c:if>
-            <div class="flex-box sendcard-txt">
-                <img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">
-                <p>全场消费满${card.user_price}元<span>即可使用</span></p>
-                <div class="sendcard-number sendcard-txt-green">
-                        ${card.price} <span>元</span>
-                </div>
-            </div>
-            <c:if test="${now gt expire}" var="rs">
-                <p>未使用</p>
-                <div class="card-shadow"></div>
-                <div class="card-status">
-                    <img src="${pageContext.request.contextPath}/images/card_timeout.png" alt="">
-                </div>
-            </c:if>
-            <c:if test="${!rs}">
-                <p>有效期至${card.expiration_date}</p>
-                <c:if test="${card.status eq '2'}">
-                    <div class="card-shadow"></div>
-                    <div class="card-status">
-                        <img src="${pageContext.request.contextPath}/images/card_used.png" alt="">
-                    </div>
-                </c:if>
-            </c:if>
-        </div>
-    </c:forEach>
 </div>
 </div>
 <div class="flex-box show-loading">
@@ -76,6 +23,55 @@
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    var coupons = JSON.parse('<%=session.getAttribute("coupons") %>');
+    if (coupons.length > 0) {
+        var html = ''
+        for (var i = 0; i < coupons.length; i++) {
+            html += '<div class="sendcard-item card-item" data-id="'
+                + coupons.id + '" data-name="满200减100" data-method="'
+                + coupons.price + '"data-headline="' + coupons.user_price + '">'
+            var expire = coupons[i].expiration_date;
+            var oldTime = new Date(expire);
+            var curTime = oldTime.getFullYear() * 10000 + (oldTime.getMonth() + 1) * 100 + oldTime.getDate();
+            var now = '${now}';
+            if (now > curTime) {
+                html += '<img src="${pageContext.request.contextPath}/images/card_yellow.png" alt="">';
+            } else {
+                if (coupons[i].status == '1') {
+                    html += '<img src="${pageContext.request.contextPath}/images/card_green.png" alt="">'
+                } else if (coupons[i].status == '2') {
+                    html += '<img src="${pageContext.request.contextPath}/images/card_purple.png" alt="">'
+                }
+            }
+            html += '<div class="flex-box sendcard-txt">'
+            html += '<img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">'
+            html += '<p>全场消费满' + coupons[i].user_price + '元<span>即可使用</span></p>'
+            html += '<div class="sendcard-number sendcard-txt-green">'
+            html += coupons[i].price
+            html += '<span>元</span>'
+            html += '</div>'
+            html += '</div>'
+            if (now > curTime) {
+                html += '<p>未使用</p>'
+                html += '<div class="card-shadow"></div>'
+                html += '<div class="card-status">'
+                html += '<img src="${pageContext.request.contextPath}/images/card_timeout.png" alt="">'
+                html += '</div>'
+            } else {
+                html += '<p>有效期至' + coupons[i].expiration_date + '</p>'
+                if (coupons[i].status == '2') {
+                    html += '<div class="card-shadow"></div>'
+                    html += '<div class="card-status">'
+                    html += '<img src="${pageContext.request.contextPath}/images/card_used.png" alt="">'
+                    html += '</div>'
+                }
+            }
+            html += '</div>'
+        }
+        $(".sendcard-container").append(html);
+    }
+
+
     $('.card-item').click(function () {
         var json = {}
         json.card_id = $(this).attr('data-id');
