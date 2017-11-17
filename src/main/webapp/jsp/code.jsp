@@ -61,6 +61,24 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    function bestPay(money) {
+        $.ajax({
+            'url': "${pageContext.request.contextPath}/rest/payChoice",
+            'type': 'post',
+            'dataType': 'json',
+            'data': {
+                money: money
+            },
+            success: function success(d) {
+                if (d.status == 0) {
+                } else {
+                    alert(d.errmsg);
+                }
+            }
+        });
+    };
+</script>
+<script>
     $.fn.toggle = function (fn, fn2) {
         var args = arguments, guid = fn.guid || $.guid++, i = 0,
             toggle = function (event) {
@@ -117,7 +135,7 @@
             selectedinfo.balance = false
             localStorage.selectedinfo = JSON.stringify(selectedinfo)
             setselectValue()
-        })
+        });
     $('.code-item-integral').toggle(function () {
             $(this).find("input[type='checkbox']").prop("checked", "checked");
             var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
@@ -132,13 +150,13 @@
             selectedinfo.integral = false
             localStorage.selectedinfo = JSON.stringify(selectedinfo)
             setselectValue()
-        })
+        });
     $('#discount').click(function () {
         window.location.href = "${pageContext.request.contextPath}/jsp/sendcard2.jsp";
-    })
+    });
     $('#ticket').click(function () {
         window.location.href = "${pageContext.request.contextPath}/jsp/card2.jsp";
-    })
+    });
     $('#moneyinput').bind('input propertychange', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
         selectedinfo.inputmoney = $(this).val()
@@ -248,8 +266,6 @@
         localStorage.selectedinfo = JSON.stringify(selectedinfo)
         setvalue()
     }
-
-
 </script>
 
 
@@ -265,7 +281,7 @@
 
     //保存按钮的事件
     $('.self-btn button').on('click', function () {
-        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+        var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {};
         var discountCardId = ''; //todo 打折卡ID
         var couponId = ''; //todo 优惠券ID
 

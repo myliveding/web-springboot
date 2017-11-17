@@ -117,4 +117,12 @@ public class LoginRestController extends BaseController {
         return successResult("savePerfectInfo");
     }
 
+
+    @RequestMapping("/payChoice")
+    public Map<String, Object> payChoice(@RequestParam(value = "money") String money,
+                                         HttpServletRequest request) {
+
+        return successResult(loginService.payChoice(money, request));
+    }
+
 }

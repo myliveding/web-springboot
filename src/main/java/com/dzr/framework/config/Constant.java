@@ -69,7 +69,8 @@ public final class Constant {
     public static final String SCAN_PAY_INFO = "/api/get_pay_info";
     //扫码回调
     public static final String SCAN_PAY_SUC = "/api/pay_suc";
-
+    //支付选择
+    public static final String PAY_CHOICE = "/api/pay_choice";
 
     /**
      * @param urlPath 接口地址

@@ -7,6 +7,7 @@ import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.LoginService;
 import com.dzr.service.WechatService;
+import com.dzr.util.StringUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
@@ -126,6 +127,29 @@ public class LoginServiceImpl implements LoginService {
         String mystr = "member_id=" + userId + "&discount_card_id=" + cardId;
         JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECEIVE_DISCOUNT_CARD, mystr, arr));
         if (res.getInt("error_code") == 0) {
+        } else {
+            throw new ApiException(10008, res.getString("error_msg"));
+        }
+    }
+
+    /**
+     * 扫码支付的最优选择
+     *
+     * @param money
+     * @param request
+     */
+    public JSONObject payChoice(String money, HttpServletRequest request) {
+        String userId = (String) request.getSession().getAttribute("userId");
+        if (StringUtils.isEmpty(userId)) {
+            throw new ApiException(10008, "请先选择登陆");
+        }
+        if (StringUtils.isEmpty(money)) {
+            throw new ApiException(10008, "输入金额不能为空");
+        }
+        String mystr = "member_id=" + userId + "&money=" + money;
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PAY_CHOICE, mystr, null));
+        if (res.getInt("error_code") == 0) {
+            return res;
         } else {
             throw new ApiException(10008, res.getString("error_msg"));
         }

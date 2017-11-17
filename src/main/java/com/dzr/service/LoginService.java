@@ -1,5 +1,7 @@
 package com.dzr.service;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,4 +21,12 @@ public interface LoginService {
     String gotoDiscountCard(Model model, HttpServletRequest request);
 
     void receiveCard(Model model, HttpServletRequest request);
+
+    /**
+     * 扫码支付的最优选择
+     *
+     * @param money
+     * @param request
+     */
+    JSONObject payChoice(String money, HttpServletRequest request);
 }
