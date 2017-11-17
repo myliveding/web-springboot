@@ -95,27 +95,6 @@
     };
 </script>
 <script>
-    $.fn.toggle = function (fn, fn2) {
-        var args = arguments, guid = fn.guid || $.guid++, i = 0,
-            toggle = function (event) {
-                var lastToggle = ( $._data(this, "lastToggle" + fn.guid) || 0 ) % i;
-                $._data(this, "lastToggle" + fn.guid, lastToggle + 1);
-                event.preventDefault();
-                return args[lastToggle].apply(this, arguments) || false;
-            };
-        toggle.guid = guid;
-        while (i < args.length) {
-            args[i++].guid = guid;
-        }
-        return this.click(toggle);
-    };
-</script>
-<script>
-    var swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
-        // mousewheelControl : true,
-    });
 
     setvalue()
     setselectValue()
@@ -282,9 +261,9 @@
     //保存按钮的事件
     $('.self-btn button').on('click', function () {
         var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {};
-        var discountCardId = ''; //todo 打折卡ID
-        var couponId = ''; //todo 优惠券ID
-
+        var discountCardId = ''; //打折卡ID
+        var couponId = ''; //优惠券ID
+        var inputMoney = selectedinfo.inputmoney;
         if (selectedinfo.cardinfo) {
             discountCardId = selectedinfo.sendinfo.card_id
             couponId = selectedinfo.cardinfo.card_id
@@ -295,7 +274,10 @@
         var balance = $('#minusbalance').text();
         var integral = $('#minusintegral').text();
         var couponDesc = $('#minusdiscount').text();
-
+        if (inputMoney == 0) {
+            alert("请先输入购买金额");
+            return;
+        }
         if (payAmt > 0) {
             //表示需要用户进行支付操作，需要调用微信的预支付接口
             if (!isWeixnOpen()) {
