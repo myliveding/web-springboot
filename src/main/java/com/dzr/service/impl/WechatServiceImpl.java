@@ -330,8 +330,8 @@ public class WechatServiceImpl implements WechatService {
         String mystr;
         StringBuffer buffer = new StringBuffer();
         buffer.append("type=1");
-        buffer.append("member_id=").append(userId);
-        buffer.append("money=").append(money);
+        buffer.append("&member_id=").append(userId);
+        buffer.append("&money=").append(money);
         if (StringUtils.isNotEmpty(balance)) {
             buffer.append("&balance=").append(balance);
         }
@@ -545,23 +545,26 @@ public class WechatServiceImpl implements WechatService {
                             mystr.append("&serial_no=" + serialNo);
                         }
                         //商品ID 或者是一系列参数
+                        String name = Constant.RECHARGE_SUC;
                         if (StringUtils.isNotEmpty(productId)) {
                             if (productId.contains("&")) {
                                 mystr.append(productId);
+                                name = Constant.SCAN_PAY_SUC;
                             } else {
                                 mystr.append("&member_recharge_id=" + productId);
                             }
-                        }
-                        JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.RECHARGE_SUC, mystr.toString(), null));
-                        if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
-                            logger.info("微信支付确认订单完成:" + orderNo);
-                            String resXml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml> ";
-                            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(response.getOutputStream());
-                            bufferedOutputStream.write(resXml.getBytes());
-                            bufferedOutputStream.flush();
-                            bufferedOutputStream.close();
-                        } else {
-                            response.getWriter().println("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[支付发生异常，请联系无忧保客服400-111-8900]]></return_msg></xml>");//支付成功，确认清单失败的处理
+
+                            JSONObject resultStr = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + name, mystr.toString(), null));
+                            if (resultStr.containsKey("error_code") && 0 == resultStr.getInt("error_code")) {
+                                logger.info("微信支付确认订单完成:" + orderNo);
+                                String resXml = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml> ";
+                                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(response.getOutputStream());
+                                bufferedOutputStream.write(resXml.getBytes());
+                                bufferedOutputStream.flush();
+                                bufferedOutputStream.close();
+                            } else {
+                                response.getWriter().println("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[支付发生异常，请联系无忧保客服400-111-8900]]></return_msg></xml>");//支付成功，确认清单失败的处理
+                            }
                         }
                     } else {
                         logger.info("根据openid获取的用户对象为空");

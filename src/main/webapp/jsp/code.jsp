@@ -202,10 +202,11 @@
         } else {
             $('#minusbalance').text('0')
         }
-
+        var w = allmoney.toString().indexOf(".");
+        if (w != -1) {
+            allmoney = allmoney.toString().substring(0, (parseInt(w) + 3));
+        }
         $('#needpay').text(allmoney)
-
-
     }
 
     function setvalue() {
@@ -306,7 +307,7 @@
                 },
                 success: function success(d) {
                     if (d.status == 0) {
-                        window.location.reload();
+                        window.location.href = "${pageContext.request.contextPath}/login/gotoConsumptionRecords";
                     } else {
                         alert(d.errmsg);
                     }
