@@ -78,7 +78,8 @@
             },
             success: function success(d) {
                 if (d.status == 0) {
-                    window.location.reload();
+                    //window.location.reload();
+                    window.location.href = "${pageContext.request.contextPath}/login/userCenter";
                 } else {
                     alert(d.errmsg);
                 }

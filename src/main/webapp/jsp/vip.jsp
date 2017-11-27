@@ -20,7 +20,7 @@
             <div class="flex-box vip-item">
                 <img src="${pageContext.request.contextPath}/images/icon_vip_logo.png" alt="">
                 <span>${t.price}元</span>
-                <p>${t.remark}</p>
+                <p style="color:#FF0000;">${t.remark}</p>
                 <input type="hidden" value="${t.id}">
                 <div class="vip-item-opreate">
                     <input type="radio" name="pay" id="middling" onclick="updateDate(${t.id}, ${t.price})">
