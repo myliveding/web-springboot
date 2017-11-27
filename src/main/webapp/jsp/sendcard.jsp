@@ -17,7 +17,7 @@
             <img src="${pageContext.request.contextPath}/images/sendcard_green.png" alt="">
             <div class="flex-box sendcard-txt">
                 <img src="${pageContext.request.contextPath}/images/icon_logo_white.png" alt="">
-                <p>全场消费满${card.user_price}元<span>即可使用</span></p>
+                <p>全场消费<span>即可使用</span></p>
                 <div class="sendcard-number sendcard-txt-green">${card.discount}<span>折</span></div>
             </div>
             <c:if test="${card.status eq '1'}">
@@ -31,6 +31,15 @@
     <p>加载更多</p>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
+<div class="mask"
+     style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:99999;display:none">
+    <img src="${pageContext.request.contextPath}/images/pointer.png" alt="" style="position:absolute;top:0;right:0">
+    <p style="color:#f4f4f4;font-size:14px;padding-top:120px;width:80%;margin:0 auto">
+        臻品给您发福利啦！<br><br><br>
+        超值打折卡，臻品给您发福利啦！
+    </p>
+
+</div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     var page = 2;
@@ -106,6 +115,7 @@
 
     function send(cardId) {
         bindListen({link: shareUrl.replace("ID", cardId.toString())});
+        $('.mask').show();
     }
 
 
@@ -130,6 +140,11 @@
 
     wx.ready(function () {
         bindListen();
+    });
+
+    //遮罩
+    $('.mask').click(function () {
+        $(this).hide()
     });
 </script>
 </body>

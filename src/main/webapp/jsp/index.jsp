@@ -100,8 +100,11 @@
      style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:99999;display:none">
     <img src="${pageContext.request.contextPath}/images/pointer.png" alt="" style="position:absolute;top:0;right:0">
     <p style="color:#f4f4f4;font-size:14px;padding-top:120px;width:80%;margin:0 auto">
-        请点击右上角的“...”进行分享<br>
-        请点击右上角的“...”进行分享
+        臻品邀请你成为会员啦！<br><br><br>
+        凡充值即可成为臻品会员，臻品会员权益如下：<br><br>
+        1、会员充值返奖励金，充的多返的多。<br><br>
+        2、推荐微信好友注册臻品会员，被推荐者在本店购买商品推荐者都有百分比分奖励金（1个奖励金=1元钱。满五百奖励金可提现）<br><br>
+        3、臻品会员生日时，会有更多惊喜和礼物哦！
     </p>
 
 </div>
@@ -147,7 +150,7 @@
     };
     $('.mask').click(function () {
         $(this).hide()
-    })
+    });
 
     $(document).ready(function () {
         $('.home img').attr("src", "${pageContext.request.contextPath}/images/icon_homed.png");
