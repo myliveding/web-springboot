@@ -13,19 +13,14 @@
         <span>姓名</span>
         <input class="name" type="text" placeholder="请填写您的真实姓名">
     </div>
-    <div class="flex-box self-item">
-        <h4>性别</h4>
+    <div class="flex-box fillself-item">
+        <span>性别</span>
         <div class="flex self-radio">
             <input type="radio" name="sex1" id="sex1" value="1">男
             <input type="radio" name="sex2" id="sex2" value="2">女
         </div>
     </div>
-
     <div class="flex-box fillself-item">
-        <span>生日</span>
-        <input class="birth" type="text" placeholder="请填写您的生日(2010-10-10)">
-    </div>
-    <div class="flex-box self-item">
         <span>生日</span>
         <input type="text" class="start-time-day birth" name="" id=""
                onclick="new Calendar().show(this);"
@@ -45,6 +40,7 @@
     <div class="fillself-skip"><a href="${pageContext.request.contextPath}/login/index">跳过此步骤</a></div>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
+<script src="${pageContext.request.contextPath}/js/calendar.js"></script>
 <script>
 
     var sex = 1;
@@ -64,15 +60,17 @@
             sex = $("#sex2").val();
         });
     });
+
+    //返回得url
     var backUrl = "${backUrl}";
 
     function save() {
         var name = $('.name').val();
         var birth = $('.birth').val();
         var wechat = $('.wechat').val();
-        var adress = $('.adress').val();
+        var address = $('.adress').val();
         $.ajax({
-            'url': "${pageContext.request.contextPath}/login/savePerfectInfo",
+            'url': "${pageContext.request.contextPath}/rest/savePerfectInfo",
             'type': 'post',
             'dataType': 'json',
             'data': {
@@ -80,7 +78,7 @@
                 sex: sex,
                 birth: birth,
                 wechat: wechat,
-                adress: adress
+                address: address
             },
             success: function success(d) {
                 if (d.status == 0) {
