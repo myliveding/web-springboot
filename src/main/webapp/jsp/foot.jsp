@@ -34,6 +34,7 @@
     $('input').blur(function () {
         $('.navbar-fixed-bottom').show()
     })
+    localStorage.clear();
     var swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         paginationClickable: true,

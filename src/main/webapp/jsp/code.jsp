@@ -19,7 +19,7 @@
             src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
         <div class="code-item-txt">余额：￥<span id="balancenum">${info.balance}</span></div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="balance" id="" value="1" disabled>
+            <input type="checkbox" name="balance" id="" value="1" disabled checked>
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
@@ -101,17 +101,18 @@
     //     $("input[type='checkbox']").click(function(e){
     //     e.stopPropagation();
     // });
-    $('.code-item-balance').toggle(function () {
-            $(this).find("input[type='checkbox']").prop("checked", "checked");
-            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
-            selectedinfo.balance = true
-            localStorage.selectedinfo = JSON.stringify(selectedinfo)
-            setselectValue()
-        },
+    $('.code-item-balance').toggle(
         function () {
             $(this).find("input[type='checkbox']").prop("checked", false);
             var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
             selectedinfo.balance = false
+            localStorage.selectedinfo = JSON.stringify(selectedinfo)
+            setselectValue()
+        },
+        function () {
+            $(this).find("input[type='checkbox']").prop("checked", "checked");
+            var selectedinfo = localStorage.selectedinfo ? JSON.parse(localStorage.selectedinfo) : {}
+            selectedinfo.balance = true
             localStorage.selectedinfo = JSON.stringify(selectedinfo)
             setselectValue()
         });
