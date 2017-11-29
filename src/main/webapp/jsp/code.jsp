@@ -19,7 +19,7 @@
             src="${pageContext.request.contextPath}/images/icon_code_balance.png" alt="">
         <div class="code-item-txt">余额：￥<span id="balancenum">${info.balance}</span></div>
         <div class="code-item-opreate">
-            <input type="checkbox" name="balance" id="" value="1" disabled checked>
+            <input type="checkbox" name="balance" id="" value="1" disabled>
         </div>
     </div>
     <div class="flex-box code-item code-item-integral">
@@ -227,7 +227,9 @@
         } else {
             $('.code-item-integral').find("input[type='checkbox']").prop("checked", false);
         }
-        if (selectedinfo.balance) {
+        if (typeof(selectedinfo.balance) == 'undefined') {
+            $('.code-item-balance').find("input[type='checkbox']").prop("checked", "checked");
+        } else if (selectedinfo.balance) {
             $('.code-item-balance').find("input[type='checkbox']").prop("checked", "checked");
         } else {
             $('.code-item-balance').find("input[type='checkbox']").prop("checked", false);
