@@ -73,9 +73,9 @@ public class LoginServiceImpl implements LoginService {
      */
     public String gotoCode(Model model, HttpServletRequest request) {
         String userId = (String) request.getSession().getAttribute("userId");
-        String[] arr = new String[]{"member_id" + userId};
         String mystr = "member_id=" + userId;
-        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_INFO, mystr, arr));
+
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.SCAN_PAY_INFO, mystr, null));
         if (res.getInt("error_code") == 0) {
             JSONObject data = JSONObject.fromObject(res.getString("result"));
             model.addAttribute("info", data);
@@ -87,6 +87,17 @@ public class LoginServiceImpl implements LoginService {
             if (data.containsKey("discount_cards")) {
                 session.setAttribute("cards", data.getJSONArray("discount_cards"));
             }
+//            //去调用获取最优方案
+//            res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.PAY_CHOICE, mystr, null));
+//            if(res.getInt("error_code") == 0){
+//                //0优惠券 1打折卡 2积分
+//                model.addAttribute("type", res.get("type"));
+//                data = JSONObject.fromObject(res.getString("result"));
+//                //19代表优惠券或是打折卡的id
+//                //98代表优惠券或是打折卡的优惠金额
+//                model.addAttribute("type", res.get("type"));
+//                model.addAttribute("type", res.get("type"));
+//            }
         } else {
             throw new ApiException(10008, res.getString("error_msg"));
         }

@@ -27,8 +27,10 @@
         </div>
         <div class="flex-box self-item">
             <h4>生日</h4>
-            <input class="birth" name="" id="" type="date" placeholder="生日格式:1990-01-05"
-                   value="${user.birthday}" class="start-time-day">
+            <input class="birth" name="" id="" type="text" placeholder="生日格式:2010-10-10"
+                   value="${user.birthday}">
+            <%--<input class="birth" name="" id="" type="date" placeholder="生日格式:2010-10-10"--%>
+            <%--value="${user.birthday}" class="start-time-day">--%>
         </div>
         <div class="flex-box self-item">
             <h4>收货地址</h4>

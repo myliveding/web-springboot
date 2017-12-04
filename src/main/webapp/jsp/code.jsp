@@ -61,6 +61,7 @@
 <img src="${pageContext.request.contextPath}/images/icon_logo.png" alt="" class="self-bg code-bg">
 <jsp:include page="foot.jsp" flush="true"/>
 <script>
+    //获取最优支付方案得方法，得在金额输入框有值得情况下，才去调用
     function bestPay(money) {
         $.ajax({
             'url': "${pageContext.request.contextPath}/rest/payChoice",
@@ -70,7 +71,11 @@
                 money: money
             },
             success: function success(d) {
-                if (d.status == 0) {
+                if (d.error_code == 0) {
+                    //type  0优惠券 1打折卡 2积分
+                    //19代表优惠券或是打折卡的id
+                    //98代表优惠券或是打折卡的优惠金额
+                    //如果返回type=2时，key=1只是为了格式一致，无其他作用
                 } else {
                     alert(d.errmsg);
                 }

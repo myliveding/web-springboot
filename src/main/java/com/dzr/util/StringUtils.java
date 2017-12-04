@@ -81,10 +81,12 @@ public final class StringUtils {
      */
     public static boolean isValidDate(String str) {
         //String str = "2007-01-02";
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date date = (Date) formatter.parse(str);
-            return str.equals(formatter.format(date));
+            formatter.setLenient(false);
+            formatter.parse(str);
+            System.err.println(formatter.parse(str));
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -93,6 +95,8 @@ public final class StringUtils {
     public static void main(String[] args) {
         String a = "/login/receiveCardPage?telphone=31111111112&cardId=99";
         System.err.println(a.substring(32, 43));
+
+        System.err.println(isValidDate("2018-8-3"));
     }
 
 }

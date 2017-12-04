@@ -22,9 +22,10 @@
     </div>
     <div class="flex-box fillself-item">
         <span>生日</span>
-        <input type="text" class="start-time-day birth" name="" id=""
-               onclick="new Calendar().show(this);"
-               readonly="readonly" placeholder="请填写您的生日(2010-10-10)">
+        <input type="text" class="birth" name="" id="" placeholder="请填写您的生日(2010-10-10)">
+        <%--<input type="text" class="start-time-day birth" name="" id=""--%>
+        <%--onclick="new Calendar().show(this);"--%>
+        <%--readonly="readonly" placeholder="请填写您的生日(2010-10-10)">--%>
     </div>
     <div class="flex-box fillself-item">
         <span>微信号</span>
@@ -40,7 +41,7 @@
     <div class="fillself-skip"><a href="${pageContext.request.contextPath}/login/index">跳过此步骤</a></div>
 </div>
 <jsp:include page="foot.jsp" flush="true"/>
-<script src="${pageContext.request.contextPath}/js/calendar.js"></script>
+<%--<script src="${pageContext.request.contextPath}/js/calendar.js"></script>--%>
 <script>
 
     var sex = 1;
