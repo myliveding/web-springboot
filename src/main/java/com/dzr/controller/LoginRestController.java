@@ -5,6 +5,7 @@ import com.dzr.framework.config.UrlConfig;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.LoginService;
 import com.dzr.service.WechatService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,10 +120,10 @@ public class LoginRestController extends BaseController {
 
 
     @RequestMapping("/payChoice")
-    public Map<String, Object> payChoice(@RequestParam(value = "money") String money,
-                                         HttpServletRequest request) {
+    public JSONObject payChoice(@RequestParam(value = "money") String money,
+                                HttpServletRequest request) {
 
-        return successResult(loginService.payChoice(money, request));
+        return loginService.payChoice(money, request);
     }
 
 }
