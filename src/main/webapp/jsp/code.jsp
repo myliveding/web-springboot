@@ -71,11 +71,21 @@
                 money: money
             },
             success: function success(d) {
+                //返回的json
+//                "error_code": 0,
+//                    "error_msg": "成功",
+//                    "type": 1,
+//                    "result": {
+//                    "id": "7",
+//                        "price": 182
+//                }
+                //json属性说明
+                //type  0优惠券 1打折卡 2积分
+                //result里面得属性
+                //id 代表优惠券或是打折卡的id
+                //price 代表优惠券或是打折卡的优惠金额
                 if (d.error_code == 0) {
-                    //type  0优惠券 1打折卡 2积分
-                    //19代表优惠券或是打折卡的id
-                    //98代表优惠券或是打折卡的优惠金额
-                    //如果返回type=2时，key=1只是为了格式一致，无其他作用
+
                 } else {
                     alert(d.errmsg);
                 }
