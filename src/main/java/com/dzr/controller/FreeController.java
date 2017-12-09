@@ -47,6 +47,12 @@ public class FreeController extends BaseController {
         return successResult("register");
     }
 
+    @RequestMapping("/openidLogin")
+    public Map<String, Object> openidLogin(String openId, HttpServletRequest request) {
+        baseInfoService.openidLogin(openId, request);
+        return successResult("openidLogin");
+    }
+
 
     @RequestMapping("/login")
     public Map<String, Object> login(String mobile, String password, String code, HttpServletRequest request) {

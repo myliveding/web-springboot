@@ -71,6 +71,8 @@ public final class Constant {
     public static final String SCAN_PAY_SUC = "/api/pay_suc";
     //支付选择
     public static final String PAY_CHOICE = "/api/pay_choice";
+    //openid登录
+    public static final String OPENID_LOGIN = "/api/openid_login";
 
     /**
      * @param urlPath 接口地址

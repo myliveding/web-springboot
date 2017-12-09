@@ -46,6 +46,13 @@ public interface BaseInfoService {
     /**
      * 登录方法
      *
+     * @param openId
+     */
+    void openidLogin(String openId, HttpServletRequest request);
+
+    /**
+     * 登录方法
+     *
      * @param mobile
      * @param password
      * @param code

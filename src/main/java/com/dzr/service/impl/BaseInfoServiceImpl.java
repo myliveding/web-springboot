@@ -57,6 +57,33 @@ public class BaseInfoServiceImpl implements BaseInfoService {
     /**
      * 登录方法
      *
+     * @param openId
+     */
+    public void openidLogin(String openId, HttpServletRequest request) {
+
+        if (StringUtils.isEmpty(openId)) {
+            throw new ApiException(20101);
+        }
+
+        StringBuilder buffer = new StringBuilder();
+        getUserInfoFromWechat(buffer, openId);
+        JSONObject res = JSONObject.fromObject(Constant.getInterface(urlConfig.getPhp() + Constant.OPENID_LOGIN, buffer.toString(), null));
+        if (res.getInt("error_code") == 0) {
+            //登录成功就加session
+            HttpSession session = request.getSession();
+
+            JSONObject data = JSONObject.fromObject(res.getString("data"));
+            //登录成功就加session
+            session.setAttribute("userId", data.getString("member_id"));
+            session.setAttribute("mobile", data.getString("mobile"));
+        } else {
+            logger.info("根据openid登陆失败" + res.getString("error_msg"));
+        }
+    }
+
+    /**
+     * 登录方法
+     *
      * @param mobile
      * @param password
      * @param code
@@ -112,7 +139,9 @@ public class BaseInfoServiceImpl implements BaseInfoService {
      *
      * @param mobile
      */
-    public void register(String name, String mobile, String password, String code, HttpServletRequest request) {
+    public void register(String name, String mobile, String password,
+                         String code, HttpServletRequest request) {
+
         if (StringUtils.isEmpty(mobile)) {
             throw new ApiException(10007, "手机号");
         } else if (!StringUtils.isMobileNo(mobile)) {
@@ -180,6 +209,27 @@ public class BaseInfoServiceImpl implements BaseInfoService {
             }
             if (null != user.getHeadimgurl()) {
                 list.add("head_url" + user.getHeadimgurl());
+                buffer.append("&head_url=").append(user.getHeadimgurl());
+            }
+        }
+    }
+
+    /**
+     * 获取微信用户信息并添加到用户信息表
+     *
+     * @param buffer
+     * @param openId
+     */
+    private void getUserInfoFromWechat(StringBuilder buffer, String openId) {
+
+        if (!"".equals(openId)) {
+            buffer.append("&openid=").append(openId);
+            //去获取微信用户信息
+            WechatUser user = wechatService.getUserInfo(openId);
+            if (null != user.getNickname()) {
+                buffer.append("&wechat_nickname=").append(user.getNickname());
+            }
+            if (null != user.getHeadimgurl()) {
                 buffer.append("&head_url=").append(user.getHeadimgurl());
             }
         }

@@ -2,7 +2,7 @@ package com.dzr.controller;
 
 import com.dzr.framework.config.WechatParams;
 import com.dzr.framework.config.WechatUtil;
-import com.dzr.service.WechatService;
+import com.dzr.service.BaseInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +24,8 @@ public class ScopeController {
 
     @Autowired
     WechatParams wechatParams;
+    @Autowired
+    BaseInfoService baseInfoService;
 
     @RequestMapping("/openid")
     public ModelAndView getUserOpenIdOfScope(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -48,10 +49,12 @@ public class ScopeController {
             session.setAttribute("appid", appid);
             logger.info("把openid：" + openid + "，appid：" + appid + "加到sesion");
 
+            //先去使用openid进行登录
+            baseInfoService.openidLogin(openid, request);
+
             if (!"".equals(pram)) {
                 logger.info(nextPage + "?" + pram);
                 return new ModelAndView("redirect:" + wechatParams.getDomain() + "/" + nextPage + "?" + pram);
-
             } else {
                 return new ModelAndView("redirect:" + wechatParams.getDomain() + "/" + nextPage);
             }
