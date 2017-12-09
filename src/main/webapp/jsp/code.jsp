@@ -293,7 +293,9 @@
         var balance = $('#minusbalance').text();
         var integral = $('#minusintegral').text();
         var couponDesc = $('#minusdiscount').text();
-        if (inputMoney == 0) {
+
+        var inputMoney1 = $('#moneyinput').val();
+        if (typeof(inputMoney) == "undefined" || $('#moneyinput').val() == "" || inputMoney <= 0 || inputMoney1 <= 0) {
             alert("请先输入购买金额");
             return;
         }
