@@ -299,6 +299,12 @@
             alert("请先输入购买金额");
             return;
         }
+
+        if (inputMoney <= 0 || inputMoney1 <= 0) {
+            alert("购买金额必须是正值");
+            return;
+        }
+
         if (payAmt > 0) {
             //表示需要用户进行支付操作，需要调用微信的预支付接口
             if (!isWeixnOpen()) {
