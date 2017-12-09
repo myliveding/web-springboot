@@ -295,7 +295,7 @@
         var couponDesc = $('#minusdiscount').text();
 
         var inputMoney1 = $('#moneyinput').val();
-        if (typeof(inputMoney) == "undefined" || $('#moneyinput').val() == "" || inputMoney <= 0 || inputMoney1 <= 0) {
+        if (typeof(inputMoney) == "undefined" || $('#moneyinput').val() == "") {
             alert("请先输入购买金额");
             return;
         }
