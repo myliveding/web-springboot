@@ -1,8 +1,6 @@
 package com.dzr.util;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -92,11 +90,21 @@ public final class StringUtils {
         }
     }
 
-    public static void main(String[] args) {
-        String a = "/login/receiveCardPage?telphone=31111111112&cardId=99";
-        System.err.println(a.substring(32, 43));
+    public static boolean isNumeric(String str) {
+        try {
+            Double.valueOf(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
-        System.err.println(isValidDate("2018-8-3"));
+    public static void main(String[] args) {
+//        String a = "/login/receiveCardPage?telphone=31111111112&cardId=99";
+//        System.err.println(a.substring(32, 43));
+
+//        System.err.println(isValidDate("2018-8-3"));
+        System.err.println(isNumeric("dd445.222"));
     }
 
 }

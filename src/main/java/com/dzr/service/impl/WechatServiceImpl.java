@@ -326,6 +326,12 @@ public class WechatServiceImpl implements WechatService {
         if (StringUtils.isEmpty(money)) {
             throw new ApiException(10007, "购买金额");
         }
+        if (!StringUtils.isNumeric(money)) {
+            throw new ApiException(10008, "购买金额格式不正确");
+        }
+        if (Double.valueOf(money) <= 0) {
+            throw new ApiException(10008, "购买金额必须大于0");
+        }
 
         String mystr;
         StringBuffer buffer = new StringBuffer();
@@ -390,6 +396,20 @@ public class WechatServiceImpl implements WechatService {
             model.addAttribute("sumAmt", payAmt);
             if (!type.equals("1")) {
                 String money = req.getParameter("money");
+                if (StringUtils.isEmpty(money)) {
+                    req.setAttribute("error", "购买金额不能为空");
+                    return "error";
+                }
+                if (!StringUtils.isNumeric(money)) {
+                    req.setAttribute("error", "购买金额格式不正确");
+                    return "error";
+                }
+                if (Double.valueOf(money) <= 0) {
+                    req.setAttribute("error", "购买金额必须大于0");
+                    return "error";
+                }
+
+
                 String balance = req.getParameter("balance");
                 String integral = req.getParameter("integral");
                 String discountCardId = req.getParameter("discountCardId");
