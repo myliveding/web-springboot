@@ -42,16 +42,16 @@ public class WechatServiceImpl implements WechatService {
 
     private final WechatTokenMapper wechatTokenMapper;
     private final WechatParams wechatParams;
-    private final TemplateConfig templateConfig;
 
+    @Autowired
+    TemplateConfig templateConfig;
     @Autowired
     UrlConfig urlConfig;
 
     @Autowired
-    public WechatServiceImpl(WechatParams wechatParams, WechatTokenMapper wechatTokenMapper, TemplateConfig templateConfig) {
+    public WechatServiceImpl(WechatParams wechatParams, WechatTokenMapper wechatTokenMapper) {
         this.wechatParams = wechatParams;
         this.wechatTokenMapper = wechatTokenMapper;
-        this.templateConfig = templateConfig;
     }
 
     private Logger logger = LoggerFactory.getLogger(WechatServiceImpl.class);
