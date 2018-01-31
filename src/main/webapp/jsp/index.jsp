@@ -126,11 +126,12 @@
     });
     //https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI5OTEwODM2Ng==&scene=110#wechat_redirect
     var shareUrl = "${shareUrl}";
+    // /login/productCates
     wx.ready(function () {
         var wxData = {
             title: '臻品vip折扣卡',
             desc: '臻品vip折扣卡等你来拿',
-            link: shareUrl + "/login/productCates",
+            link: shareUrl + "/free/gotoSharePage?name=productCates",
             imgUrl: shareUrl + '/images/logo.png', // 分享图标
         };
 

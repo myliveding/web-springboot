@@ -6,14 +6,7 @@
 <jsp:include page="head.jsp" flush="true"/>
 <body>
 <script>
-
-    var goUrl = '';
-    var name = "${name}"
-    var cardId = "${cardId}";
-    if (name == 'card') {
-        goUrl = shareUrl + 'cardId=' + cardId + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-    }
-    window.location.href = goUrl;
+    window.location.href = "${shareUrl}";
 </script>
 </body>
 </html>

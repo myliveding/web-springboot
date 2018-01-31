@@ -3,15 +3,18 @@ package com.dzr.controller;
 import com.dzr.framework.base.BaseController;
 import com.dzr.framework.config.Constant;
 import com.dzr.framework.config.UrlConfig;
+import com.dzr.framework.config.WechatParams;
 import com.dzr.framework.exception.ApiException;
 import com.dzr.service.BaseInfoService;
 import com.dzr.service.WechatService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -27,6 +30,8 @@ import java.util.Map;
 @RequestMapping("/free")
 public class FreeController extends BaseController {
 
+    @Autowired
+    WechatParams wechatParams;
     @Autowired
     UrlConfig urlConfig;
     @Autowired
@@ -108,6 +113,30 @@ public class FreeController extends BaseController {
 
 
         return wechatService.sendTemplateMessageByType(type, first, keyword1, keyword2, keyword3, keyword4, keyword5, openId, remark, url);
+    }
+
+    @RequestMapping("/gotoSharePage")
+    public String gotoSharePage(Model model, HttpServletRequest request) {
+        String name = request.getParameter("name");
+        //String reg = "(^|&)" + name + "=([^&]*)(&|$)";
+        if (name.equals("productCates")) {
+
+            model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                    + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
+                    + "/scope/openid.do?next=login/productCates.do" + wechatParams.getAppId()
+                    + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+
+        } else if (name.equals("receiveCardPage")) {
+//            /free/gotoSharePage?name=receiveCardPage&telphone=" + telphone + "&cardId=ID
+            String telphone = request.getParameter("telphone");
+            String cardId = request.getParameter("cardId");
+            model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                    + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
+                    + "/scope/openid.do?next=/login/receiveCardPage.do" + wechatParams.getAppId()
+                    + "telphone=" + telphone + "&cardId=" + cardId
+                    + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+        }
+        return "share";
     }
 
 }

@@ -225,17 +225,6 @@ public class LoginController extends BaseController {
         return loginService.gotoDiscountCard(model, request);
     }
 
-    @RequestMapping("/gotoSharePage")
-    public String gotoSharePage(Model model, String name, String cardId) {
-        model.addAttribute("name", name);
-        model.addAttribute("cardId", cardId);
-        model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
-                + "/scope/openid.do?next=rest/receiveCard.do" + wechatParams.getAppId());
-//        + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
-        return "share";
-    }
-
     @RequestMapping("/receiveCardPage")
     public String receiveCardPage(Model model, HttpServletRequest request) {
         String telphone = request.getParameter("telphone");
