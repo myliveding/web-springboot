@@ -369,6 +369,11 @@ public class WechatServiceImpl implements WechatService {
     public String wechatPay(HttpServletRequest req, Model model) {
         HttpSession session = req.getSession();
         Object openidObj = session.getAttribute("openid");
+        logger.info("从session里面获取到的openid对象为：" + openidObj);
+        if (null == openidObj) {
+            req.setAttribute("error", "openid不能为空");
+            return "error";
+        }
         String openid = openidObj.toString();
         logger.info("支付调用时获取的openid为：" + openid);
         if (null != openid && !"".equals(openid)) {

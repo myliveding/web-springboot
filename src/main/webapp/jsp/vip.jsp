@@ -59,7 +59,6 @@
         if (id == 0 && price == 0) {
             return false;
         }
-
         if (!isWeixnOpen()) {
             alert('<div><div><img src="${pageContext.request.contextPath}/images/10.png"></div><div style="color:#2cca6f;">微信不支持在浏览器端的支付！</div><div style="color:#333;">可通过以下方式完成支付</div><div style="color:#999; text-align:left;">方式一：打开微信，关注“盛世欢唱”公众号，进入“我的>我的订单”中完成交易</div><div style="color:#999; text-align:left;">方式二：选择其他支付方式完成交易</div></div>');
             return false;
@@ -69,23 +68,7 @@
                     + id + "&price=" + price + "&type=1";
             }, 1000);
         }
-
-        $.ajax({
-            'url': "${pageContext.request.contextPath}/rest/couponsPaging",
-            'type': 'post',
-            'dataType': 'json',
-            'data': {
-                page: page,
-            },
-            success: function success(d) {
-                if (d.status == 0) {
-                } else {
-                    alert(d.errmsg);
-                }
-            }
-        });
-    };
-
+    }
 </script>
 </body>
 </html>
