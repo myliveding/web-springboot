@@ -43,8 +43,13 @@ public class ErrorPageController implements ErrorController {
         if (null != backUrl && StringUtils.isNotEmpty(backUrl)) {
             model.addAttribute("backUrl", backUrl);
 //             /login/receiveCardPage?telphone=11111&cardId=99
+//            /login/receiveCardPage.do?telphone=18756730009&cardId=41
 //            substring 从0开始计数 左闭右开
-            model.addAttribute("tel", backUrl.substring(32, 43));
+            if (backUrl.contains(".do")) {
+                model.addAttribute("tel", backUrl.substring(35, 46));
+            } else {
+                model.addAttribute("tel", backUrl.substring(32, 43));
+            }
         }
         if (null == userId || "".equals(userId)) {
             return "login";
