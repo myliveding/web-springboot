@@ -1,7 +1,6 @@
 package com.dzr.framework.filter;
 
 
-import com.dzr.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -10,7 +9,6 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ public class LoginFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
     private static final String excludedUrls = "login/systemInfo,login/productCates," +
-            "login/activitys,login/productDetail,login/activityDetail";
+            "login/activitys,login/productDetail,login/activityDetail,login/gotoSharePage";
 
     /**
      * 封装，不需要过滤的list列表

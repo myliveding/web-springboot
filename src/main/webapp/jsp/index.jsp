@@ -131,7 +131,7 @@
         var wxData = {
             title: '臻品vip折扣卡',
             desc: '臻品vip折扣卡等你来拿',
-            link: shareUrl + "/free/gotoSharePage?name=productCates",
+            link: shareUrl + "/login/gotoSharePage?name=productCates",
             imgUrl: shareUrl + '/images/logo.png', // 分享图标
         };
 

@@ -115,28 +115,4 @@ public class FreeController extends BaseController {
         return wechatService.sendTemplateMessageByType(type, first, keyword1, keyword2, keyword3, keyword4, keyword5, openId, remark, url);
     }
 
-    @RequestMapping("/gotoSharePage")
-    public String gotoSharePage(Model model, HttpServletRequest request) {
-        String name = request.getParameter("name");
-        //String reg = "(^|&)" + name + "=([^&]*)(&|$)";
-        if (name.equals("productCates")) {
-
-            model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                    + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
-                    + "/scope/openid.do?next=login/productCates.do" + wechatParams.getAppId()
-                    + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
-
-        } else if (name.equals("receiveCardPage")) {
-//            /free/gotoSharePage?name=receiveCardPage&telphone=" + telphone + "&cardId=ID
-            String telphone = request.getParameter("telphone");
-            String cardId = request.getParameter("cardId");
-            model.addAttribute("shareUrl", "https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                    + wechatParams.getAppId() + "&redirect_uri=" + wechatParams.getDomain()
-                    + "/scope/openid.do?next=/login/receiveCardPage.do" + wechatParams.getAppId()
-                    + "telphone=" + telphone + "&cardId=" + cardId
-                    + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
-        }
-        return "share";
-    }
-
 }

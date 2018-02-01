@@ -124,7 +124,7 @@ public class LoginServiceImpl implements LoginService {
         wechatService.getWechatShare(model, request);
         //使用openid自动登陆得时候需要去使用中间分享页面
         model.addAttribute("shareUrl", wechatParams.getDomain()
-                + "/free/gotoSharePage?name=receiveCardPage&telphone=" + telphone + "&cardId=ID");
+                + "/login/gotoSharePage?name=receiveCardPage&telphone=" + telphone + "&cardId=ID");
 //        model.addAttribute("shareUrl", wechatParams.getDomain()
 //                + "/login/receiveCardPage?telphone=" + telphone + "&cardId=ID");
         model.addAttribute("domain", wechatParams.getDomain());
